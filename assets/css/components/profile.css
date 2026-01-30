@@ -1,0 +1,470 @@
+/* ============================================
+   Hero Section & Profile Component
+   ============================================ */
+
+/* Hero Section */
+.hero-section {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+    width: 100%;
+}
+
+/* Left Side - Text Content */
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.hero-greeting {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-accent-primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5dvw, 3.5rem);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-primary);
+}
+
+.hero-title .highlight {
+    background: var(--color-accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.5rem, 3dvw, 2rem);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-top: calc(var(--space-2) * -1);
+}
+
+.hero-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    max-width: 400px;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+}
+
+.hero-description i {
+    color: var(--color-accent-primary);
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+/* Hero Buttons */
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+}
+
+/* Social Links */
+.hero-socials {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+}
+
+.hero-socials-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-medium);
+}
+
+.hero-socials-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.hero-social-link {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    transition:
+        transform var(--transition-fast),
+        background var(--transition-normal),
+        color var(--transition-normal),
+        border-color var(--transition-normal),
+        box-shadow var(--transition-normal);
+}
+
+.hero-social-link:hover {
+    transform: translateY(-3px);
+    color: var(--color-bg-primary);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.hero-social-link.instagram:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    border-color: transparent;
+    color: #ffffff;
+}
+
+.hero-social-link.github:hover {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+    color: #333;
+}
+
+.hero-social-link.email:hover {
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+}
+
+/* Right Side - Profile Image */
+.hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Profile Container */
+.profile-container {
+    position: relative;
+    width: 400px;
+    height: 450px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+/* Circular Background with Gradient - Cyan Only */
+.profile-circle-bg {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%);
+    opacity: 0.75;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Outer Ring */
+.profile-ring {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    border: 1px solid var(--color-glass-border);
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Semi-circle accent - Cyan */
+.profile-accent {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--color-accent-primary);
+    border-right-color: var(--color-accent-light);
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    opacity: 0.7;
+}
+
+/* Profile Image - Pop out effect */
+.profile-image-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 320px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.profile-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5)) saturate(0.85) hue-rotate(-5deg);
+    transition: filter var(--transition-normal), transform var(--transition-normal);
+}
+
+.profile-container:hover .profile-image {
+    transform: scale(1.03) translateY(-5px);
+    filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.6)) saturate(0.9) hue-rotate(-5deg);
+}
+
+/* Glow Effect - Cyan Only */
+.profile-glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle,
+            rgba(0, 212, 255, 0.25) 0%,
+            rgba(8, 145, 178, 0.15) 50%,
+            transparent 70%);
+    border-radius: 50%;
+    filter: blur(30px);
+    z-index: 0;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: profile-glow-pulse 5s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes profile-glow-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Scroll Indicator - Positioned at Section Bottom */
+.scroll-indicator {
+    position: absolute;
+    margin-bottom: var(--space-6);
+    bottom: var(--space-6);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator-mouse {
+    width: 18px;
+    height: 28px;
+    border: 1.5px solid var(--color-text-muted);
+    border-radius: 10px;
+    position: relative;
+}
+
+.scroll-indicator-mouse::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 5px;
+    background: var(--color-text-muted);
+    border-radius: var(--radius-full);
+    animation: scroll-wheel 2s ease-in-out infinite;
+}
+
+@keyframes scroll-bounce {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(4px);
+    }
+}
+
+@keyframes scroll-wheel {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: translateX(-50%) translateY(4px);
+    }
+}
+
+/* Responsive Hero */
+@media (max-width: 968px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--space-8);
+    }
+
+    .hero-text {
+        align-items: center;
+        order: 2;
+    }
+
+    .hero-image {
+        order: 1;
+    }
+
+    .hero-description {
+        justify-content: center;
+        max-width: 100%;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-socials {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .profile-container {
+        width: 320px;
+        height: 380px;
+    }
+
+    .profile-circle-bg {
+        width: 240px;
+        height: 240px;
+    }
+
+    .profile-ring,
+    .profile-accent {
+        width: 290px;
+        height: 290px;
+    }
+
+    .profile-image-wrapper {
+        width: 260px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        padding-top: 55px;
+        min-height: 100dvh;
+        padding-bottom: var(--space-8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .hero-content {
+        gap: var(--space-4);
+    }
+
+    .hero-greeting {
+        font-size: var(--font-size-xs);
+        letter-spacing: 1px;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .hero-text {
+        gap: var(--space-3);
+    }
+
+    .hero-description {
+        font-size: var(--font-size-xs);
+        gap: var(--space-1);
+    }
+
+    .hero-description i {
+        font-size: var(--font-size-sm);
+        margin-top: 2px;
+    }
+
+    .profile-container {
+        width: 260px;
+        height: 320px;
+    }
+
+    .profile-circle-bg {
+        width: 190px;
+        height: 190px;
+    }
+
+    .profile-ring,
+    .profile-accent {
+        width: 240px;
+        height: 240px;
+    }
+
+    .profile-image-wrapper {
+        width: 220px;
+    }
+
+    .profile-glow {
+        width: 190px;
+        height: 190px;
+        filter: blur(15px);
+        animation: none;
+        opacity: 0.5;
+    }
+
+    /* Hero buttons horizontal on mobile */
+    .hero-buttons {
+        flex-direction: row;
+        width: 80%;
+        gap: var(--space-3);
+    }
+
+    .hero-buttons .btn {
+        flex: 1;
+        justify-content: center;
+        padding: var(--space-2) var(--space-3);
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .hero-socials {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .hero-socials-label {
+        font-size: var(--font-size-xs);
+    }
+
+    .hero-social-link {
+        width: 32px;
+        height: 32px;
+        font-size: var(--font-size-sm);
+    }
+}

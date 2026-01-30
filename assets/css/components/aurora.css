@@ -1,0 +1,99 @@
+/* ============================================
+   Aurora Background Effect - Enhanced Glassmorphic
+   ============================================ */
+
+.aurora-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.aurora-bg::before,
+.aurora-bg::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.9;
+    animation: aurora-float 25s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+/* Primary Aurora Blob - Cyan - Top Right */
+.aurora-bg::before {
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle,
+            rgba(0, 212, 255, 0.35) 0%,
+            rgba(0, 212, 255, 0.20) 30%,
+            transparent 70%);
+    top: -150px;
+    right: -150px;
+    animation-delay: 0s;
+}
+
+/* Secondary Aurora Blob - Teal - Bottom Left */
+.aurora-bg::after {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle,
+            rgba(8, 145, 178, 0.30) 0%,
+            rgba(8, 145, 178, 0.15) 30%,
+            transparent 70%);
+    bottom: -100px;
+    left: -150px;
+    animation-delay: -7s;
+}
+
+/* Aurora Animations */
+@keyframes aurora-float {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -30px) scale(1.05);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.95);
+    }
+}
+
+/* Add bottom fade to blend with next section */
+.aurora-bg {
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+/* Mobile Adjustments - Keep animation but scale down */
+@media (max-width: 768px) {
+
+    .aurora-bg::before,
+    .aurora-bg::after {
+        filter: blur(60px);
+        opacity: 0.7;
+        /* Animation kept active as requested */
+    }
+
+    .aurora-bg::before {
+        width: 400px;
+        height: 400px;
+        top: -100px;
+        right: -100px;
+    }
+
+    .aurora-bg::after {
+        width: 300px;
+        height: 300px;
+        bottom: -50px;
+        left: -50px;
+    }
+}

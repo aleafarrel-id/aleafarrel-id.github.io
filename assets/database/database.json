@@ -1,0 +1,243 @@
+{
+    "profile": {
+        "name": "Alea Farrel",
+        "firstName": "Alea",
+        "lastName": "Farrel",
+        "title": "Computer & Network Engineer",
+        "greeting": "Hello",
+        "bio": "I'm specializing in robust infrastructure, modern web/desktop development, and intuitive UI/UX design.",
+        "image": "assets/images/img/profile.webp"
+    },
+    "socials": {
+        "instagram": {
+            "url": "https://instagram.com/alea_farrel",
+            "label": "Instagram"
+        },
+        "github": {
+            "url": "https://github.com/aleafarrel-id",
+            "label": "GitHub"
+        },
+        "email": {
+            "url": "mailto:aleafarrel.work@gmail.com",
+            "label": "Email"
+        }
+    },
+    "navigation": [
+        {
+            "label": "Home",
+            "href": "#hero"
+        },
+        {
+            "label": "About",
+            "href": "#about"
+        },
+        {
+            "label": "Projects",
+            "href": "#projects"
+        },
+        {
+            "label": "Gallery",
+            "href": "#gallery"
+        },
+        {
+            "label": "Awards",
+            "href": "#awards"
+        }
+    ],
+    "about": {
+        "tagline": "Passionate about technology and continuous learning",
+        "cards": [
+            {
+                "icon": "bx-code-block",
+                "title": "Development",
+                "description": "Building efficient applications with C++, Qt, and modern web technologies."
+            },
+            {
+                "icon": "bx-network-chart",
+                "title": "Networking",
+                "description": "Designing and configuring complex network infrastructures."
+            },
+            {
+                "icon": "bx-palette",
+                "title": "UI/UX Design",
+                "description": "Creating modern and intuitive user interfaces with attention to detail."
+            }
+        ]
+    },
+    "technologies": [
+        {
+            "name": "C++",
+            "icon": "bxl-c-plus-plus"
+        },
+        {
+            "name": "Qt Framework",
+            "icon": "bxs-cube"
+        },
+        {
+            "name": "HTML",
+            "icon": "bxl-html5"
+        },
+        {
+            "name": "CSS",
+            "icon": "bxl-css3"
+        },
+        {
+            "name": "JavaScript",
+            "icon": "bxl-javascript"
+        },
+        {
+            "name": "PHP",
+            "icon": "bxl-php"
+        },
+        {
+            "name": "Python",
+            "icon": "bxl-python"
+        },
+        {
+            "name": "MySQL",
+            "icon": "bxs-data"
+        },
+        {
+            "name": "MikroTik",
+            "icon": "bxs-network-chart"
+        }
+    ],
+    "projects": [
+        {
+            "id": 1,
+            "name": "Rapid Texter GUI",
+            "description": "Modern typing speed test with stunning GUI interface. Test your finger speed and mental accuracy.",
+            "image": "assets/images/projects/rapidtextergui.webp",
+            "link": "https://aleafarrel-id.github.io/rapidtextergui/",
+            "tags": [
+                "C++",
+                "Qt",
+                "Desktop App"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Rapid Texter TUI",
+            "description": "Terminal-based typing trainer with real-time feedback directly from the terminal.",
+            "image": "assets/images/projects/rapidtextertui.webp",
+            "link": "https://aleafarrel-id.github.io/rapidtextertui/",
+            "tags": [
+                "C++",
+                "Terminal",
+                "CLI App"
+            ]
+        }
+    ],
+    "gallery": {
+        "autoSlideInterval": 5000,
+        "images": [
+            {
+                "src": "assets/images/img/configurations.webp",
+                "title": "Network Configurations",
+                "description": "Setting up complex network topologies"
+            },
+            {
+                "src": "assets/images/img/splicing.webp",
+                "title": "Fiber Optic Splicing",
+                "description": "Precision fiber optic cable work"
+            },
+            {
+                "src": "assets/images/img/voip-configurations.webp",
+                "title": "VoIP Setup",
+                "description": "Configuring voice over IP systems"
+            },
+            {
+                "src": "assets/images/img/potting.webp",
+                "title": "Cable Management",
+                "description": "Organized network infrastructure"
+            },
+            {
+                "src": "assets/images/img/lsp23.webp",
+                "title": "LSP Competition",
+                "description": "Network engineering competition"
+            },
+            {
+                "src": "assets/images/img/ojm1.webp",
+                "title": "Field Work 1",
+                "description": "On-site network deployment"
+            },
+            {
+                "src": "assets/images/img/ojm2.webp",
+                "title": "Field Work 2",
+                "description": "Infrastructure installation"
+            },
+            {
+                "src": "assets/images/img/ojm3.webp",
+                "title": "Field Work 3",
+                "description": "Network setup and testing"
+            },
+            {
+                "src": "assets/images/img/ojm4.webp",
+                "title": "Field Work 4",
+                "description": "Cable routing and connections"
+            },
+            {
+                "src": "assets/images/img/ojm5.webp",
+                "title": "Field Work 5",
+                "description": "Final system verification"
+            }
+        ]
+    },
+    "awards": {
+        "autoSlideInterval": 6000,
+        "certificates": [
+            {
+                "id": 1,
+                "name": "MTCNA",
+                "title": "MikroTik Certified Network Associate",
+                "description": "Entry-level MikroTik certification covering fundamental networking concepts, basic router configuration, wireless setup, firewall basics, and network management using RouterOS.",
+                "image": "assets/images/certs/mtcna.webp"
+            },
+            {
+                "id": 2,
+                "name": "MTCTCE",
+                "title": "MikroTik Certified Traffic Control Engineer",
+                "description": "Advanced MikroTik certification focused on traffic control, Quality of Service (QoS), and bandwidth management techniques for network optimization.",
+                "image": "assets/images/certs/mtctce.webp"
+            },
+            {
+                "id": 3,
+                "name": "TKJ Excellence Award",
+                "title": "Network Engineering Excellence Award",
+                "description": "Recognition award for outstanding achievement and excellence in Computer Network Engineering (Teknik Komputer Jaringan) program.",
+                "image": "assets/images/certs/tkj-award.webp"
+            },
+            {
+                "id": 4,
+                "name": "Cluster Training 1",
+                "title": "Network Infrastructure Training Certificate",
+                "description": "Certificate of completion for network infrastructure training covering router configuration, network topology design, and practical implementation.",
+                "image": "assets/images/certs/cluster1.webp"
+            },
+            {
+                "id": 5,
+                "name": "Cluster Training 2",
+                "title": "Advanced Network Configuration Training",
+                "description": "Certificate of completion for advanced network configuration training including VLAN setup, routing protocols, and network security implementation.",
+                "image": "assets/images/certs/cluster2.webp"
+            },
+            {
+                "id": 6,
+                "name": "Cluster Training 3",
+                "title": "Network Security & Management Training",
+                "description": "Certificate of completion for network security and management training covering firewall configuration, VPN setup, and network monitoring.",
+                "image": "assets/images/certs/cluster3.webp"
+            },
+            {
+                "id": 7,
+                "name": "OJM Certificate",
+                "title": "Industrial Internship Certificate",
+                "description": "Certificate of completion for on-the-job training (OJM) in network engineering, demonstrating practical field experience in network installation and maintenance.",
+                "image": "assets/images/certs/ojm.webp"
+            }
+        ]
+    },
+    "footer": {
+        "description": "Building digital experiences and network solutions with passion and precision."
+    }
+}

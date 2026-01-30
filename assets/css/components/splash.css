@@ -1,0 +1,149 @@
+/* ============================================
+   Splash Screen / Loading Screen
+   ============================================ */
+
+/* Splash Screen Container */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: var(--color-bg-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-12);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Logo Container */
+.splash-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Logo Image */
+.splash-logo-image {
+    width: 100px;
+    height: 100px;
+    border-radius: var(--radius-xl);
+    animation: splash-logo-pulse 2s ease-in-out infinite;
+}
+
+/* Logo Glow Effect */
+.splash-logo::before {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle,
+            rgba(0, 212, 255, 0.4) 0%,
+            rgba(0, 212, 255, 0.1) 50%,
+            transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: splash-glow 2s ease-in-out infinite;
+}
+
+@keyframes splash-logo-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes splash-glow {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* Progress Bar Container */
+.splash-progress {
+    width: 200px;
+    height: 6px;
+    background: var(--color-glass-bg);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 1px solid var(--color-glass-border);
+}
+
+/* Progress Bar Fill */
+.splash-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--color-accent-gradient);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* Status Text */
+.splash-status {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-align: center;
+    min-height: 1.5em;
+    transition: opacity 0.3s ease;
+}
+
+/* Loading Spinner (optional - shows before progress starts) */
+.splash-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--color-glass-border);
+    border-top-color: var(--color-accent-primary);
+    border-radius: 50%;
+    animation: splash-spin 1s linear infinite;
+    position: absolute;
+    bottom: -40px;
+}
+
+@keyframes splash-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Splash */
+@media (max-width: 480px) {
+    .splash-logo-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .splash-logo::before {
+        width: 100px;
+        height: 100px;
+    }
+
+    .splash-progress {
+        width: 160px;
+    }
+
+    .splash-status {
+        font-size: var(--font-size-xs);
+        padding: 0 var(--space-4);
+    }
+}

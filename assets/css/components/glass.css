@@ -1,0 +1,97 @@
+/* ============================================
+   Glassmorphism Component - Cyan Theme
+   ============================================ */
+
+.glass {
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-xl);
+}
+
+.glass-hover {
+    transition:
+        background var(--transition-normal),
+        border-color var(--transition-normal),
+        box-shadow var(--transition-normal);
+}
+
+.glass-hover:hover {
+    background: var(--color-glass-hover);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Glass Card Variant */
+.glass-card {
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition:
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal),
+        border-color var(--transition-normal);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.25);
+}
+
+/* Glass Panel - For larger sections */
+.glass-panel {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+}
+
+/* Glass with Gradient Border - Cyan Only */
+.glass-gradient-border {
+    position: relative;
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+}
+
+.glass-gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--color-accent-gradient);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.4;
+    transition: opacity var(--transition-normal);
+}
+
+.glass-gradient-border:hover::before {
+    opacity: 0.8;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(12px)) {
+
+    .glass,
+    .glass-card,
+    .glass-panel {
+        background: rgba(13, 17, 23, 0.95);
+    }
+}

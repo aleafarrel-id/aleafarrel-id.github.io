@@ -1,2 +1,724 @@
+/* ============================================
+   Component Imports
+   ============================================ */
+@import "./components/splash.css";
+@import "./components/aurora.css";
+@import "./components/glass.css";
 @import "./components/button.css";
 @import "./components/modal.css";
+@import "./components/profile.css";
+@import "./components/timeline.css";
+@import "./components/gallery.css";
+@import "./components/awards.css";
+@import "./components/nav.css";
+@import "./components/footer.css";
+@import "./components/about.css";
+
+/* ============================================
+   ALEA FARREL PORTFOLIO - Main Stylesheet
+   ============================================ */
+
+/* ============================================
+   CSS Custom Properties (Variables)
+   ============================================ */
+:root {
+    /* Colors - Dark Theme */
+    --color-bg-primary: #0a0a0f;
+    --color-bg-secondary: #0d1117;
+    --color-bg-tertiary: #161b22;
+
+    /* Accent Colors - Cyan/Teal Theme */
+    --color-accent-primary: #00d4ff;
+    --color-accent-secondary: #0891b2;
+    --color-accent-light: #67e8f9;
+    --color-accent-gradient: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+
+    /* Aurora Colors - Cyan Only */
+    --color-aurora-1: rgba(0, 212, 255, 0.12);
+    --color-aurora-2: rgba(8, 145, 178, 0.12);
+    --color-aurora-3: rgba(103, 232, 249, 0.08);
+
+    /* Text Colors */
+    --color-text-primary: #e6edf3;
+    --color-text-secondary: #7d8590;
+    --color-text-muted: #484f58;
+
+    /* Glass Effect Colors */
+    --color-glass-bg: rgba(255, 255, 255, 0.04);
+    --color-glass-border: rgba(255, 255, 255, 0.1);
+    --color-glass-hover: rgba(255, 255, 255, 0.08);
+
+    /* Section Background Colors - Zebra */
+    --color-section-dark: #0a0a0f;
+    --color-section-light: #0f1218;
+
+    /* Typography */
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+    --font-size-4xl: 2.5rem;
+    --font-size-5xl: 3rem;
+
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Line Heights */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* Spacing Scale */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+    --shadow-glow-purple: 0 0 20px rgba(168, 85, 247, 0.3);
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+    --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Z-Index Scale */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-tooltip: 400;
+}
+
+/* ============================================
+   CSS Reset & Base Styles
+   ============================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    overflow-x: hidden;
+    /* Prevent global horizontal scroll */
+}
+
+body {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-primary);
+}
+
+h1 {
+    font-size: var(--font-size-4xl);
+}
+
+h2 {
+    font-size: var(--font-size-3xl);
+}
+
+h3 {
+    font-size: var(--font-size-2xl);
+}
+
+h4 {
+    font-size: var(--font-size-xl);
+}
+
+p {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+a {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-accent-secondary);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.text-gradient {
+    background: var(--color-accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* Section Spacing */
+.section {
+    padding: var(--space-24) 0;
+    position: relative;
+}
+
+/* Zebra Section Backgrounds */
+.section-dark {
+    background: var(--color-section-dark);
+}
+
+.section-light {
+    background: var(--color-section-light);
+}
+
+/* Section Fade Transition - Top and Bottom */
+.section-light::before,
+.section-light::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 80px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.section-light::before {
+    top: 0;
+    background: linear-gradient(to bottom,
+            var(--color-section-dark) 0%,
+            transparent 100%);
+}
+
+.section-light::after {
+    bottom: 0;
+    background: linear-gradient(to top,
+            var(--color-section-dark) 0%,
+            transparent 100%);
+}
+
+/* Ensure content is above fade overlay */
+.section>.container {
+    position: relative;
+    z-index: 2;
+}
+
+.section-title {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--space-4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.section-title i {
+    color: var(--color-accent-primary);
+}
+
+/* Global cursor pointer for interactive elements */
+a,
+button,
+[role="button"],
+.btn,
+.skill-tag,
+.about-card,
+.timeline-card,
+.hero-social-link,
+.footer-social-link,
+.nav-link,
+.scroll-indicator {
+    cursor: pointer;
+}
+
+/* ============================================
+   Selection Styles
+   ============================================ */
+::selection {
+    background-color: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+}
+
+/* ============================================
+   Scrollbar Styles
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-text-muted);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+}
+
+/* ============================================
+   Responsive Base Styles - Tablet
+   ============================================ */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 var(--space-5);
+    }
+
+    .section {
+        padding: var(--space-20) 0;
+    }
+
+    .section-title {
+        font-size: var(--font-size-2xl);
+        gap: var(--space-2);
+    }
+
+    h1 {
+        font-size: var(--font-size-3xl);
+    }
+
+    h2 {
+        font-size: var(--font-size-2xl);
+    }
+
+    h3 {
+        font-size: var(--font-size-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--space-4);
+    }
+
+    .section {
+        padding: var(--space-16) 0;
+    }
+
+    .section-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .section-title i {
+        font-size: var(--font-size-xl);
+    }
+
+    h1 {
+        font-size: var(--font-size-2xl);
+    }
+
+    h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    h3 {
+        font-size: var(--font-size-lg);
+    }
+
+    h4 {
+        font-size: var(--font-size-base);
+    }
+}
+
+/* ============================================
+   Responsive Base Styles - Smartphone
+   ============================================ */
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 var(--space-4);
+    }
+
+    .section {
+        padding: var(--space-12) 0;
+    }
+
+    .section-title {
+        font-size: var(--font-size-lg);
+        gap: var(--space-2);
+    }
+
+    .section-title i {
+        font-size: var(--font-size-base);
+    }
+
+    h1 {
+        font-size: var(--font-size-xl);
+    }
+
+    h2 {
+        font-size: var(--font-size-lg);
+    }
+
+    h3 {
+        font-size: var(--font-size-base);
+    }
+
+    .text-muted {
+        font-size: var(--font-size-sm);
+    }
+
+    /* Adjust fade transition height for mobile */
+    .section-light::before,
+    .section-light::after {
+        height: 50px;
+    }
+
+    /* REMOVED body padding to fix black bars */
+
+    /* REMOVED nav adjustment since body padding is gone */
+}
+
+@media (max-width: 834px) {
+    * {
+        -webkit-tap-highlight-color: transparent !important;
+    }
+}
+
+/* ============================================
+   Animation Performance Optimizations
+   ============================================ */
+
+/* Faster transitions on mobile for better performance */
+@media (max-width: 768px) {
+    :root {
+        --transition-fast: 80ms ease-out;
+        --transition-normal: 150ms ease-out;
+        --transition-slow: 200ms ease-out;
+        --transition-bounce: 200ms ease-out;
+    }
+
+    /* DISABLE backdrop-filter on mobile - main cause of lag */
+    .nav,
+    .nav.scrolled,
+    .nav-links,
+    .gallery-nav,
+    .awards-nav,
+    .awards-card,
+    .gallery-lightbox,
+    .awards-lightbox,
+    .project-lightbox {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Use solid backgrounds instead for performance */
+    .nav.scrolled {
+        background: rgba(10, 10, 15, 0.98) !important;
+    }
+
+    .nav-links {
+        background: rgba(10, 10, 15, 1) !important;
+    }
+
+    /* GPU acceleration for animated elements - Ultra Performance Mode */
+    .timeline-card,
+    .gallery-card,
+    .awards-card,
+    .about-card,
+    .btn,
+    .profile-container,
+    .hero-social-link {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        perspective: 1000px;
+        will-change: transform;
+        /* Hint browser to optimize */
+    }
+
+    /* Remove perspective for simpler mobile rendering */
+    .gallery-container,
+    .awards-container {
+        perspective: none;
+    }
+
+    /* Disable complex shadows on mobile */
+    .gallery-card,
+    .awards-card,
+    .timeline-card {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+        /* Lighter shadow */
+    }
+
+    /* Simplify hover effects on mobile (touch devices) */
+    .timeline-card:hover,
+    .about-card:hover,
+    .gallery-card:hover {
+        transform: translateZ(0) !important;
+    }
+
+    /* Disable 3D rotations on mobile - Flatten everything */
+    .gallery-card.position-left-1,
+    .gallery-card.position-right-1,
+    .awards-card.position-left-1,
+    .awards-card.position-right-1 {
+        transform: translateX(-50%) scale(0.9) !important;
+        opacity: 0.5 !important;
+    }
+}
+
+/* ============================================
+   Scroll Reveal Animations
+   ============================================ */
+
+/* Base reveal state - hidden */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+}
+
+/* Revealed state */
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Reveal variants */
+.reveal-fade {
+    opacity: 0;
+    transition: opacity 0.6s ease-out;
+    will-change: opacity;
+}
+
+.reveal-fade.revealed {
+    opacity: 1;
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+}
+
+.reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+}
+
+.reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+}
+
+.reveal-scale.revealed {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Staggered delay classes */
+.reveal-delay-1 {
+    transition-delay: 0.1s;
+}
+
+.reveal-delay-2 {
+    transition-delay: 0.2s;
+}
+
+.reveal-delay-3 {
+    transition-delay: 0.3s;
+}
+
+.reveal-delay-4 {
+    transition-delay: 0.4s;
+}
+
+/* ============================================
+   Scroll Anchor Offset
+   ============================================ */
+
+/* Offset for navbar when scrolling to sections */
+section[id] {
+    scroll-margin-top: 100px;
+}
+
+.section-title {
+    scroll-margin-top: 100px;
+}
+
+/* Reduced motion preferences for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .scroll-indicator,
+    .profile-glow {
+        animation: none !important;
+    }
+
+}
+
+/* ============================================
+   Touch Device Optimizations
+   ============================================ */
+
+/* Disable hover effects on touch devices to prevent stuck states */
+@media (hover: none) {
+
+    /* Timeline interactions handled via .expanded class */
+    .timeline-card:hover {
+        transform: none !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+        border-color: var(--color-glass-border) !important;
+    }
+
+    .timeline-card:hover .timeline-card-image img {
+        transform: none !important;
+    }
+
+    .timeline-card:hover .timeline-card-title {
+        transform: none !important;
+    }
+
+    /* Disable About Card hover */
+    .about-card:hover {
+        transform: none !important;
+        background: var(--color-glass-bg) !important;
+        border-color: var(--color-glass-border) !important;
+    }
+
+    .about-card:hover .about-card-icon {
+        transform: none !important;
+        color: var(--color-accent-primary) !important;
+    }
+
+    /* Disable Profile hover */
+    .profile-container:hover .profile-image {
+        transform: none !important;
+        filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5)) saturate(0.85) hue-rotate(-5deg) !important;
+    }
+
+    /* Disable Button hovers */
+    .btn:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn-primary:hover {
+        background: var(--color-accent-primary);
+        color: var(--color-bg-primary);
+    }
+
+    .btn-secondary:hover {
+        background: var(--color-glass-bg);
+        border-color: var(--color-glass-border);
+    }
+
+    /* Add active states for feedback instead */
+    .btn:active,
+    .hero-social-link:active,
+    .timeline-card:active {
+        transform: scale(0.96) !important;
+        transition: transform 0.1s;
+    }
+}
+
+/* Specific class based touch overrides */
+body.touch-device .timeline-card:hover {
+    transform: none !important;
+}
+
+/* Ensure smooth scrolling on touch */
+@media (pointer: coarse) {
+
+    html,
+    body {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+}

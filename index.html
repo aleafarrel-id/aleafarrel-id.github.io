@@ -6,23 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Portfolio Website of Alea Farrel">
-    <meta name="keywords" content="Alea Farrel, Alea Farrel Portfolio, Web Developer, Network Engineer, Projects">
+    <meta name="description"
+        content="Alea Farrel - Network Engineer & Web Developer. Creating elegant solutions through code and building robust network infrastructures.">
+    <meta name="keywords"
+        content="Alea Farrel, Portfolio, Network Engineer, Web Developer, C++, Qt, MikroTik, MTCNA, Projects">
     <meta name="author" content="Alea Farrel">
+    <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aleafarrel-id.github.io/portofolio/">
     <meta property="og:title" content="Alea Farrel - Portfolio">
-    <meta property="og:description" content="Portfolio Website of Alea Farrel">
+    <meta property="og:description"
+        content="Network Engineer & Web Developer. Creating elegant solutions through code.">
+    <meta property="og:image" content="assets/images/img/profile.webp">
 
-    <title>Alea Farrel</title>
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alea Farrel - Portfolio">
+    <meta name="twitter:description"
+        content="Network Engineer & Web Developer. Creating elegant solutions through code.">
+
+    <title>Alea Farrel | Portfolio</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/webp" href="assets/favicon/favicon.webp">
 
-    <!-- Google Fonts: JetBrains Mono -->
+    <!-- Preconnect for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- Preload critical assets -->
+    <link rel="preload" href="assets/images/img/profile.webp" as="image" type="image/webp">
+    <link rel="preload" href="assets/css/style.css" as="style">
+    <link rel="preload" href="assets/js/app.js" as="script" crossorigin>
+
+    <!-- Google Fonts: JetBrains Mono with display=swap for faster render -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
         rel="stylesheet">
 
@@ -37,6 +63,241 @@
 </head>
 
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-logo">
+            <img src="assets/favicon/favicon.webp" alt="aF Logo" class="splash-logo-image">
+        </div>
+        <div class="splash-progress">
+            <div id="splash-progress-bar" class="splash-progress-bar"></div>
+        </div>
+        <p id="splash-status" class="splash-status">Initializing...</p>
+    </div>
+
+    <!-- Aurora Background -->
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span class="nav-logo-bracket">&lt;</span>
+                <span class="nav-logo-text">Dev</span>
+                <span class="nav-logo-bracket">&gt;</span>
+            </a>
+
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="#awards" class="nav-link">Awards</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="section section-dark hero-section">
+        <div class="aurora-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <!-- Left Side - Text -->
+                <div class="hero-text">
+                    <span class="hero-greeting" id="hero-greeting">Hello</span>
+
+                    <h1 class="hero-title">
+                        I'm <span id="hero-firstname">Alea</span> <span class="highlight"
+                            id="hero-lastname">Farrel</span>
+                    </h1>
+                    <p class="hero-subtitle" id="hero-title">Network Engineer</p>
+
+                    <!-- Buttons -->
+                    <div class="hero-buttons" id="hero-buttons-container">
+                        <a href="#" class="btn btn-primary btn-ripple" target="_blank" rel="noopener noreferrer">
+                            <i class="bx bxl-instagram"></i> Message
+                        </a>
+                        <a href="#projects" class="btn btn-secondary">
+                            <i class="bx bx-folder-open"></i> See Projects
+                        </a>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="hero-description">
+                        <i class="bx bx-code-alt"></i>
+                        <span id="hero-bio">I create and customize modern interface designs with my UI/UX knowledge for
+                            websites and web applications.</span>
+                    </p>
+
+                    <!-- Social Links -->
+                    <div class="hero-socials">
+                        <span class="hero-socials-label">Follow Me</span>
+                        <div class="hero-socials-links" id="hero-socials-links">
+                            <a href="#" class="hero-social-link instagram" target="_blank" rel="noopener noreferrer"
+                                aria-label="Instagram">
+                                <i class="bx bxl-instagram"></i>
+                            </a>
+                            <a href="#" class="hero-social-link github" target="_blank" rel="noopener noreferrer"
+                                aria-label="GitHub">
+                                <i class="bx bxl-github"></i>
+                            </a>
+                            <a href="#" class="hero-social-link email" aria-label="Email">
+                                <i class="bx bxl-gmail"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Profile Image -->
+                <div class="hero-image">
+                    <div class="profile-container">
+                        <div class="profile-glow"></div>
+                        <div class="profile-circle-bg"></div>
+                        <div class="profile-ring"></div>
+                        <div class="profile-accent"></div>
+                        <div class="profile-image-wrapper">
+                            <img id="hero-image" src="assets/images/img/profile.webp"
+                                alt="Alea Farrel - Network Engineer" class="profile-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" role="button" aria-label="Scroll to About section">
+            <div class="scroll-indicator-mouse"></div>
+            <div class="scroll-indicator-text">Scroll Down</div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section section-light about-section">
+        <div class="container">
+            <h2 class="section-title text-center" style="display: flex; justify-content: center;">
+                <i class="bx bx-user"></i> About Me
+            </h2>
+            <p class="text-center text-muted" id="about-tagline" style="margin-bottom: 0;">
+                Passionate about technology and continuous learning
+            </p>
+
+            <!-- About Cards Grid - Dynamic -->
+            <div class="about-grid" id="about-cards">
+                <!-- Cards will be rendered dynamically from database.json -->
+            </div>
+
+            <!-- Technologies Section -->
+            <div class="about-skills">
+                <h3 class="text-center" style="font-size: var(--font-size-lg); margin-bottom: var(--space-6);">
+                    Technologies
+                </h3>
+                <div class="skills-grid" id="technologies-grid">
+                    <!-- Technologies will be rendered dynamically from database.json -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section section-dark timeline-section">
+        <div class="container">
+            <h2 class="section-title text-center" style="display: flex; justify-content: center;">
+                <i class="bx bx-folder-open"></i> My Projects
+            </h2>
+            <p class="text-center text-muted" style="margin-bottom: var(--space-8);">
+                Hover to see project details
+            </p>
+
+            <div class="timeline-container">
+                <div class="timeline" id="timeline">
+                    <!-- Timeline items will be rendered dynamically via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section section-light gallery-section">
+        <div class="container">
+            <h2 class="section-title text-center" style="display: flex; justify-content: center;">
+                <i class="bx bx-film"></i> Gallery
+            </h2>
+            <p class="text-center text-muted" style="margin-bottom: var(--space-8);">
+                A glimpse of my work and activities
+            </p>
+
+            <!-- Gallery Card Stack - Dynamic -->
+            <div class="gallery-wrapper">
+                <div class="gallery-container" id="gallery-container">
+                    <!-- Gallery cards will be rendered dynamically from database.json -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Section -->
+    <section id="awards" class="section section-dark awards-section">
+        <div class="container">
+            <h2 class="section-title text-center" style="display: flex; justify-content: center;">
+                <i class="bx bx-award"></i> Awards
+            </h2>
+            <p class="text-center text-muted" style="margin-bottom: var(--space-8);">
+                Professional certifications and achievements
+            </p>
+
+            <!-- Awards Slider - Dynamic -->
+            <div class="awards-container" id="awards-container">
+                <!-- Awards slides will be rendered dynamically from database.json -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="aurora-bg"></div>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div class="footer-brand">
+                    <span class="footer-logo">&lt;Dev&gt;</span>
+                    <p class="footer-description" id="footer-description">
+                        Building digital experiences and network solutions with passion and precision.
+                    </p>
+                </div>
+
+                <!-- Navigation Column -->
+                <div class="footer-section">
+                    <h4 class="footer-section-title">Navigation</h4>
+                    <nav class="footer-nav" id="footer-nav">
+                        <!-- Navigation links will be rendered dynamically from database.json -->
+                    </nav>
+                </div>
+
+                <!-- Connect Column -->
+                <div class="footer-section">
+                    <h4 class="footer-section-title">Connect</h4>
+                    <div class="footer-socials" id="footer-socials">
+                        <!-- Social links will be rendered dynamically from database.json -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    <i class="bx bx-copyright"></i> <span id="footer-year"></span>
+                    <a id="footer-name-link" href="#" target="_blank" rel="noopener noreferrer">Alea Farrel</a>. All
+                    rights reserved.
+                </p>
+                <a href="#hero" class="footer-back-to-top">
+                    <i class="bx bx-chevron-up"></i> Back to Top
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="assets/js/app.js" type="module" defer></script>
