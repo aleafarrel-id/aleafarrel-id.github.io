@@ -14,6 +14,7 @@ export class Awards {
         this.lightbox = null;
         this.preloadedImages = [];
         this.progressBar = null;
+        this.isInView = false;
     }
 
     /**
@@ -255,10 +256,38 @@ export class Awards {
             this.handleSwipe(touchStartX, touchEndX);
         }, { passive: true });
 
-        // Keyboard navigation
+        // Keyboard navigation with visibility check
         this.container.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') this.prev();
             if (e.key === 'ArrowRight') this.next();
+        });
+
+        // Setup Intersection Observer for specialized keyboard support
+        // This allows using arrow keys even when focus is not explicitly on the container
+        // if the section is mostly visible in the viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                this.isInView = entry.isIntersecting;
+            });
+        }, { threshold: 0.6 });
+
+        observer.observe(this.container);
+
+        // Document-level key listener that checks visibility
+        document.addEventListener('keydown', (e) => {
+            if (!this.isInView) return;
+
+            // Only capture if no other element has focus (input, etc)
+            if (document.activeElement.tagName === 'INPUT' ||
+                document.activeElement.tagName === 'TEXTAREA') return;
+
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault(); // Prevent scroll
+                this.prev();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault(); // Prevent scroll
+                this.next();
+            }
         });
     }
 

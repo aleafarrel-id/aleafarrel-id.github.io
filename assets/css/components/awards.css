@@ -451,8 +451,9 @@
     }
 
     .awards-image {
-        max-width: 280px;
+        max-width: 100%;
         max-height: 320px;
+        height: auto;
     }
 
     .awards-info {
@@ -501,8 +502,9 @@
     }
 
     .awards-image {
-        max-width: 280px;
+        max-width: 100%;
         max-height: 350px;
+        height: auto;
     }
 
     .awards-badge {

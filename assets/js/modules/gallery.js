@@ -13,6 +13,7 @@ export class Gallery {
         this.isPaused = false;
         this.lightbox = null;
         this.isAnimating = false;
+        this.isInView = false;
     }
 
     /**
@@ -289,14 +290,36 @@ export class Gallery {
         let touchStartX = 0;
         let touchEndX = 0;
 
-        this.stack.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
         this.stack.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
             this.handleSwipe(touchStartX, touchEndX);
         }, { passive: true });
+
+        // Setup Intersection Observer for specialized keyboard support
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                this.isInView = entry.isIntersecting;
+            });
+        }, { threshold: 0.6 });
+
+        observer.observe(this.container);
+
+        // Document-level key listener that checks visibility
+        document.addEventListener('keydown', (e) => {
+            if (!this.isInView) return;
+
+            // Only capture if no other element has focus (input, etc)
+            if (document.activeElement.tagName === 'INPUT' ||
+                document.activeElement.tagName === 'TEXTAREA') return;
+
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault(); // Prevent scroll
+                this.prev();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault(); // Prevent scroll
+                this.next();
+            }
+        });
     }
 
     /**

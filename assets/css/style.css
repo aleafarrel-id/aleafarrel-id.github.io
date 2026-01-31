@@ -311,6 +311,24 @@ button,
 }
 
 /* ============================================
+   Focus Indicators (Accessibility)
+   ============================================ */
+:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Custom focus for rounded elements */
+.btn:focus-visible,
+.awards-dot:focus-visible,
+.awards-nav:focus-visible,
+.gallery-nav:focus-visible,
+.gallery-thumbnail:focus-visible {
+    border-radius: var(--radius-full);
+}
+
+/* ============================================
    Scrollbar Styles
    ============================================ */
 ::-webkit-scrollbar {
