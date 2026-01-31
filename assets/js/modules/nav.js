@@ -79,7 +79,7 @@ export class Navigation {
         let currentSection = '';
 
         sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
+            const sectionTop = section.offsetTop - 120; // Increased offset for better active state detection
             const sectionHeight = section.offsetHeight;
 
             if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {

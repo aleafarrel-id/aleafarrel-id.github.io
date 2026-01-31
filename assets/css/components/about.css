@@ -166,6 +166,11 @@
 }
 
 @media (max-width: 640px) {
+    .about-section {
+        padding-top: var(--space-24);
+        /* Fix title overlap on mobile */
+    }
+
     .about-grid {
         grid-template-columns: 1fr;
         gap: var(--space-4);
@@ -219,6 +224,11 @@
 @media (max-width: 380px) {
     .about-card {
         padding: var(--space-3);
+    }
+
+    .about-section {
+        padding-top: var(--space-24);
+        /* Fix title overlap on mobile */
     }
 
     .about-card-icon {
