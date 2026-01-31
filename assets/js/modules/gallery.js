@@ -140,11 +140,18 @@ export class Gallery {
         thumbnails.forEach((thumb, index) => {
             if (index === this.currentIndex) {
                 thumb.classList.add('active');
-                // Scroll active thumbnail into view
-                thumb.scrollIntoView({
-                    behavior: 'smooth',
-                    inline: 'center',
-                    block: 'nearest'
+
+                // Calculate scroll position to center the active thumbnail
+                const container = this.thumbnailsContainer;
+                const thumbLeft = thumb.offsetLeft;
+                const thumbWidth = thumb.offsetWidth;
+                const containerWidth = container.offsetWidth;
+
+                const scrollPos = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
+
+                container.scrollTo({
+                    left: scrollPos,
+                    behavior: 'smooth'
                 });
             } else {
                 thumb.classList.remove('active');
