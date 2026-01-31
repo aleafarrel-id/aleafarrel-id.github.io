@@ -4,12 +4,11 @@
 
 /* Hero Section */
 .hero-section {
-    min-height: 100dvh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 80px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .hero-content {
@@ -129,6 +128,13 @@
     background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
     border-color: transparent;
     color: #ffffff;
+}
+
+.hero-social-link.telegram:hover {
+    background: #24A1DE;
+    border-color: #24A1DE;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(36, 161, 222, 0.4);
 }
 
 .hero-social-link.github:hover {
@@ -336,7 +342,7 @@
 
     .hero-description {
         justify-content: center;
-        max-width: 100%;
+        max-width: 80%;
     }
 
     .hero-buttons {
@@ -371,9 +377,7 @@
 
 @media (max-width: 480px) {
     .hero-section {
-        padding-top: 55px;
-        min-height: 100dvh;
-        padding-bottom: var(--space-8);
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -385,6 +389,7 @@
 
     .hero-greeting {
         font-size: var(--font-size-xs);
+        text-transform: capitalize;
         letter-spacing: 1px;
     }
 
@@ -401,13 +406,11 @@
     }
 
     .hero-description {
+        max-width: 85%;
         font-size: var(--font-size-xs);
         gap: var(--space-1);
-    }
-
-    .hero-description i {
-        font-size: var(--font-size-sm);
-        margin-top: 2px;
+        display: block;
+        text-align: justify;
     }
 
     .profile-container {
@@ -466,5 +469,9 @@
         width: 32px;
         height: 32px;
         font-size: var(--font-size-sm);
+    }
+
+    .scroll-indicator {
+        display: none;
     }
 }

@@ -13,6 +13,10 @@
             "url": "https://instagram.com/alea_farrel",
             "label": "Instagram"
         },
+        "telegram": {
+            "url": "https://t.me/aleafarrel",
+            "label": "Telegram"
+        },
         "github": {
             "url": "https://github.com/aleafarrel-id",
             "label": "GitHub"
@@ -126,10 +130,49 @@
                 "Terminal",
                 "CLI App"
             ]
+        },
+        {
+            "id": 3,
+            "name": "Enigmorph",
+            "description": "A modern portable Enigma-style encryption application with password and PIN-based shifting.",
+            "image": "assets/images/projects/enigmorph.webp",
+            "link": "https://github.com/aleafarrel-id/enigmorph",
+            "tags": [
+                "C++",
+                "Qt",
+                "Desktop App"
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Alea AirCursor",
+            "description": "A gesture-based cursor controller, designed for vision-based interaction.",
+            "image": "assets/images/projects/aircursor.webp",
+            "link": "https://github.com/aleafarrel-id/alea-aircursor",
+            "tags": [
+                "Python",
+                "PyQt",
+                "MediaPipe",
+                "Desktop App"
+            ]
+        },
+        {
+            "id": 5,
+            "name": "Alea's Intelligence",
+            "description": "AI Chat Web-UI with Speech-to-Text powered by Whisper AI and support OpenRouter/Groq API integration.",
+            "image": "assets/images/projects/aleas-intelligence.webp",
+            "link": "https://github.com/aleafarrel-id/aleas-intelligence",
+            "tags": [
+                "Whisper AI",
+                "OpenRouter",
+                "Groq",
+                "PHP",
+                "Web App"
+            ]
         }
     ],
     "gallery": {
-        "autoSlideInterval": 5000,
+        "autoSlideInterval": 6000,
         "images": [
             {
                 "src": "assets/images/img/configurations.webp",
@@ -153,86 +196,86 @@
             },
             {
                 "src": "assets/images/img/lsp23.webp",
-                "title": "LSP Competition",
-                "description": "Network engineering competition"
+                "title": "LSP Certification",
+                "description": "Network engineering certification"
             },
             {
                 "src": "assets/images/img/ojm1.webp",
-                "title": "Field Work 1",
-                "description": "On-site network deployment"
+                "title": "MikroTik Network Olympiad",
+                "description": "MikroTik Network Olympiad"
             },
             {
                 "src": "assets/images/img/ojm2.webp",
-                "title": "Field Work 2",
-                "description": "Infrastructure installation"
+                "title": "MikroTik Network Olympiad",
+                "description": "MikroTik Network Olympiad"
             },
             {
                 "src": "assets/images/img/ojm3.webp",
-                "title": "Field Work 3",
-                "description": "Network setup and testing"
+                "title": "MikroTik Network Olympiad",
+                "description": "MikroTik Network Olympiad"
             },
             {
                 "src": "assets/images/img/ojm4.webp",
-                "title": "Field Work 4",
-                "description": "Cable routing and connections"
+                "title": "MikroTik Network Olympiad",
+                "description": "MikroTik Network Olympiad"
             },
             {
                 "src": "assets/images/img/ojm5.webp",
-                "title": "Field Work 5",
-                "description": "Final system verification"
+                "title": "MikroTik Network Olympiad",
+                "description": "MikroTik Network Olympiad"
             }
         ]
     },
     "awards": {
-        "autoSlideInterval": 6000,
+        "autoSlideInterval": 8000,
         "certificates": [
             {
                 "id": 1,
                 "name": "MTCNA",
                 "title": "MikroTik Certified Network Associate",
-                "description": "Entry-level MikroTik certification covering fundamental networking concepts, basic router configuration, wireless setup, firewall basics, and network management using RouterOS.",
+                "description": "Entry-level MikroTik certification covering fundamental networking and router configuration using RouterOS.",
                 "image": "assets/images/certs/mtcna.webp"
             },
             {
                 "id": 2,
                 "name": "MTCTCE",
                 "title": "MikroTik Certified Traffic Control Engineer",
-                "description": "Advanced MikroTik certification focused on traffic control, Quality of Service (QoS), and bandwidth management techniques for network optimization.",
+                "description": "Advanced MikroTik certification focused on traffic control, Quality of Service (QoS), and bandwidth management.",
                 "image": "assets/images/certs/mtctce.webp"
             },
             {
                 "id": 3,
-                "name": "TKJ Excellence Award",
-                "title": "Network Engineering Excellence Award",
-                "description": "Recognition award for outstanding achievement and excellence in Computer Network Engineering (Teknik Komputer Jaringan) program.",
+                "name": "TKJ Skanesga Award",
+                "title": "TKJ Best Graduate Award Certificate",
+                "description": "Recognition award for outstanding achievement in Computer Network Engineering program at SMKN 1 Seyegan.",
                 "image": "assets/images/certs/tkj-award.webp"
             },
             {
                 "id": 4,
                 "name": "Cluster Training 1",
-                "title": "Network Infrastructure Training Certificate",
-                "description": "Certificate of completion for network infrastructure training covering router configuration, network topology design, and practical implementation.",
+                "title": "Cable-Based Network Installation",
+                "description": "Certificate of completion for cable-based network installation training at SMKN 1 Seyegan.",
                 "image": "assets/images/certs/cluster1.webp"
             },
             {
                 "id": 5,
                 "name": "Cluster Training 2",
-                "title": "Advanced Network Configuration Training",
-                "description": "Certificate of completion for advanced network configuration training including VLAN setup, routing protocols, and network security implementation.",
+                "title": "Computer Network Device Configuration",
+                "description": "Certificate of completion for computer network device configuration training at SMKN 1 Seyegan.",
                 "image": "assets/images/certs/cluster2.webp"
             },
             {
                 "id": 6,
                 "name": "Cluster Training 3",
-                "title": "Network Security & Management Training",
-                "description": "Certificate of completion for network security and management training covering firewall configuration, VPN setup, and network monitoring.",
+                "title": "Routing Configuration",
+                "description": "Certificate of completion for routing configuration and computer network device configuration training at SMKN 1 Seyegan.",
                 "image": "assets/images/certs/cluster3.webp"
             },
             {
                 "id": 7,
-                "name": "OJM Certificate",
-                "title": "Industrial Internship Certificate",
-                "description": "Certificate of completion for on-the-job training (OJM) in network engineering, demonstrating practical field experience in network installation and maintenance.",
+                "name": "OJM Finalist",
+                "title": "MikroTik Network Olympiad Finalist",
+                "description": "Finalist in the MikroTik Network Olympiad, competition for network engineering students in Indonesia.",
                 "image": "assets/images/certs/ojm.webp"
             }
         ]

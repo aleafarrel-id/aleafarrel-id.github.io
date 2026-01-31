@@ -21,33 +21,37 @@ export class Timeline {
 
         this.projects = projects;
 
-        this.container.innerHTML = projects.map((project, index) => `
-            <div class="timeline-item" data-index="${index}">
-                <div class="timeline-dot"></div>
-                <div class="timeline-card">
-                    <div class="timeline-card-image" data-index="${index}">
-                        <img 
-                            src="${project.image}" 
-                            alt="${project.name}" 
-                            loading="lazy"
-                        >
-                        <div class="timeline-card-overlay">
-                            <span class="timeline-card-number">${String(index + 1).padStart(2, '0')}</span>
-                            <h3 class="timeline-card-title">${project.name}</h3>
+        this.container.innerHTML = `
+            <div class="timeline-list">
+                ${projects.map((project, index) => `
+                <div class="timeline-item" data-index="${index}">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-image" data-index="${index}">
+                            <img 
+                                src="${project.image}" 
+                                alt="${project.name}" 
+                                loading="lazy"
+                            >
+                            <div class="timeline-card-overlay">
+                                <span class="timeline-card-number">${String(index + 1).padStart(2, '0')}</span>
+                                <h3 class="timeline-card-title">${project.name}</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="timeline-card-details">
-                        <p class="timeline-card-description">${project.description}</p>
-                        <div class="timeline-card-tags">
-                            ${project.tags.map(tag => `<span class="timeline-card-tag">${tag}</span>`).join('')}
+                        <div class="timeline-card-details">
+                            <p class="timeline-card-description">${project.description}</p>
+                            <div class="timeline-card-tags">
+                                ${project.tags.map(tag => `<span class="timeline-card-tag">${tag}</span>`).join('')}
+                            </div>
+                            <a href="${project.link}" class="timeline-card-link" target="_blank" rel="noopener noreferrer">
+                                View Project <i class="bx bx-right-arrow-alt"></i>
+                            </a>
                         </div>
-                        <a href="${project.link}" class="timeline-card-link" target="_blank" rel="noopener noreferrer">
-                            View Project <i class="bx bx-right-arrow-alt"></i>
-                        </a>
                     </div>
                 </div>
+            `).join('')}
             </div>
-        `).join('');
+        `;
 
         this.createNavigationButtons();
         this.createLightbox();
@@ -59,59 +63,52 @@ export class Timeline {
      * Create navigation buttons
      */
     createNavigationButtons() {
-        const timelineContainer = this.container.closest('.timeline-container');
-        if (!timelineContainer) return;
+        // The container used for positioning is the parent wrapper
+        const timelineWrapper = this.container.closest('.timeline-container');
+        if (!timelineWrapper) return;
 
         // Create nav container
         const nav = document.createElement('div');
         nav.className = 'timeline-nav';
         nav.innerHTML = `
-            <button class="timeline-nav-btn" id="timeline-nav-up" aria-label="Previous project">
+            <button class="timeline-nav-btn" id="timeline-nav-up" aria-label="Scroll up">
                 <i class="bx bx-chevron-up"></i>
             </button>
-            <button class="timeline-nav-btn" id="timeline-nav-down" aria-label="Next project">
+            <button class="timeline-nav-btn" id="timeline-nav-down" aria-label="Scroll down">
                 <i class="bx bx-chevron-down"></i>
             </button>
         `;
-        timelineContainer.appendChild(nav);
+        timelineWrapper.appendChild(nav);
 
         this.navUp = nav.querySelector('#timeline-nav-up');
         this.navDown = nav.querySelector('#timeline-nav-down');
     }
 
     /**
-     * Navigate to specific project
+     * Scroll content by amount
+     * @param {number} amount - Pixels to scroll
      */
-    navigateToProject(index) {
-        if (index < 0 || index >= this.projects.length) return;
+    scrollContent(amount) {
+        if (!this.container) return;
 
-        this.currentIndex = index;
-        const items = this.container.querySelectorAll('.timeline-item');
-        const targetItem = items[index];
-
-        if (targetItem) {
-            const timelineContainer = this.container.closest('.timeline-container');
-            if (timelineContainer) {
-                const containerRect = timelineContainer.getBoundingClientRect();
-                const itemRect = targetItem.getBoundingClientRect();
-                const scrollOffset = itemRect.top - containerRect.top + timelineContainer.scrollTop - (containerRect.height / 2) + (itemRect.height / 2);
-
-                timelineContainer.scrollTo({
-                    top: scrollOffset,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        this.updateNavButtons();
+        this.container.scrollBy({
+            top: amount,
+            behavior: 'smooth'
+        });
     }
 
     /**
-     * Update navigation button states
+     * Update navigation button states based on scroll position
      */
     updateNavButtons() {
+        if (!this.container) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = this.container;
+        const isAtTop = scrollTop <= 5; // buffer
+        const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) <= 5;
+
         if (this.navUp) {
-            if (this.currentIndex <= 0) {
+            if (isAtTop) {
                 this.navUp.classList.add('disabled');
             } else {
                 this.navUp.classList.remove('disabled');
@@ -119,7 +116,7 @@ export class Timeline {
         }
 
         if (this.navDown) {
-            if (this.currentIndex >= this.projects.length - 1) {
+            if (isAtBottom) {
                 this.navDown.classList.add('disabled');
             } else {
                 this.navDown.classList.remove('disabled');
@@ -178,22 +175,23 @@ export class Timeline {
             });
         });
 
+        // Scroll event to update buttons
+        this.container.addEventListener('scroll', () => {
+            this.updateNavButtons();
+        });
 
+        // Navigation button events - Scroll by fixed amount (e.g. 200px)
+        const SCROLL_AMOUNT = 200;
 
-        // Navigation button events
         if (this.navUp) {
             this.navUp.addEventListener('click', () => {
-                if (this.currentIndex > 0) {
-                    this.navigateToProject(this.currentIndex - 1);
-                }
+                this.scrollContent(-SCROLL_AMOUNT);
             });
         }
 
         if (this.navDown) {
             this.navDown.addEventListener('click', () => {
-                if (this.currentIndex < this.projects.length - 1) {
-                    this.navigateToProject(this.currentIndex + 1);
-                }
+                this.scrollContent(SCROLL_AMOUNT);
             });
         }
     }

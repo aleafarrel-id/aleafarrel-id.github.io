@@ -137,12 +137,17 @@ export class Awards {
                 <div class="awards-lightbox-caption">
                     <h4 class="awards-lightbox-title"></h4>
                 </div>
+                <div class="awards-lightbox-hint">
+                    <i class="bx bx-x"></i>
+                    <span>Click outside to close</span>
+                </div>
             </div>
         `;
         document.body.appendChild(this.lightbox);
 
         this.lightbox.addEventListener('click', (e) => {
-            if (e.target === this.lightbox) {
+            if (!e.target.closest('.awards-lightbox-image') &&
+                !e.target.closest('.awards-lightbox-caption')) {
                 this.closeLightbox();
             }
         });
@@ -365,6 +370,9 @@ export class Awards {
      * Start auto-slide
      */
     startAutoSlide() {
+        // Disable autoscroll on mobile
+        if (window.innerWidth <= 768) return;
+
         this.resetProgress();
         this.autoSlideTimer = setInterval(() => {
             if (!this.isPaused) {

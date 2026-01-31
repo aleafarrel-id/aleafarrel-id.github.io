@@ -138,6 +138,13 @@ html {
     /* Prevent global horizontal scroll */
 }
 
+/* Utility to prevent scrolling during splash screen */
+body.no-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none;
+}
+
 body {
     font-family: var(--font-mono);
     font-size: var(--font-size-base);
@@ -145,8 +152,7 @@ body {
     line-height: var(--line-height-normal);
     color: var(--color-text-primary);
     background-color: var(--color-bg-primary);
-    min-height: 100dvh;
-    overflow-x: hidden;
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -224,7 +230,7 @@ a:hover {
 
 /* Section Spacing */
 .section {
-    padding: var(--space-24) 0;
+    padding: var(--space-20) 0;
     position: relative;
 }
 
@@ -515,8 +521,7 @@ button,
 
     /* Simplify hover effects on mobile (touch devices) */
     .timeline-card:hover,
-    .about-card:hover,
-    .gallery-card:hover {
+    .about-card:hover {
         transform: translateZ(0) !important;
     }
 

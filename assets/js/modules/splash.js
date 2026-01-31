@@ -27,7 +27,7 @@ export class SplashScreen {
         if (!this.splash) return;
 
         // Prevent scrolling while splash is visible
-        document.body.style.overflow = 'hidden';
+        // Note: 'no-scroll' class is now added in HTML for immediate effect
 
         try {
             await this.preloadAssets();
@@ -153,7 +153,7 @@ export class SplashScreen {
 
         setTimeout(() => {
             this.splash.classList.add('hidden');
-            document.body.style.overflow = '';
+            document.body.classList.remove('no-scroll');
 
             // Remove splash from DOM after animation
             setTimeout(() => {

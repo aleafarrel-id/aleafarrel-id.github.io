@@ -10,29 +10,16 @@
 /* Timeline Container */
 .timeline-container {
     position: relative;
-    max-height: 600px;
-    overflow-y: auto;
+    overflow: hidden;
     padding: var(--space-6) var(--space-2);
-
-    /* Fade edges */
-    mask-image: linear-gradient(to bottom,
-            transparent 0%,
-            black 3%,
-            black 97%,
-            transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom,
-            transparent 0%,
-            black 3%,
-            black 97%,
-            transparent 100%);
 }
 
 /* Hide Scrollbar */
-.timeline-container::-webkit-scrollbar {
+.timeline::-webkit-scrollbar {
     display: none;
 }
 
-.timeline-container {
+.timeline {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -89,13 +76,34 @@
 /* Timeline Line */
 .timeline {
     position: relative;
+    /* Move scrolling here */
+    max-height: 600px;
+    overflow-y: hidden;
+    /* Disable manual scroll */
+    scroll-behavior: smooth;
+
+    /* Fade edges */
+    mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            black 3%,
+            black 97%,
+            transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            black 3%,
+            black 97%,
+            transparent 100%);
+}
+
+.timeline-list {
+    position: relative;
     padding: var(--space-4) 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
 }
 
-.timeline::before {
+.timeline-list::before {
     content: '';
     position: absolute;
     left: 50%;
@@ -168,13 +176,7 @@ body:not(.touch-device) .timeline-card:hover {
     border-color: rgba(0, 212, 255, 0.3);
 }
 
-/* Expanded state for touch */
-.timeline-card.expanded {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 212, 255, 0.15);
-    border-color: rgba(0, 212, 255, 0.3);
-    z-index: 5;
-}
+/* Expanded state removed */
 
 /* Card Image with Overlay */
 .timeline-card-image {
@@ -206,10 +208,7 @@ body.touch-device .timeline-item:hover .timeline-dot {
     box-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
 }
 
-body.touch-device .timeline-card.expanded~.timeline-dot {
-    transform: translateX(-50%) scale(1.3);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.7);
-}
+/* Expanded dot state removed */
 
 /* Image Overlay with Title */
 .timeline-card-overlay {
@@ -226,8 +225,7 @@ body.touch-device .timeline-card.expanded~.timeline-dot {
     transition: background var(--transition-normal);
 }
 
-body:not(.touch-device) .timeline-card:hover .timeline-card-overlay,
-.timeline-card.expanded .timeline-card-overlay {
+body:not(.touch-device) .timeline-card:hover .timeline-card-overlay {
     background: linear-gradient(to top,
             rgba(10, 10, 15, 0.98) 0%,
             rgba(10, 10, 15, 0.7) 60%,
@@ -242,8 +240,7 @@ body:not(.touch-device) .timeline-card:hover .timeline-card-overlay,
     transition: transform var(--transition-normal);
 }
 
-body:not(.touch-device) .timeline-card:hover .timeline-card-title,
-.timeline-card.expanded .timeline-card-title {
+body:not(.touch-device) .timeline-card:hover .timeline-card-title {
     transform: translateY(-4px);
 }
 
@@ -262,22 +259,12 @@ body:not(.touch-device) .timeline-card:hover .timeline-card-title,
 }
 
 /* Card Details - Hidden by default, shown on hover */
+/* Card Details - Always visible */
 .timeline-card-details {
-    padding: 0 var(--space-4) var(--space-4);
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition:
-        max-height var(--transition-normal),
-        opacity var(--transition-normal),
-        padding var(--transition-normal);
-}
-
-body:not(.touch-device) .timeline-card:hover .timeline-card-details,
-.timeline-card.expanded .timeline-card-details {
-    max-height: 200px;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    max-height: none;
     opacity: 1;
-    padding-top: var(--space-3);
+    overflow: visible;
 }
 
 .timeline-card-description {
@@ -331,7 +318,7 @@ body:not(.touch-device) .timeline-card:hover .timeline-card-details,
 
 /* Responsive Timeline - Tablet */
 @media (max-width: 768px) {
-    .timeline::before {
+    .timeline-list::before {
         left: 16px;
     }
 
@@ -402,7 +389,7 @@ body:not(.touch-device) .timeline-card:hover .timeline-card-details,
         padding: var(--space-4) var(--space-1);
     }
 
-    .timeline {
+    .timeline-list {
         gap: var(--space-4);
     }
 
@@ -411,7 +398,7 @@ body:not(.touch-device) .timeline-card:hover .timeline-card-details,
         padding-left: 40px;
     }
 
-    .timeline::before {
+    .timeline-list::before {
         left: 12px;
     }
 

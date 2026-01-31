@@ -230,17 +230,17 @@
 }
 
 .awards-badge {
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-1);
     padding: var(--space-2) var(--space-4);
     background: var(--color-accent-primary);
     color: var(--color-bg-primary);
     border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
-    letter-spacing: 1px;
     width: fit-content;
 }
 
@@ -390,6 +390,30 @@
     color: var(--color-text-primary);
 }
 
+.awards-lightbox-hint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        opacity 0.4s ease 0.3s,
+        transform 0.4s ease 0.3s;
+}
+
+.awards-lightbox.active .awards-lightbox-hint {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.awards-lightbox-hint i {
+    font-size: var(--font-size-lg);
+}
+
 /* ============================================
    Responsive Awards
    ============================================ */
@@ -397,6 +421,10 @@
 @media (max-width: 900px) {
     .awards-stack {
         height: 560px;
+    }
+
+    .awards-progress {
+        display: none;
     }
 
     .awards-card {
@@ -433,7 +461,9 @@
     }
 
     .awards-description {
+        max-width: 85%;
         font-size: var(--font-size-sm);
+        text-align: justify;
     }
 
     .awards-nav {
@@ -449,10 +479,9 @@
     }
 
     .awards-card {
-        padding: var(--space-3);
+        padding: var(--space-4) var(--space-2);
         border-radius: var(--radius-lg);
         min-height: 480px;
-        /* Optimize animations for mobile */
         will-change: transform, opacity;
     }
 
@@ -462,7 +491,6 @@
         font-size: var(--font-size-sm);
     }
 
-    /* Enlarge certificate image for better visibility */
     .awards-image {
         max-width: 280px;
         max-height: 350px;
@@ -478,7 +506,9 @@
     }
 
     .awards-description {
+        width: 90%;
         font-size: var(--font-size-xs);
+        text-align: justify;
     }
 
     .awards-dot {
@@ -488,6 +518,7 @@
 
     .awards-hint {
         font-size: var(--font-size-xs);
+        padding-top: var(--space-10);
     }
 
     .awards-progress {

@@ -216,13 +216,40 @@
 }
 
 /* Thumbnails */
+/* Thumbnails */
 .gallery-thumbnails {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
     gap: var(--space-2);
-    padding: var(--space-4) 0;
-    max-width: 100%;
+    padding: var(--space-4) var(--space-6);
+    max-width: 600px;
+    margin: 0 auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+
+    /* Fade edges */
+    mask-image: linear-gradient(to right,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%);
+    -webkit-mask-image: linear-gradient(to right,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%);
+}
+
+/* Hide scrollbar for thumbnails */
+.gallery-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery-thumbnails {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 /* Gallery Hint */
@@ -331,7 +358,7 @@
 
 .gallery-lightbox-image {
     max-width: 100%;
-    max-height: 80vh;
+    max-height: 70vh;
     object-fit: contain;
     border-radius: var(--radius-xl);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
@@ -374,6 +401,30 @@
     color: var(--color-text-secondary);
 }
 
+.gallery-lightbox-hint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        opacity 0.4s ease 0.3s,
+        transform 0.4s ease 0.3s;
+}
+
+.gallery-lightbox.active .gallery-lightbox-hint {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gallery-lightbox-hint i {
+    font-size: var(--font-size-lg);
+}
+
 /* ============================================
    Global Custom Scrollbar
    ============================================ */
@@ -412,12 +463,16 @@
         padding: 0 var(--space-4);
     }
 
+    .gallery-progress {
+        display: none;
+    }
+
     .gallery-stack {
-        max-width: 350px;
+        max-width: 400px;
     }
 
     .gallery-card {
-        max-width: 350px;
+        max-width: 400px;
     }
 
     .gallery-card.position-left-2,
@@ -455,11 +510,11 @@
 
 @media (max-width: 480px) {
     .gallery-stack {
-        max-width: 260px;
+        max-width: 320px;
     }
 
     .gallery-card {
-        max-width: 260px;
+        max-width: 320px;
         border-radius: var(--radius-lg);
         /* Optimize animations for mobile */
         will-change: transform, opacity;
@@ -489,9 +544,10 @@
         font-size: var(--font-size-sm);
     }
 
-    /* Hide thumbnails on mobile for cleaner look */
+    /* Restore thumbnails on mobile as carousel */
     .gallery-thumbnails {
-        display: none;
+        display: flex;
+        max-width: 100%;
     }
 
     .gallery-card-overlay {
@@ -508,6 +564,7 @@
 
     .gallery-hint {
         font-size: var(--font-size-xs);
+        padding-top: var(--space-4);
     }
 
     .gallery-progress {

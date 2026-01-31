@@ -138,7 +138,17 @@ export class Gallery {
     updateThumbnails() {
         const thumbnails = this.thumbnailsContainer.querySelectorAll('.gallery-thumbnail');
         thumbnails.forEach((thumb, index) => {
-            thumb.classList.toggle('active', index === this.currentIndex);
+            if (index === this.currentIndex) {
+                thumb.classList.add('active');
+                // Scroll active thumbnail into view
+                thumb.scrollIntoView({
+                    behavior: 'smooth',
+                    inline: 'center',
+                    block: 'nearest'
+                });
+            } else {
+                thumb.classList.remove('active');
+            }
         });
     }
 
@@ -161,12 +171,17 @@ export class Gallery {
                     <h4 class="gallery-lightbox-title"></h4>
                     <p class="gallery-lightbox-description"></p>
                 </div>
+                <div class="gallery-lightbox-hint">
+                    <i class="bx bx-x"></i>
+                    <span>Click outside to close</span>
+                </div>
             </div>
         `;
         document.body.appendChild(this.lightbox);
 
         this.lightbox.addEventListener('click', (e) => {
-            if (e.target === this.lightbox) {
+            if (!e.target.closest('.gallery-lightbox-image') &&
+                !e.target.closest('.gallery-lightbox-caption')) {
                 this.closeLightbox();
             }
         });
@@ -329,6 +344,9 @@ export class Gallery {
      * Start auto-slide
      */
     startAutoSlide() {
+        // Disable autoscroll on mobile
+        if (window.innerWidth <= 768) return;
+
         this.resetProgress();
         this.autoSlideTimer = setInterval(() => {
             if (!this.isPaused && !this.isAnimating) {

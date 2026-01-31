@@ -59,9 +59,6 @@ class App {
         // Initialize scroll indicator
         this.initScrollIndicator();
 
-        // Initialize smooth scroll for anchor links
-        this.initSmoothScroll();
-
         // Initialize image lightbox
         this.initLightbox();
 
@@ -179,10 +176,12 @@ class App {
         } else {
             // Update icon links
             const instagramLink = container.querySelector('.instagram');
+            const telegramLink = container.querySelector('.telegram');
             const githubLink = container.querySelector('.github');
             const emailLink = container.querySelector('.email');
 
             if (instagramLink && socials.instagram) instagramLink.href = socials.instagram.url;
+            if (telegramLink && socials.telegram) telegramLink.href = socials.telegram.url;
             if (githubLink && socials.github) githubLink.href = socials.github.url;
             if (emailLink && socials.email) emailLink.href = socials.email.url;
         }
@@ -243,6 +242,9 @@ class App {
             <a href="${socials.instagram.url}" class="contact-icon-link instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <i class="bx bxl-instagram"></i>
             </a>
+            <a href="${socials.telegram.url}" class="contact-icon-link telegram" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                <i class="bx bxl-telegram"></i>
+            </a>
             <a href="${socials.github.url}" class="contact-icon-link github" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <i class="bx bxl-github"></i>
             </a>
@@ -281,6 +283,9 @@ class App {
                 <a href="${socials.instagram.url}" class="footer-social-link" target="_blank" rel="noopener noreferrer">
                     <i class="bx bxl-instagram"></i> ${socials.instagram.label}
                 </a>
+                <a href="${socials.telegram.url}" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+                    <i class="bx bxl-telegram"></i> ${socials.telegram.label}
+                </a>
                 <a href="${socials.github.url}" class="footer-social-link" target="_blank" rel="noopener noreferrer">
                     <i class="bx bxl-github"></i> ${socials.github.label}
                 </a>
@@ -314,28 +319,6 @@ class App {
                 }
             });
         }
-    }
-
-    /**
-     * Initialize smooth scroll for anchor links
-     */
-    initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', (e) => {
-                const href = anchor.getAttribute('href');
-                if (href === '#') return;
-
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    // Use 'start' block to show title at top
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
     }
 
     /**
