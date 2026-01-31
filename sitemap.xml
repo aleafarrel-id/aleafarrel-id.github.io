@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://aleafarrel-id.github.io/</loc>
+    <lastmod>2026-02-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    
+    <!-- Profile Image -->
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/img/profile.webp</image:loc>
+    </image:image>
+
+    <!-- Certification Images -->
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/cluster1.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/cluster2.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/cluster3.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/mtcna.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/mtctce.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/ojm.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/certs/tkj-award.webp</image:loc>
+    </image:image>
+
+    <!-- Project Images -->
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/projects/aircursor.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/projects/aleas-intelligence.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/projects/enigmorph.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/projects/rapidtextergui.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://aleafarrel-id.github.io/assets/images/projects/rapidtextertui.webp</image:loc>
+    </image:image>
+  </url>
+</urlset>
