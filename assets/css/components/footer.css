@@ -231,6 +231,10 @@
         align-items: center;
         flex-direction: row;
         gap: var(--space-4);
+        flex-wrap: wrap;
+        /* Allow wrapping */
+        justify-content: center;
+        /* Center align wrapped items */
     }
 
     .footer-nav-link,

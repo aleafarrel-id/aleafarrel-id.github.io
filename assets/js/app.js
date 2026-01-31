@@ -56,8 +56,7 @@ class App {
         // Preload images for smooth scrolling
         this.preloadImages();
 
-        // Initialize scroll indicator
-        this.initScrollIndicator();
+
 
         // Initialize image lightbox
         this.initLightbox();
@@ -303,23 +302,7 @@ class App {
         }
     }
 
-    /**
-     * Initialize scroll indicator click
-     */
-    initScrollIndicator() {
-        const scrollIndicator = document.querySelector('.scroll-indicator');
-        if (scrollIndicator) {
-            scrollIndicator.addEventListener('click', () => {
-                const nextSection = document.getElementById('about');
-                if (nextSection) {
-                    nextSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        }
-    }
+
 
     /**
      * Initialize image lightbox for certificate images

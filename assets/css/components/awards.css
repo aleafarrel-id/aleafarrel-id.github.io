@@ -420,7 +420,8 @@
 
 @media (max-width: 900px) {
     .awards-stack {
-        height: 560px;
+        height: 580px;
+        /* Increased to fit card + visual buffer */
     }
 
     .awards-progress {
@@ -430,9 +431,12 @@
     .awards-card {
         max-width: 90%;
         grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        /* Force image to take available space */
         gap: var(--space-6);
-        height: auto;
-        min-height: 520px;
+        height: 560px;
+        /* Fixed height for uniformity */
+        min-height: unset;
         padding: var(--space-6);
     }
 
@@ -475,13 +479,18 @@
 
 @media (max-width: 480px) {
     .awards-stack {
-        height: 520px;
+        height: 560px;
+        /* Increased to fit 580px card + buffer */
     }
 
     .awards-card {
         padding: var(--space-4) var(--space-2);
         border-radius: var(--radius-lg);
-        min-height: 480px;
+        height: 580px;
+        grid-template-rows: 1fr auto;
+        /* Force image to take available space */
+        /* Fixed height for uniformity */
+        min-height: unset;
         will-change: transform, opacity;
     }
 
