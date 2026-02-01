@@ -177,6 +177,18 @@
         },
         {
             "id": 6,
+            "name": "TKJ Inventory",
+            "description": "The inventory management system for SMKN 1 Seyegan's Computer Network Engineering program.",
+            "image": "assets/images/projects/tkj-inventory.webp",
+            "link": "https://github.com/aleafarrel-id/tkj-inventory",
+            "tags": [
+                "PHP",
+                "MySQL",
+                "Web App"
+            ]
+        },
+        {
+            "id": 7,
             "name": "Portofolio",
             "description": "Portofolio website for showcasing projects and achievements.",
             "image": "assets/images/projects/portofolio.webp",
