@@ -13,6 +13,10 @@ import { dataLoader } from "./modules/dataLoader.js";
 import { ScrollReveal } from "./modules/scrollReveal.js";
 import { SplashScreen } from "./modules/splash.js";
 import { TouchDetect } from "./modules/touchDetect.js";
+import {
+    initEmailGuard,
+    getEncryptedButtonHTML
+} from "./modules/emailGuard.js";
 
 class App {
     constructor() {
@@ -38,6 +42,7 @@ class App {
         // Initialize splash screen first
         this.splashScreen = new SplashScreen();
         this.touchDetect = new TouchDetect();
+        initEmailGuard();
 
         // Initialize UI components
         this.button = new Button();
@@ -111,7 +116,7 @@ class App {
         }
 
         // Render contact section socials
-        this.renderContactSocials(dataLoader.getSocials());
+        this.renderContactSocials(dataLoader.getSocials(), dataLoader.getProfile());
 
         // Render footer
         this.renderFooter(
@@ -150,8 +155,8 @@ class App {
 
         // Update hero social links
         if (socials) {
-            this.updateSocialLinks('hero-socials-links', socials, 'hero-social-link');
-            this.updateSocialLinks('hero-buttons-container', socials, 'btn', true);
+            this.updateSocialLinks('hero-socials-links', socials, 'hero-social-link', false, profile.contact);
+            this.updateSocialLinks('hero-buttons-container', socials, 'btn', true, profile.contact);
         }
     }
 
@@ -162,7 +167,7 @@ class App {
      * @param {string} linkClass - CSS class for links
      * @param {boolean} isButton - If true, update button links
      */
-    updateSocialLinks(containerId, socials, linkClass, isButton = false) {
+    updateSocialLinks(containerId, socials, linkClass, isButton = false, contact = null) {
         const container = document.getElementById(containerId);
         if (!container) return;
 
@@ -171,6 +176,19 @@ class App {
             const instagramBtn = container.querySelector('.btn-primary');
             if (instagramBtn && socials.instagram) {
                 instagramBtn.href = socials.instagram.url;
+            }
+            // Hero email button
+            const emailBtn = container.querySelector('.btn-secondary');
+
+            if (emailBtn && contact) {
+                emailBtn.outerHTML = getEncryptedButtonHTML(
+                    contact.user,
+                    contact.domain,
+                    contact.subject,
+                    'Email',
+                    '',
+                    emailBtn.className
+                );
             }
         } else {
             // Update icon links
@@ -182,7 +200,20 @@ class App {
             if (instagramLink && socials.instagram) instagramLink.href = socials.instagram.url;
             if (telegramLink && socials.telegram) telegramLink.href = socials.telegram.url;
             if (githubLink && socials.github) githubLink.href = socials.github.url;
-            if (emailLink && socials.email) emailLink.href = socials.email.url;
+
+            if (emailLink && socials.email && contact) {
+                // Use encrypted button
+                emailLink.outerHTML = getEncryptedButtonHTML(
+                    contact.user,
+                    contact.domain,
+                    contact.subject,
+                    '',
+                    'bx bxl-gmail',
+                    emailLink.className
+                );
+            } else if (emailLink && socials.email) {
+                emailLink.href = socials.email.url;
+            }
         }
     }
 
@@ -231,11 +262,15 @@ class App {
      * Render contact section socials
      * @param {Object} socials - Socials data
      */
-    renderContactSocials(socials) {
+    renderContactSocials(socials, profile) {
         if (!socials) return;
 
         const container = document.getElementById('contact-icons');
         if (!container) return;
+
+        const emailButtonHTML = profile && profile.contact
+            ? getEncryptedButtonHTML(profile.contact.user, profile.contact.domain, profile.contact.subject, '', 'bx bxl-gmail', 'contact-icon-link email')
+            : `<a href="${socials.email.url}" class="contact-icon-link email" aria-label="Email"><i class="bx bxl-gmail"></i></a>`;
 
         container.innerHTML = `
             <a href="${socials.instagram.url}" class="contact-icon-link instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -247,9 +282,7 @@ class App {
             <a href="${socials.github.url}" class="contact-icon-link github" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <i class="bx bxl-github"></i>
             </a>
-            <a href="${socials.email.url}" class="contact-icon-link email" aria-label="Email">
-                <i class="bx bxl-gmail"></i>
-            </a>
+            ${emailButtonHTML}
         `;
     }
 
@@ -278,6 +311,10 @@ class App {
         // Render footer social links
         const socialsContainer = document.getElementById('footer-socials');
         if (socialsContainer && socials) {
+            const emailButtonHTML = profile && profile.contact
+                ? getEncryptedButtonHTML(profile.contact.user, profile.contact.domain, profile.contact.subject, socials.email.label, 'bx bxl-gmail', 'footer-social-link')
+                : `<a href="${socials.email.url}" class="footer-social-link"><i class="bx bxl-gmail"></i> ${socials.email.label}</a>`;
+
             socialsContainer.innerHTML = `
                 <a href="${socials.instagram.url}" class="footer-social-link" target="_blank" rel="noopener noreferrer">
                     <i class="bx bxl-instagram"></i> ${socials.instagram.label}
@@ -288,9 +325,7 @@ class App {
                 <a href="${socials.github.url}" class="footer-social-link" target="_blank" rel="noopener noreferrer">
                     <i class="bx bxl-github"></i> ${socials.github.label}
                 </a>
-                <a href="${socials.email.url}" class="footer-social-link">
-                    <i class="bx bxl-gmail"></i> ${socials.email.label}
-                </a>
+                ${emailButtonHTML}
             `;
         }
 

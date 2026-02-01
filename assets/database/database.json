@@ -6,7 +6,12 @@
         "title": "Computer & Network Engineer",
         "greeting": "Hello",
         "bio": "I'm specializing in robust infrastructure, modern web/desktop development, and intuitive UI/UX design.",
-        "image": "assets/images/img/profile.webp"
+        "image": "assets/images/img/profile.webp",
+        "contact": {
+            "user": "aleafarrel.work",
+            "domain": "gmail.com",
+            "subject": "Reach out from Portfolio"
+        }
     },
     "socials": {
         "instagram": {
@@ -22,7 +27,7 @@
             "label": "GitHub"
         },
         "email": {
-            "url": "mailto:aleafarrel.work@gmail.com",
+            "url": "#",
             "label": "Email"
         }
     },
