@@ -15,6 +15,25 @@
 @import "./components/about.css";
 
 /* ============================================
+   Font Definitions
+   ============================================ */
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 800;
+    src: url('../font/JetBrainsMono-Variable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: italic;
+    font-display: swap;
+    font-weight: 100 800;
+    src: url('../font/JetBrainsMono-Italic-Variable.woff2') format('woff2');
+}
+
+/* ============================================
    ALEA FARREL PORTFOLIO - Main Stylesheet
    ============================================ */
 
