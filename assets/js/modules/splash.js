@@ -26,8 +26,13 @@ export class SplashScreen {
     async init() {
         if (!this.splash) return;
 
-        // Prevent scrolling while splash is visible
-        // Note: 'no-scroll' class is now added in HTML for immediate effect
+        // Deteksi Mobile
+        const isMobile = window.innerWidth < 768;
+
+        // Mobile: 800ms, Desktop: 1500ms
+        if (isMobile) {
+            this.minDisplayTime = 800;
+        }
 
         try {
             await this.preloadAssets();
@@ -35,38 +40,28 @@ export class SplashScreen {
             console.warn('Some assets failed to preload:', error);
         }
 
-        // Ensure minimum display time
         const elapsed = Date.now() - this.startTime;
         const remaining = Math.max(0, this.minDisplayTime - elapsed);
 
         await this.delay(remaining);
         this.hide();
+
+        // Panggil lazy load setelah splash hilang
+        this.lazyLoadRemainingImages();
     }
 
-    /**
-     * Preload all images and critical assets
-     */
     async preloadAssets() {
-        // Get all images from the page
-        const images = Array.from(document.querySelectorAll('img[src]'));
-        const backgroundImages = this.getBackgroundImages();
-
-        const allAssets = [
-            ...images.map(img => img.src),
-            ...backgroundImages
-        ].filter(src => src && !src.startsWith('data:'));
-
-        if (allAssets.length === 0) {
-            this.updateProgress(100);
-            return;
-        }
+        // HANYA preload aset vital (Hero & Logo)
+        const criticalAssets = [
+            'assets/images/img/profile.webp',
+            'assets/favicon/favicon.webp'
+        ];
 
         let loaded = 0;
-        const total = allAssets.length;
-
+        const total = criticalAssets.length;
         this.updateStatus(this.statusMessages[0]);
 
-        const loadPromises = allAssets.map(src => {
+        const loadPromises = criticalAssets.map(src => {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => {
@@ -77,8 +72,7 @@ export class SplashScreen {
                 };
                 img.onerror = () => {
                     loaded++;
-                    this.updateProgress((loaded / total) * 100);
-                    resolve(); // Don't fail on error, just continue
+                    resolve();
                 };
                 img.src = src;
             });
@@ -87,21 +81,15 @@ export class SplashScreen {
         await Promise.all(loadPromises);
     }
 
-    /**
-     * Get background images from stylesheets
-     */
-    getBackgroundImages() {
-        const images = [];
-        // Check for common image elements that might have background images
-        const elements = document.querySelectorAll('[style*="background"]');
-        elements.forEach(el => {
-            const style = el.style.backgroundImage;
-            const match = style.match(/url\(['"]?(.+?)['"]?\)/);
-            if (match) {
-                images.push(match[1]);
-            }
+    lazyLoadRemainingImages() {
+        // Load sisa gambar di background agar masuk cache browser
+        const otherImages = Array.from(document.querySelectorAll('img[src]'))
+            .filter(img => !img.src.includes('profile.webp') && !img.src.includes('favicon'));
+
+        otherImages.forEach(img => {
+            const i = new Image();
+            i.src = img.src;
         });
-        return images;
     }
 
     /**

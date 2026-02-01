@@ -290,6 +290,10 @@ export class Gallery {
         let touchStartX = 0;
         let touchEndX = 0;
 
+        this.stack.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
         this.stack.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
             this.handleSwipe(touchStartX, touchEndX);
