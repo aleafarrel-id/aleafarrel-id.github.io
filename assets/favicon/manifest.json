@@ -1,0 +1,21 @@
+{
+    "name": "Alea Farrel - Portfolio",
+    "short_name": "Alea Farrel",
+    "description": "Network Engineer & Web Developer Portfolio",
+    "start_url": "../../index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "favicon.webp",
+            "sizes": "512x512",
+            "type": "image/webp"
+        }
+    ]
+}
