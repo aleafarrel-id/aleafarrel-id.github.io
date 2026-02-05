@@ -69,7 +69,9 @@ export class DataLoader {
      * @returns {Array} Array of projects
      */
     getProjects() {
-        return this.data?.projects || [];
+        const projects = this.data?.projects || [];
+        // Return a copy sorted by ID descending (newest first)
+        return [...projects].sort((a, b) => b.id - a.id);
     }
 
     /**

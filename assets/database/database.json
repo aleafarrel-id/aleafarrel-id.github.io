@@ -198,6 +198,19 @@
                 "CSS",
                 "JavaScript"
             ]
+        },
+        {
+            "id": 8,
+            "name": "Satu Ramadhan",
+            "description": "A PWA for Islamic prayer times based on user location via GPS and manual location input.",
+            "image": "assets/images/projects/saturamadhan.webp",
+            "link": "https://aleafarrel-id.github.io/saturamadhan/",
+            "tags": [
+                "PWA",
+                "Offline First",
+                "Aladhan API",
+                "Web App"
+            ]
         }
     ],
     "gallery": {
