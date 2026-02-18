@@ -8,6 +8,7 @@
 @import "./components/modal.css";
 @import "./components/profile.css";
 @import "./components/timeline.css";
+@import "./components/projects-overlay.css";
 @import "./components/gallery.css";
 @import "./components/awards.css";
 @import "./components/nav.css";
@@ -512,7 +513,8 @@ button,
     .awards-card,
     .gallery-lightbox,
     .awards-lightbox,
-    .project-lightbox {
+    .project-lightbox,
+    .projects-overlay {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
     }

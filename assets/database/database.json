@@ -118,6 +118,7 @@
             "description": "Modern typing speed test with stunning GUI interface. Test your finger speed and mental accuracy.",
             "image": "assets/images/projects/rapidtextergui.webp",
             "link": "https://aleafarrel-id.github.io/rapidtextergui/",
+            "category": "Desktop",
             "tags": [
                 "C++",
                 "Qt",
@@ -130,6 +131,7 @@
             "description": "Terminal-based typing trainer with real-time feedback directly from the terminal.",
             "image": "assets/images/projects/rapidtextertui.webp",
             "link": "https://aleafarrel-id.github.io/rapidtextertui/",
+            "category": "CLI",
             "tags": [
                 "C++",
                 "Terminal",
@@ -142,6 +144,7 @@
             "description": "A modern portable Enigma-style encryption application with password and PIN-based shifting.",
             "image": "assets/images/projects/enigmorph.webp",
             "link": "https://github.com/aleafarrel-id/enigmorph",
+            "category": "Desktop",
             "tags": [
                 "C++",
                 "Qt",
@@ -154,6 +157,7 @@
             "description": "A gesture-based cursor controller, designed for vision-based interaction.",
             "image": "assets/images/projects/aircursor.webp",
             "link": "https://github.com/aleafarrel-id/alea-aircursor",
+            "category": "Desktop",
             "tags": [
                 "Python",
                 "PyQt",
@@ -167,6 +171,7 @@
             "description": "AI Chat Web-UI with Speech-to-Text powered by Whisper AI and support OpenRouter/Groq API integration.",
             "image": "assets/images/projects/aleas-intelligence.webp",
             "link": "https://github.com/aleafarrel-id/aleas-intelligence",
+            "category": "Web",
             "tags": [
                 "Whisper AI",
                 "OpenRouter",
@@ -181,6 +186,7 @@
             "description": "The inventory management system for SMKN 1 Seyegan's Computer Network Engineering program.",
             "image": "assets/images/projects/tkj-inventory.webp",
             "link": "https://github.com/aleafarrel-id/tkj-inventory",
+            "category": "Web",
             "tags": [
                 "PHP",
                 "MySQL",
@@ -193,6 +199,7 @@
             "description": "Portofolio website for showcasing projects and achievements.",
             "image": "assets/images/projects/portofolio.webp",
             "link": "https://github.com/aleafarrel-id/aleafarrel-id.github.io",
+            "category": "Web",
             "tags": [
                 "HTML",
                 "CSS",
@@ -205,6 +212,7 @@
             "description": "A PWA for Islamic prayer times based on user location via GPS and manual location input.",
             "image": "assets/images/projects/saturamadhan.webp",
             "link": "https://aleafarrel-id.github.io/saturamadhan/",
+            "category": "Web",
             "tags": [
                 "PWA",
                 "Offline First",

@@ -1,15 +1,21 @@
 /**
  * Timeline Module
  * Renders timeline items from data with compact card design
+ * Includes Projects Overlay with search & category filter
  */
 
 export class Timeline {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
         this.lightbox = null;
+        this.overlay = null;
         this.currentIndex = 0;
         this.navUp = null;
         this.navDown = null;
+        this.projects = [];
+        this.activeCategory = 'All';
+        this.searchQuery = '';
+        this.debounceTimer = null;
     }
 
     /**
@@ -55,22 +61,24 @@ export class Timeline {
 
         this.createNavigationButtons();
         this.createLightbox();
+        this.createOverlay();
         this.bindEvents();
         this.updateNavButtons();
     }
 
     /**
-     * Create navigation buttons
+     * Create navigation buttons (up, down, expand)
      */
     createNavigationButtons() {
-        // The container used for positioning is the parent wrapper
         const timelineWrapper = this.container.closest('.timeline-container');
         if (!timelineWrapper) return;
 
-        // Create nav container
         const nav = document.createElement('div');
         nav.className = 'timeline-nav';
         nav.innerHTML = `
+            <button class="timeline-nav-btn" id="timeline-nav-expand" aria-label="Expand all projects">
+                <i class="bx bx-expand-alt"></i>
+            </button>
             <button class="timeline-nav-btn" id="timeline-nav-up" aria-label="Scroll up">
                 <i class="bx bx-chevron-up"></i>
             </button>
@@ -82,6 +90,7 @@ export class Timeline {
 
         this.navUp = nav.querySelector('#timeline-nav-up');
         this.navDown = nav.querySelector('#timeline-nav-down');
+        this.navExpand = nav.querySelector('#timeline-nav-expand');
     }
 
     /**
@@ -104,7 +113,7 @@ export class Timeline {
         if (!this.container) return;
 
         const { scrollTop, scrollHeight, clientHeight } = this.container;
-        const isAtTop = scrollTop <= 5; // buffer
+        const isAtTop = scrollTop <= 5;
         const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) <= 5;
 
         if (this.navUp) {
@@ -147,18 +156,235 @@ export class Timeline {
         `;
         document.body.appendChild(this.lightbox);
 
-        // Close on background click
         this.lightbox.addEventListener('click', (e) => {
             if (e.target === this.lightbox) {
                 this.closeLightbox();
             }
         });
+    }
 
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.lightbox.classList.contains('active')) {
-                this.closeLightbox();
+    /**
+     * Create projects overlay element
+     */
+    createOverlay() {
+        if (document.getElementById('projects-overlay')) {
+            this.overlay = document.getElementById('projects-overlay');
+            return;
+        }
+
+        this.overlay = document.createElement('div');
+        this.overlay.className = 'projects-overlay';
+        this.overlay.id = 'projects-overlay';
+        this.overlay.innerHTML = `
+            <div class="projects-overlay-container">
+                <div class="projects-overlay-header">
+                    <div class="projects-overlay-title-row">
+                        <h3 class="projects-overlay-title">
+                            <i class="bx bx-folder-open"></i> All Projects
+                        </h3>
+                        <button class="projects-overlay-close" aria-label="Close overlay">
+                            <i class="bx bx-x"></i>
+                        </button>
+                    </div>
+                    <div class="projects-overlay-controls">
+                        <div class="projects-overlay-search">
+                            <i class="bx bx-search"></i>
+                            <input 
+                                type="text" 
+                                class="projects-overlay-search-input" 
+                                placeholder="Quick search projects..."
+                                autocomplete="off"
+                            >
+                        </div>
+                        <div class="projects-overlay-filters">
+                            <button class="projects-overlay-filter active" data-category="All">All</button>
+                            <button class="projects-overlay-filter" data-category="Desktop">
+                                <i class="bx bx-desktop"></i> Desktop
+                            </button>
+                            <button class="projects-overlay-filter" data-category="Web">
+                                <i class="bx bx-globe"></i> Web
+                            </button>
+                            <button class="projects-overlay-filter" data-category="CLI">
+                                <i class="bx bx-terminal"></i> CLI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="projects-overlay-body">
+                    <div class="projects-overlay-grid" id="projects-overlay-grid">
+                        <!-- Cards rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(this.overlay);
+
+        // Bind overlay-specific events
+        this.bindOverlayEvents();
+    }
+
+    /**
+     * Bind overlay events (separated for clarity)
+     */
+    bindOverlayEvents() {
+        if (!this.overlay) return;
+
+        // Close button
+        this.overlay.querySelector('.projects-overlay-close').addEventListener('click', () => {
+            this.closeOverlay();
+        });
+
+        // Background click to close
+        this.overlay.addEventListener('click', (e) => {
+            if (e.target === this.overlay) {
+                this.closeOverlay();
             }
+        });
+
+        // Search input with debounce - triggers after 2+ chars
+        const searchInput = this.overlay.querySelector('.projects-overlay-search-input');
+        searchInput.addEventListener('input', () => {
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(() => {
+                const query = searchInput.value.trim();
+                // Only search if 2+ chars or empty (reset)
+                if (query.length >= 2 || query.length === 0) {
+                    this.searchQuery = query;
+                    this.renderOverlayGrid();
+                }
+            }, 150);
+        });
+
+        // Filter buttons
+        this.overlay.querySelectorAll('.projects-overlay-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                this.overlay.querySelectorAll('.projects-overlay-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.activeCategory = btn.dataset.category;
+                this.renderOverlayGrid();
+            });
+        });
+    }
+
+    /**
+     * Open the projects overlay
+     */
+    openOverlay() {
+        if (!this.overlay) return;
+
+        // Reset state
+        this.searchQuery = '';
+        this.activeCategory = 'All';
+
+        // Reset UI
+        const searchInput = this.overlay.querySelector('.projects-overlay-search-input');
+        if (searchInput) searchInput.value = '';
+
+        this.overlay.querySelectorAll('.projects-overlay-filter').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.category === 'All');
+        });
+
+        // Render grid
+        this.renderOverlayGrid();
+
+        // Show overlay
+        this.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Focus search input after animation
+        setTimeout(() => {
+            if (searchInput) searchInput.focus();
+        }, 400);
+    }
+
+    /**
+     * Close the projects overlay
+     */
+    closeOverlay() {
+        if (!this.overlay) return;
+
+        this.overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    /**
+     * Render the overlay grid based on current search/filter state
+     */
+    renderOverlayGrid() {
+        const grid = this.overlay.querySelector('#projects-overlay-grid');
+        if (!grid) return;
+
+        // Filter projects
+        let filtered = this.projects.filter(project => {
+            // Category filter
+            if (this.activeCategory !== 'All' && project.category !== this.activeCategory) {
+                return false;
+            }
+
+            // Search filter (case-insensitive)
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                const matchName = project.name.toLowerCase().includes(query);
+                const matchDesc = project.description.toLowerCase().includes(query);
+                const matchTags = project.tags.some(tag => tag.toLowerCase().includes(query));
+                return matchName || matchDesc || matchTags;
+            }
+
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="projects-overlay-empty">
+                    <i class="bx bx-search-alt"></i>
+                    <p>No projects found</p>
+                    <span>Try adjusting your search or filter</span>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(project => `
+            <div class="projects-overlay-card">
+                <div class="projects-overlay-card-image" data-project-id="${project.id}">
+                    <img src="${project.image}" alt="${project.name}" loading="lazy">
+                    <span class="projects-overlay-card-category">${project.category || ''}</span>
+                </div>
+                <div class="projects-overlay-card-body">
+                    <h4 class="projects-overlay-card-title">${project.name}</h4>
+                    <p class="projects-overlay-card-desc">${project.description}</p>
+                    <div class="projects-overlay-card-tags">
+                        ${project.tags.map(tag => `<span class="projects-overlay-card-tag">${tag}</span>`).join('')}
+                    </div>
+                    <a href="${project.link}" class="projects-overlay-card-link" target="_blank" rel="noopener noreferrer">
+                        View Project <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                </div>
+            </div>
+        `).join('');
+
+        // Bind image click events for lightbox
+        this.bindOverlayGridEvents();
+    }
+
+    /**
+     * Bind click events on overlay grid card images
+     */
+    bindOverlayGridEvents() {
+        const grid = this.overlay.querySelector('#projects-overlay-grid');
+        if (!grid) return;
+
+        grid.querySelectorAll('.projects-overlay-card-image').forEach(imageWrapper => {
+            imageWrapper.style.cursor = 'pointer';
+            imageWrapper.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const projectId = parseInt(imageWrapper.dataset.projectId);
+                const index = this.projects.findIndex(p => p.id === projectId);
+                if (index !== -1) {
+                    this.openLightbox(index);
+                }
+            });
         });
     }
 
@@ -180,7 +406,7 @@ export class Timeline {
             this.updateNavButtons();
         });
 
-        // Navigation button events - Scroll by fixed amount (e.g. 200px)
+        // Navigation button events
         const SCROLL_AMOUNT = 200;
 
         if (this.navUp) {
@@ -194,6 +420,24 @@ export class Timeline {
                 this.scrollContent(SCROLL_AMOUNT);
             });
         }
+
+        // Expand button
+        if (this.navExpand) {
+            this.navExpand.addEventListener('click', () => {
+                this.openOverlay();
+            });
+        }
+
+        // Escape key for both lightbox and overlay
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (this.overlay && this.overlay.classList.contains('active')) {
+                    this.closeOverlay();
+                } else if (this.lightbox && this.lightbox.classList.contains('active')) {
+                    this.closeLightbox();
+                }
+            }
+        });
     }
 
     /**
