@@ -370,6 +370,7 @@
     border: 1.5px solid var(--color-text-muted);
     border-radius: 10px;
     position: relative;
+    transition: border-color var(--transition-normal);
 }
 
 .scroll-indicator-mouse::before {
@@ -383,6 +384,15 @@
     background: var(--color-text-muted);
     border-radius: var(--radius-full);
     animation: scroll-wheel 2s ease-in-out infinite;
+    transition: background var(--transition-normal);
+}
+
+.scroll-indicator:hover .scroll-indicator-mouse {
+    border-color: var(--color-accent-primary);
+}
+
+.scroll-indicator:hover .scroll-indicator-mouse::before {
+    background: var(--color-accent-primary);
 }
 
 @keyframes scroll-bounce {
