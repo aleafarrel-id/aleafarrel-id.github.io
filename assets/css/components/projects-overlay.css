@@ -369,6 +369,38 @@ body:not(.touch-device) .projects-overlay-card:hover .projects-overlay-card-imag
     transform: translateX(2px);
 }
 
+.projects-overlay-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.projects-overlay-card-playstore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+    color: var(--color-accent-primary);
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    text-decoration: none;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.projects-overlay-card-playstore i {
+    font-size: 14px;
+}
+
+.projects-overlay-card-playstore:hover {
+    transform: translateY(-1px);
+    background: rgba(0, 212, 255, 0.12);
+}
+
 /* Empty State */
 .projects-overlay-empty {
     grid-column: 1 / -1;

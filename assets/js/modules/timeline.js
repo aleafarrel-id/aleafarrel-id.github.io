@@ -49,9 +49,16 @@ export class Timeline {
                             <div class="timeline-card-tags">
                                 ${project.tags.map(tag => `<span class="timeline-card-tag">${tag}</span>`).join('')}
                             </div>
-                            <a href="${project.link}" class="timeline-card-link" target="_blank" rel="noopener noreferrer">
-                                View Project <i class="bx bx-right-arrow-alt"></i>
-                            </a>
+                            <div class="timeline-card-actions">
+                                <a href="${project.link}" class="timeline-card-link" target="_blank" rel="noopener noreferrer">
+                                    View Project <i class="bx bx-right-arrow-alt"></i>
+                                </a>
+                                ${project.playStoreUrl ? `
+                                <a href="${project.playStoreUrl}" class="timeline-card-playstore" target="_blank" rel="noopener noreferrer" title="Open in Play Store">
+                                    <i class="bx bxl-play-store"></i>
+                                </a>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,6 +210,9 @@ export class Timeline {
                             </button>
                             <button class="projects-overlay-filter" data-category="Web">
                                 <i class="bx bx-globe"></i> Web
+                            </button>
+                            <button class="projects-overlay-filter" data-category="Hybrid">
+                                <i class="bx bx-mobile"></i> Hybrid
                             </button>
                             <button class="projects-overlay-filter" data-category="CLI">
                                 <i class="bx bx-terminal"></i> CLI
@@ -357,9 +367,16 @@ export class Timeline {
                     <div class="projects-overlay-card-tags">
                         ${project.tags.map(tag => `<span class="projects-overlay-card-tag">${tag}</span>`).join('')}
                     </div>
-                    <a href="${project.link}" class="projects-overlay-card-link" target="_blank" rel="noopener noreferrer">
-                        View Project <i class="bx bx-right-arrow-alt"></i>
-                    </a>
+                    <div class="projects-overlay-card-actions">
+                        <a href="${project.link}" class="projects-overlay-card-link" target="_blank" rel="noopener noreferrer">
+                            View Project <i class="bx bx-right-arrow-alt"></i>
+                        </a>
+                        ${project.playStoreUrl ? `
+                        <a href="${project.playStoreUrl}" class="projects-overlay-card-playstore" target="_blank" rel="noopener noreferrer" title="Open in Play Store">
+                            <i class="bx bxl-play-store"></i> Play Store
+                        </a>
+                        ` : ''}
+                    </div>
                 </div>
             </div>
         `).join('');
