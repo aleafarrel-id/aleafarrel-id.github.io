@@ -1,71 +1,52 @@
 ---
 /**
  * AboutSection.astro
- * About section with skills chips.
+ * About section.
  * Data consumed from locale JSON props.
  */
+import SkillsLogoLoop from './react/SkillsLogoLoop.jsx';
+
 interface Props {
   section_label: string;
   heading: string;
   bio_1: string;
   bio_2: string;
   skills_label: string;
-  skills: string[];
 }
 
-const { section_label, heading, bio_1, bio_2, skills_label, skills } =
-  Astro.props;
+const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
 ---
 
-<section id="about" class="section py-32" aria-labelledby="about-heading">
-  <div class="container">
-    <div class="about-grid">
-      <!-- Text Column -->
-      <div>
-        <p class="section-label reveal">{section_label}</p>
-        <h2
-          class="about-heading reveal reveal-delay-1 font-black tracking-tighter"
-          id="about-heading"
-        >
-          {heading}
-        </h2>
-        <p class="about-bio reveal reveal-delay-2">{bio_1}</p>
-        <p class="about-bio reveal reveal-delay-3">{bio_2}</p>
-      </div>
+<section id="about" class="section py-32 about-section" aria-labelledby="about-heading">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="about-centered-container">
+      <p class="section-label reveal about-label">
+        {section_label}
+      </p>
+      
+      <h2
+        class="about-heading reveal reveal-delay-1"
+        id="about-heading"
+      >
+        {heading}
+      </h2>
+      
+      <p class="about-bio reveal reveal-delay-2">
+        {bio_1}
+      </p>
+      
+      <p class="about-bio reveal reveal-delay-3">
+        {bio_2}
+      </p>
+    </div>
+  </div>
 
-      <!-- Skills Column -->
-      <div class="reveal reveal-delay-2">
-        <p class="section-label" style="margin-bottom:var(--space-6);">
-          {skills_label}
-        </p>
-        <div class="skills-grid">
-          {
-            skills.map((skill, i) => (
-              <div class={`skill-chip reveal reveal-delay-${(i % 4) + 1}`}>
-                {skill}
-              </div>
-            ))
-          }
-        </div>
-
-        <!-- Decorative neumorphic card -->
-        <div
-          class="neu-raised-lg reveal reveal-delay-3"
-          style="margin-top:var(--space-8);padding:var(--space-6);text-align:center;"
-          aria-hidden="true"
-        >
-          <div
-            style="font-family:var(--font-display);font-size:var(--text-5xl);font-weight:800;letter-spacing:-0.03em;color:var(--clr-text-primary);line-height:1;"
-          >
-            3+
-          </div>
-          <div
-            style="font-family:var(--font-ui);font-size:var(--text-sm);color:var(--clr-text-muted);margin-top:var(--space-2);"
-          >
-            Years of Experience
-          </div>
-        </div>
-      </div>
+  <div class="skills-wrapper reveal reveal-delay-4">
+    <p class="section-label skills-label">
+      {skills_label}
+    </p>
+    <div class="skills-marquee-container">
+      <SkillsLogoLoop client:visible />
     </div>
   </div>
 </section>
@@ -75,27 +56,33 @@ const { section_label, heading, bio_1, bio_2, skills_label, skills } =
    ABOUT SECTION
    ========================================================== */
 
-#about {
+.about-section {
+  overflow-x: hidden;
   position: relative;
   z-index: var(--z-base);
   background: var(--clr-bg);
 }
 
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-16);
+.about-centered-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-@media (min-width: 1024px) {
-  .about-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-24);
-  }
+.about-label {
+  text-align: center !important;
+  justify-content: center !important;
+  width: 100%;
+  margin-bottom: var(--space-4);
 }
 
 .about-heading {
+  text-align: center !important;
+  width: 100%;
   font-family: var(--font-display);
   font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
   font-weight: 800;
@@ -106,35 +93,33 @@ const { section_label, heading, bio_1, bio_2, skills_label, skills } =
 }
 
 .about-bio {
+  text-align: center !important;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
   color: var(--clr-text-secondary);
   line-height: 1.8;
   margin-bottom: var(--space-4);
 }
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3);
-  margin-top: var(--space-8);
+.skills-wrapper {
+  margin-top: var(--space-12);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.skill-chip {
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  padding: var(--space-3) var(--space-4);
-  background: var(--clr-bg);
-  box-shadow: var(--neu-raised-sm);
-  border-radius: var(--radius-md);
-  color: var(--clr-text-secondary);
-  text-align: center;
-  transition: all var(--duration-base) var(--ease-out-expo);
+.skills-label {
+  text-align: center !important;
+  justify-content: center !important;
+  width: 100%;
+  margin-bottom: var(--space-8);
 }
 
-.skill-chip:hover {
-  box-shadow: var(--neu-raised);
-  color: var(--clr-accent-blue);
-  transform: translateY(-2px);
+.skills-marquee-container {
+  width: 100%;
+  overflow: hidden;
 }
-
 </style>

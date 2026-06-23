@@ -96,8 +96,8 @@ async function initCanvasScroll(): Promise<void> {
   try {
     const raw = preloader?.getAttribute('data-phrases');
     if (raw) phrases = JSON.parse(raw);
-  } catch (e) {}
-  
+  } catch (e) { }
+
   let currentPhraseIndex = 0;
 
   // ── Progress update ────────────────────────────────────────
@@ -112,7 +112,7 @@ async function initCanvasScroll(): Promise<void> {
         Math.floor((loaded / FRAME_COUNT) * phrases.length),
         phrases.length - 1
       );
-      
+
       if (phraseIndex !== currentPhraseIndex) {
         currentPhraseIndex = phraseIndex;
         phraseEl.classList.add('fade-out');

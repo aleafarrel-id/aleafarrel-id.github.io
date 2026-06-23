@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 
+import react from '@astrojs/react';
+
 // https://astro.build/config
 export default defineConfig({
   i18n: {
@@ -14,7 +16,7 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
-  integrations: [icon()],
+  integrations: [icon(), react()],
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {

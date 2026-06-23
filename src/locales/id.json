@@ -32,18 +32,10 @@
   },
   "about": {
     "section_label": "Tentang Saya",
-    "heading": "Developer yang bersemangat membangun web masa depan.",
-    "bio_1": "Saya seorang web developer dengan passion mendalam dalam menciptakan pengalaman digital yang interaktif dan berkinerja tinggi. Saya mengkhususkan diri dalam menjembatani gap antara desain visual yang menakjubkan dan rekayasa yang solid dan skalabel.",
-    "bio_2": "Ketika tidak sedang mendorong piksel atau menulis kode, saya menjelajahi teknologi kreatif baru, berkontribusi ke open source, dan berkolaborasi dengan tim yang bersemangat untuk membangun produk yang bermakna.",
-    "skills_label": "Keahlian Utama",
-    "skills": [
-      "React / Next.js",
-      "TypeScript",
-      "Three.js / WebGL",
-      "Node.js",
-      "UI/UX Design",
-      "Astro.js"
-    ]
+    "heading": "Bersemangat terhadap teknologi dan pembelajaran berkelanjutan.",
+    "bio_1": "Saya adalah developer yang gemar menciptakan pengalaman digital interaktif. Saya terus mengeksplorasi berbagai teknologi, mulai dari pengembangan web hingga scripting dan sistem tingkat rendah.",
+    "bio_2": "Saya selalu antusias untuk belajar, mencoba teknologi baru, dan berkolaborasi membangun solusi yang inovatif.",
+    "skills_label": "Keahlian"
   },
   "projects": {
     "section_label": "Proyek",

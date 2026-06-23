@@ -32,18 +32,10 @@
   },
   "about": {
     "section_label": "About Me",
-    "heading": "Passionate developer building the web of tomorrow.",
-    "bio_1": "I'm a web developer with a deep love for creating interactive, high-performance digital experiences. I specialize in bridging the gap between stunning visual design and solid, scalable engineering.",
-    "bio_2": "When I'm not pushing pixels or writing code, you'll find me exploring new creative technologies, contributing to open source, and collaborating with passionate teams to build meaningful products.",
-    "skills_label": "Core Skills",
-    "skills": [
-      "React / Next.js",
-      "TypeScript",
-      "Three.js / WebGL",
-      "Node.js",
-      "UI/UX Design",
-      "Astro.js"
-    ]
+    "heading": "Passionate about technology and continuous learning.",
+    "bio_1": "I'm a developer passionate about crafting interactive digital experiences. I enjoy exploring various technical domains, from high-performance web applications to scripting and lower-level systems.",
+    "bio_2": "Always eager to learn, I spend my time exploring emerging technologies and collaborating on innovative solutions.",
+    "skills_label": "Skills"
   },
   "projects": {
     "section_label": "Projects",
