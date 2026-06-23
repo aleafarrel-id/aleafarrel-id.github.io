@@ -60,19 +60,23 @@ const base = `/${locale}`;
 
   <body>
     <!-- ══ PRELOADER ══════════════════════════════════════════ -->
-    <div id="preloader" role="status" aria-label={data.loading.label}>
-      <div class="loader-percent" id="loader-percent">0%</div>
-      <div
-        class="loader-bar-track"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={0}
-        id="loader-bar-aria"
-      >
-        <div class="loader-bar-fill" id="loader-bar"></div>
+    <div id="preloader" role="status" aria-label={data.loading.label} data-phrases={JSON.stringify(data.loading.phrases)}>
+      <div class="loader-content">
+        <div class="loader-percent" id="loader-percent">0%</div>
+        <div
+          class="loader-bar-track"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={0}
+          id="loader-bar-aria"
+        >
+          <div class="loader-bar-fill" id="loader-bar"></div>
+        </div>
+        <div class="loader-phrase-container">
+          <div class="loader-phrase" id="loader-phrase">{data.loading.phrases[0]}</div>
+        </div>
       </div>
-      <span class="loader-label">{data.loading.label}</span>
     </div>
 
     <!-- ══ MOBILE MENU ════════════════════════════════════════ -->
@@ -148,9 +152,6 @@ const base = `/${locale}`;
         <div class="footer-inner">
           <p class="footer-text">
             &copy; {new Date().getFullYear()} Alea Farrel. {data.footer.rights}
-          </p>
-          <p class="footer-text">
-            {data.footer.made_with} <span class="footer-heart">♥</span> {data.footer.and} ☕
           </p>
           <div class="footer-logo">AF<span>.</span></div>
         </div>
@@ -258,8 +259,9 @@ const base = `/${locale}`;
   align-items: center;
   justify-content: center;
   gap: var(--space-8);
-  transition: opacity var(--duration-slow) var(--ease-in-expo),
-    visibility var(--duration-slow) var(--ease-in-expo);
+  transition: 
+    opacity var(--duration-xslow) var(--ease-inout),
+    visibility var(--duration-xslow) var(--ease-inout);
 }
 
 #preloader.hidden {
@@ -268,15 +270,52 @@ const base = `/${locale}`;
   pointer-events: none;
 }
 
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.loader-phrase-container {
+  height: 28px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-phrase {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--clr-text-primary);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.loader-phrase.fade-out {
+  opacity: 0;
+  transform: translateY(-15px);
+}
+
+.loader-phrase.fade-in {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
 .loader-bar-track {
-  width: 300px;
-  height: 12px;
+  width: 320px;
+  height: 4px;
   border-radius: var(--radius-full);
   box-shadow: var(--neu-inset);
   background: var(--clr-bg-deep);
   overflow: hidden;
   position: relative;
-  border: 1px solid color-mix(in srgb, var(--shadow-dark) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--shadow-dark) 30%, transparent);
 }
 
 .loader-bar-fill {
@@ -284,17 +323,8 @@ const base = `/${locale}`;
   width: 0%;
   border-radius: var(--radius-full);
   background: linear-gradient(90deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
-  transition: width 0.1s linear;
+  transition: width 0.1s ease-out;
   box-shadow: 0 0 16px var(--clr-accent-blue-glow);
-}
-
-.loader-label {
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--clr-text-muted);
 }
 
 .loader-percent {

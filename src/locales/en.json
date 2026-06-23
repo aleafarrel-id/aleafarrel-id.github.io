@@ -13,7 +13,13 @@
     "language": "ID"
   },
   "loading": {
-    "label": "Loading Experience"
+    "label": "Loading Experience",
+    "phrases": [
+      "Initiating 3D Environment...",
+      "Loading Textures...",
+      "Preparing Experience...",
+      "Almost there..."
+    ]
   },
   "hero": {
     "greeting": "Hello, I'm",

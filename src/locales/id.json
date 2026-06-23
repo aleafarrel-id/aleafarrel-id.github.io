@@ -13,7 +13,13 @@
     "language": "EN"
   },
   "loading": {
-    "label": "Memuat Pengalaman"
+    "label": "Memuat Pengalaman",
+    "phrases": [
+      "Memuat aset 3D...",
+      "Menyiapkan tekstur...",
+      "Membangun ruang...",
+      "Hampir selesai..."
+    ]
   },
   "hero": {
     "greeting": "Halo, Saya",

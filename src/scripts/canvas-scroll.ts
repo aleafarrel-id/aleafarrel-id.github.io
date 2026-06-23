@@ -90,12 +90,38 @@ async function initCanvasScroll(): Promise<void> {
   window.addEventListener('resize', resizeCanvas, { passive: true });
   resizeCanvas();
 
+  // ── Setup phrases ──────────────────────────────────────────
+  const phraseEl = document.getElementById('loader-phrase');
+  let phrases: string[] = [];
+  try {
+    const raw = preloader?.getAttribute('data-phrases');
+    if (raw) phrases = JSON.parse(raw);
+  } catch (e) {}
+  
+  let currentPhraseIndex = 0;
+
   // ── Progress update ────────────────────────────────────────
   function updateProgress(loaded: number): void {
     const pct = Math.round((loaded / FRAME_COUNT) * 100);
     if (loaderBar) loaderBar.style.width = `${pct}%`;
     if (loaderPct) loaderPct.textContent = `${pct}%`;
     if (loaderAria) loaderAria.setAttribute('aria-valuenow', String(pct));
+
+    if (phrases.length > 0 && phraseEl) {
+      const phraseIndex = Math.min(
+        Math.floor((loaded / FRAME_COUNT) * phrases.length),
+        phrases.length - 1
+      );
+      
+      if (phraseIndex !== currentPhraseIndex) {
+        currentPhraseIndex = phraseIndex;
+        phraseEl.classList.add('fade-out');
+        setTimeout(() => {
+          phraseEl.textContent = phrases[currentPhraseIndex];
+          phraseEl.classList.remove('fade-out');
+        }, 300);
+      }
+    }
   }
 
   // ── Preload all frames in parallel batches ─────────────────

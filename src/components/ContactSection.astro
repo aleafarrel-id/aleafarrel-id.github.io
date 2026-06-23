@@ -4,7 +4,7 @@
  * Contact section with neumorphic social links.
  * Data consumed from locale JSON props.
  */
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 interface SocialLink {
   platform: string;
   url: string;
@@ -12,7 +12,6 @@ interface SocialLink {
 }
 
 interface FormData {
-  // Unused now, kept for interface compatibility
   name_label: string;
   name_placeholder: string;
   email_label: string;
@@ -46,253 +45,157 @@ const {
   socials,
 } = Astro.props;
 
-
-
 // Filter socials to grab only Github and Instagram to pair with Mail
 const targetSocials = socials.filter((s) =>
   ["github", "instagram"].includes(s.icon),
 );
+
+const instagram = targetSocials.find((s) => s.icon === "instagram");
+const github = targetSocials.find((s) => s.icon === "github");
 ---
 
-<section id="contact" class="section py-32" aria-labelledby="contact-heading">
-  <div class="container max-w-4xl mx-auto text-center">
-    <p class="section-label reveal tracking-widest">{section_label}</p>
-    <h2
-      class="font-display font-black tracking-tighter text-5xl md:text-7xl mb-6 text-white reveal reveal-delay-1"
-      id="contact-heading"
-    >
-      {heading}
-    </h2>
-    <p
-      class="text-xl text-gray-400 mb-16 reveal reveal-delay-2 tracking-wide max-w-2xl mx-auto"
-    >
-      {subheading}
-    </p>
+<section
+  id="contact"
+  class="section contact-section"
+  aria-labelledby="contact-heading"
+>
+  <div class="container">
+    <div class="contact-inner">
+      <p class="section-label reveal">
+        {section_label}
+      </p>
 
-    <div
-      class="flex justify-center items-center gap-6 md:gap-10 reveal reveal-delay-3"
-    >
-      {/* Instagram Button */}
-      {
-        targetSocials.find((s) => s.icon === "instagram") && (
-          <a
-            href={targetSocials.find((s) => s.icon === "instagram")?.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full contact-social-btn"
-            aria-label="Instagram"
-            title="Instagram"
-          >
-            <Icon name="bx:bxl-instagram" class="w-8 h-8" />
-          </a>
-        )
-      }
+      <h2 id="contact-heading" class="contact-heading reveal reveal-delay-1">
+        {heading}
+      </h2>
 
-      <a
-        href={`mailto:${email}`}
-        class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full contact-social-btn"
-        aria-label={`${email_label}: ${email}`}
-        title={email}
-      >
-        <Icon name="bx:bxs-envelope" class="w-8 h-8" />
-      </a>
+      <p class="contact-subheading reveal reveal-delay-2">
+        {subheading}
+      </p>
 
-      {/* GitHub Button */}
-      {
-        targetSocials.find((s) => s.icon === "github") && (
-          <a
-            href={targetSocials.find((s) => s.icon === "github")?.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full contact-social-btn"
-            aria-label="GitHub"
-            title="GitHub"
-          >
-            <Icon name="bx:bxl-github" class="w-8 h-8" />
-          </a>
-        )
-      }
+      <div class="contact-socials reveal reveal-delay-3">
+        {
+          instagram && (
+            <a
+              href={instagram.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-social-btn"
+              aria-label="Instagram"
+              title="Instagram"
+            >
+              <Icon name="bx:bxl-instagram" class="contact-icon" />
+            </a>
+          )
+        }
+
+        <a
+          href={`mailto:${email}`}
+          class="contact-social-btn"
+          aria-label={`${email_label}: ${email}`}
+          title={email}
+        >
+          <Icon name="bx:bxs-envelope" class="contact-icon" />
+        </a>
+
+        {
+          github && (
+            <a
+              href={github.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-social-btn"
+              aria-label="GitHub"
+              title="GitHub"
+            >
+              <Icon name="bx:bxl-github" class="contact-icon" />
+            </a>
+          )
+        }
+      </div>
     </div>
   </div>
 </section>
 
 <style is:global>
-/* ==========================================================
+  /* ==========================================================
    CONTACT SECTION
    ========================================================== */
 
-#contact {
-  position: relative;
-  z-index: var(--z-base);
-  background: var(--clr-bg);
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-16);
-}
-
-@media (min-width: 1024px) {
-  .contact-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-24);
+  #contact {
+    position: relative;
+    z-index: var(--z-base);
+    background: var(--clr-bg);
+    padding-bottom: var(--space-20);
   }
-}
 
-.contact-heading {
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--clr-text-primary);
-  margin-bottom: var(--space-4);
-}
+  .contact-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-.contact-subheading {
-  font-size: var(--text-lg);
-  color: var(--clr-text-secondary);
-  line-height: 1.7;
-  margin-bottom: var(--space-8);
-}
+  .contact-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-8);
+  }
 
-.contact-email-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--clr-accent-blue);
-  margin-bottom: var(--space-10);
-  transition: all var(--duration-base) var(--ease-out-expo);
-}
+  .contact-subheading {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    color: var(--clr-text-secondary);
+    line-height: 1.7;
+    max-width: 36rem;
+    margin-bottom: var(--space-12);
+  }
 
-.contact-email-link:hover {
-  color: var(--clr-accent-blue-light);
-  transform: translateX(4px);
-}
+  .contact-socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+  }
 
-.social-links {
-  display: flex;
-  gap: var(--space-4);
-}
+  .contact-icon {
+    width: var(--space-8);
+    height: var(--space-8);
+  }
 
-.social-btn {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--clr-bg);
-  box-shadow: var(--neu-raised-sm);
-  border-radius: var(--radius-md);
-  color: var(--clr-text-secondary);
-  transition: all var(--duration-base) var(--ease-out-expo);
-}
+  /* ==========================================================
+   CONTACT SOCIAL BUTTONS
+   ========================================================== */
 
-.social-btn:hover {
-  box-shadow: var(--neu-raised);
-  color: var(--clr-accent-blue);
-  transform: translateY(-3px);
-}
+  .contact-social-btn {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--clr-bg);
+    box-shadow: var(--neu-raised);
+    border-radius: 50%;
+    color: var(--clr-text-secondary);
+    transition: all var(--duration-slow) var(--ease-out-expo);
+  }
 
-.contact-social-btn {
-  background: var(--clr-bg);
-  color: var(--clr-text-secondary);
-  box-shadow: var(--neu-raised);
-  transition: all var(--duration-base) var(--ease-out-expo);
-}
+  .contact-social-btn:hover {
+    color: var(--clr-accent-blue);
+    box-shadow:
+      12px 12px 24px var(--shadow-dark),
+      -12px -12px 24px var(--shadow-light),
+      0 0 24px var(--clr-accent-blue-glow);
+    transform: translateY(-4px);
+  }
 
-.contact-social-btn:hover {
-  color: var(--clr-text-primary);
-  box-shadow: var(--neu-raised-lg);
-}
-
-.contact-social-btn:active {
-  box-shadow: var(--neu-inset);
-}
-
-
-/* Contact Form */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.form-label {
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--clr-text-secondary);
-}
-
-.form-input,
-.form-textarea {
-  width: 100%;
-  padding: var(--space-4) var(--space-5);
-  background: var(--clr-bg-deep);
-  box-shadow: var(--neu-inset);
-  border-radius: var(--radius-md);
-  border: none;
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  color: var(--clr-text-primary);
-  transition: box-shadow var(--duration-base) var(--ease-out-expo);
-  outline: none;
-  resize: none;
-  min-height: 48px;
-}
-
-.form-input::placeholder,
-.form-textarea::placeholder {
-  color: var(--clr-text-muted);
-}
-
-.form-input:focus,
-.form-textarea:focus {
-  box-shadow:
-    inset 4px 4px 8px var(--shadow-dark),
-    inset -4px -4px 8px var(--shadow-light),
-    0 0 0 2px var(--clr-accent-blue);
-}
-
-.form-textarea {
-  min-height: 140px;
-}
-
-.form-submit-btn {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: var(--text-sm);
-  padding: var(--space-5) var(--space-8);
-  background: var(--clr-accent-blue);
-  color: var(--clr-text-primary);
-  border-radius: var(--radius-full);
-  border: none;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-  box-shadow:
-    6px 6px 12px var(--shadow-dark),
-    -2px -2px 6px var(--shadow-light),
-    0 0 20px var(--clr-accent-blue-glow);
-  transition: all var(--duration-base) var(--ease-out-expo);
-  align-self: flex-start;
-}
-
-.form-submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    8px 12px 24px var(--shadow-dark),
-    -2px -2px 8px var(--shadow-light),
-    0 0 32px var(--clr-accent-blue-glow);
-}
-
+  .contact-social-btn:active {
+    box-shadow: var(--neu-inset);
+    transform: translateY(0);
+  }
 </style>

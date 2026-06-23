@@ -103,7 +103,7 @@ const {
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--clr-text-muted);
+    color: var(--clr-text-secondary);
     margin-bottom: var(--space-5);
     opacity: 0;
     transform: translateY(20px);
@@ -167,15 +167,15 @@ const {
 
   .btn-primary {
     font-family: var(--font-ui);
-    font-weight: 600;
+    font-weight: 700;
     font-size: var(--text-sm);
     padding: var(--space-3) var(--space-6);
     background: linear-gradient(135deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
-    color: var(--clr-text-primary);
+    color: var(--clr-bg-deep);
     border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 20px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
+    box-shadow: 0 4px 20px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, #ffffff 40%, transparent);
     transition: all var(--duration-base) var(--ease-out-expo);
     letter-spacing: 0.02em;
     display: inline-flex;
@@ -186,12 +186,12 @@ const {
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px 0 var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, var(--clr-text-primary) 40%, transparent);
+    box-shadow: 0 6px 24px 0 var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, #ffffff 60%, transparent);
   }
 
   .btn-primary:active {
     transform: translateY(0px);
-    box-shadow: 0 2px 10px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    box-shadow: 0 2px 10px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, #ffffff 20%, transparent);
   }
 
   .btn-secondary {
