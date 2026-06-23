@@ -45,37 +45,113 @@
     "view_code": "Source Code",
     "items": [
       {
-        "id": "rapid-texter",
-        "title": "Rapid Texter",
-        "description": "A high-speed text generation tool built for productivity. Designed to help writers and developers scaffold content faster with intelligent templates and real-time preview.",
-        "tags": ["React", "TypeScript", "Tailwind CSS", "Node.js"],
-        "image": "/images/projects/rapid-texter.webp",
-        "url_live": "https://rapidtexter.example.com",
-        "url_code": "https://github.com/aleafarrel/rapid-texter",
-        "featured": true,
-        "year": "2024"
+        "id": "rapidtextergui",
+        "name": "Rapid Texter GUI",
+        "description": "Modern typing speed test with stunning GUI interface. Test your finger speed and mental accuracy.",
+        "image": "/project/rapidtextergui.webp",
+        "link": "https://aleafarrel-id.github.io/rapidtextergui/",
+        "category": "Desktop",
+        "tags": [
+          "C++",
+          "Qt",
+          "Desktop App"
+        ]
       },
       {
-        "id": "portfolio-3d",
-        "title": "3D Portfolio Engine",
-        "description": "The very website you're viewing now. Built with Astro.js, GSAP scroll canvas, and a bespoke 3D Neumorphism design system. A showcase of advanced front-end architecture.",
-        "tags": ["Astro.js", "GSAP", "Canvas API", "Tailwind CSS"],
-        "image": "/images/projects/portfolio.webp",
-        "url_live": "/",
-        "url_code": "https://github.com/aleafarrel/3d-portfolio",
-        "featured": true,
-        "year": "2025"
+        "id": "rapidtextertui",
+        "name": "Rapid Texter TUI",
+        "description": "Terminal-based typing trainer with real-time feedback directly from the terminal.",
+        "image": "/project/rapidtextertui.webp",
+        "link": "https://aleafarrel-id.github.io/rapidtextertui/",
+        "category": "CLI",
+        "tags": [
+          "C++",
+          "Terminal",
+          "CLI App"
+        ]
       },
       {
-        "id": "ui-component-lib",
-        "title": "Neomorphic UI Library",
-        "description": "An open-source UI component library with a soft, tactile 3D Neumorphism aesthetic. Fully typed, accessible, and production-ready.",
-        "tags": ["TypeScript", "Storybook", "CSS Custom Properties", "Web Components"],
-        "image": "/images/projects/ui-lib.webp",
-        "url_live": "https://neomorphic-ui.example.com",
-        "url_code": "https://github.com/aleafarrel/neomorphic-ui",
-        "featured": false,
-        "year": "2024"
+        "id": "enigmorph",
+        "name": "Enigmorph",
+        "description": "A modern portable Enigma-style encryption application with password and PIN-based shifting.",
+        "image": "/project/enigmorph.webp",
+        "link": "https://github.com/aleafarrel-id/enigmorph",
+        "category": "Desktop",
+        "tags": [
+          "C++",
+          "Qt",
+          "Desktop App"
+        ]
+      },
+      {
+        "id": "aircursor",
+        "name": "Alea AirCursor",
+        "description": "A gesture-based cursor controller, designed for vision-based interaction.",
+        "image": "/project/aircursor.webp",
+        "link": "https://github.com/aleafarrel-id/alea-aircursor",
+        "category": "Desktop",
+        "tags": [
+          "Python",
+          "PyQt",
+          "MediaPipe",
+          "Desktop App"
+        ]
+      },
+      {
+        "id": "aleas-intelligence",
+        "name": "Alea's Intelligence",
+        "description": "AI Chat Web-UI with Speech-to-Text powered by Whisper AI and support OpenRouter/Groq API integration.",
+        "image": "/project/aleas-intelligence.webp",
+        "link": "https://github.com/aleafarrel-id/aleas-intelligence",
+        "category": "Web",
+        "tags": [
+          "Whisper AI",
+          "OpenRouter",
+          "Groq",
+          "PHP",
+          "Web App"
+        ]
+      },
+      {
+        "id": "tkj-inventory",
+        "name": "TKJ Inventory",
+        "description": "The inventory management system for SMKN 1 Seyegan's Computer Network Engineering program.",
+        "image": "/project/tkj-inventory.webp",
+        "link": "https://github.com/aleafarrel-id/tkj-inventory",
+        "category": "Web",
+        "tags": [
+          "PHP",
+          "MySQL",
+          "Web App"
+        ]
+      },
+      {
+        "id": "portofolio",
+        "name": "Portofolio",
+        "description": "Portofolio website for showcasing projects and achievements.",
+        "image": "/project/portofolio.webp",
+        "link": "https://github.com/aleafarrel-id/aleafarrel-id.github.io",
+        "category": "Web",
+        "tags": [
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ]
+      },
+      {
+        "id": "saturamadhan",
+        "name": "Satu Ramadhan",
+        "description": "A Hybrid app for Islamic prayer times based on user location via GPS and manual location input. Available on Play Store.",
+        "image": "/project/saturamadhan.webp",
+        "link": "https://saturamadhan-web.pages.dev/",
+        "playStoreUrl": "https://play.google.com/store/apps/details?id=com.saturamadhan.mobile",
+        "category": "Hybrid",
+        "tags": [
+          "Hybrid",
+          "Offline First",
+          "Aladhan API",
+          "Mobile App"
+        ]
       }
     ]
   },
@@ -150,9 +226,21 @@
       "error": "Something went wrong. Please try again."
     },
     "socials": [
-      { "platform": "GitHub", "url": "https://github.com/aleafarrel", "icon": "github" },
-      { "platform": "LinkedIn", "url": "https://linkedin.com/in/aleafarrel", "icon": "linkedin" },
-      { "platform": "Instagram", "url": "https://instagram.com/aleafarrel", "icon": "instagram" }
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/aleafarrel",
+        "icon": "github"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/aleafarrel",
+        "icon": "linkedin"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/aleafarrel",
+        "icon": "instagram"
+      }
     ]
   },
   "footer": {
