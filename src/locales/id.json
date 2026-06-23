@@ -48,7 +48,12 @@
         "id": "rapid-texter",
         "title": "Rapid Texter",
         "description": "Alat generasi teks berkecepatan tinggi yang dibangun untuk produktivitas. Dirancang untuk membantu penulis dan developer membuat scaffold konten lebih cepat dengan template cerdas dan pratinjau real-time.",
-        "tags": ["React", "TypeScript", "Tailwind CSS", "Node.js"],
+        "tags": [
+          "React",
+          "TypeScript",
+          "Tailwind CSS",
+          "Node.js"
+        ],
         "image": "/images/projects/rapid-texter.webp",
         "url_live": "https://rapidtexter.example.com",
         "url_code": "https://github.com/aleafarrel/rapid-texter",
@@ -59,7 +64,12 @@
         "id": "portfolio-3d",
         "title": "3D Portfolio Engine",
         "description": "Website yang sedang Anda lihat sekarang. Dibangun dengan Astro.js, GSAP scroll canvas, dan sistem desain 3D Neumorphism yang bespoke. Sebuah showcase arsitektur front-end tingkat lanjut.",
-        "tags": ["Astro.js", "GSAP", "Canvas API", "Tailwind CSS"],
+        "tags": [
+          "Astro.js",
+          "GSAP",
+          "Canvas API",
+          "Tailwind CSS"
+        ],
         "image": "/images/projects/portfolio.webp",
         "url_live": "/",
         "url_code": "https://github.com/aleafarrel/3d-portfolio",
@@ -70,7 +80,12 @@
         "id": "ui-component-lib",
         "title": "Neomorphic UI Library",
         "description": "Library komponen UI open-source dengan estetika Neumorphism 3D yang lembut dan taktil. Fully typed, aksesibel, dan siap produksi.",
-        "tags": ["TypeScript", "Storybook", "CSS Custom Properties", "Web Components"],
+        "tags": [
+          "TypeScript",
+          "Storybook",
+          "CSS Custom Properties",
+          "Web Components"
+        ],
         "image": "/images/projects/ui-lib.webp",
         "url_live": "https://neomorphic-ui.example.com",
         "url_code": "https://github.com/aleafarrel/neomorphic-ui",
@@ -150,9 +165,21 @@
       "error": "Terjadi kesalahan. Silakan coba lagi."
     },
     "socials": [
-      { "platform": "GitHub", "url": "https://github.com/aleafarrel", "icon": "github" },
-      { "platform": "LinkedIn", "url": "https://linkedin.com/in/aleafarrel", "icon": "linkedin" },
-      { "platform": "Instagram", "url": "https://instagram.com/aleafarrel", "icon": "instagram" }
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/aleafarrel",
+        "icon": "github"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/aleafarrel",
+        "icon": "linkedin"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/aleafarrel",
+        "icon": "instagram"
+      }
     ]
   },
   "footer": {

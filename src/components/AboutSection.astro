@@ -4,7 +4,8 @@
  * About section.
  * Data consumed from locale JSON props.
  */
-import SkillsLogoLoop from './react/SkillsLogoLoop.jsx';
+import SkillsLogoLoop from "./react/LogoLoop/SkillsLogoLoop.jsx";
+import Particles from "./react/Particles/Particles.jsx";
 
 interface Props {
   section_label: string;
@@ -17,24 +18,38 @@ interface Props {
 const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
 ---
 
-<section id="about" class="section py-32 about-section" aria-labelledby="about-heading">
+<section
+  id="about"
+  class="section py-32 about-section"
+  aria-labelledby="about-heading"
+>
+  <div class="particles-background">
+    <Particles
+      client:visible
+      particleColors={["#ffffff", "#00E5FF", "#FF6B35"]}
+      particleCount={250}
+      particleSpread={10}
+      speed={0.1}
+      particleBaseSize={100}
+      moveParticlesOnHover={true}
+      alphaParticles={true}
+      disableRotation={false}
+    />
+  </div>
   <div class="container mx-auto px-6 max-w-4xl">
     <div class="about-centered-container">
       <p class="section-label reveal about-label">
         {section_label}
       </p>
-      
-      <h2
-        class="about-heading reveal reveal-delay-1"
-        id="about-heading"
-      >
+
+      <h2 class="about-heading reveal reveal-delay-1" id="about-heading">
         {heading}
       </h2>
-      
+
       <p class="about-bio reveal reveal-delay-2">
         {bio_1}
       </p>
-      
+
       <p class="about-bio reveal reveal-delay-3">
         {bio_2}
       </p>
@@ -52,74 +67,89 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
 </section>
 
 <style is:global>
-/* ==========================================================
+  /* ==========================================================
    ABOUT SECTION
    ========================================================== */
 
-.about-section {
-  overflow-x: hidden;
-  position: relative;
-  z-index: var(--z-base);
-  background: var(--clr-bg);
-}
+  .about-section {
+    overflow-x: hidden;
+    position: relative;
+    z-index: var(--z-base);
+    background: var(--clr-bg);
+  }
 
-.about-centered-container {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  .particles-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Place above background but below content */
+  }
 
-.about-label {
-  text-align: center !important;
-  justify-content: center !important;
-  width: 100%;
-  margin-bottom: var(--space-4);
-}
+  /* Make sure content is above the particles */
+  .container, .skills-wrapper {
+    position: relative;
+    z-index: 2;
+  }
 
-.about-heading {
-  text-align: center !important;
-  width: 100%;
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--clr-text-primary);
-  margin-bottom: var(--space-6);
-}
+  .about-centered-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
-.about-bio {
-  text-align: center !important;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--clr-text-secondary);
-  line-height: 1.8;
-  margin-bottom: var(--space-4);
-}
+  .about-label {
+    text-align: center !important;
+    justify-content: center !important;
+    width: 100%;
+    margin-bottom: var(--space-4);
+  }
 
-.skills-wrapper {
-  margin-top: var(--space-12);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  .about-heading {
+    text-align: center !important;
+    width: 100%;
+    font-family: var(--font-display);
+    font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-6);
+  }
 
-.skills-label {
-  text-align: center !important;
-  justify-content: center !important;
-  width: 100%;
-  margin-bottom: var(--space-8);
-}
+  .about-bio {
+    text-align: center !important;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--clr-text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--space-4);
+  }
 
-.skills-marquee-container {
-  width: 100%;
-  overflow: hidden;
-}
+  .skills-wrapper {
+    margin-top: var(--space-12);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .skills-label {
+    text-align: center !important;
+    justify-content: center !important;
+    width: 100%;
+    margin-bottom: var(--space-8);
+  }
+
+  .skills-marquee-container {
+    width: 100%;
+    overflow: hidden;
+  }
 </style>
