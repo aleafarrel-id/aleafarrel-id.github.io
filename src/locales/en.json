@@ -1,0 +1,165 @@
+{
+  "meta": {
+    "title": "Alea Farrel — Creative Web Developer",
+    "description": "Portfolio of Alea Farrel, a creative web developer specializing in interactive 3D experiences, modern UI/UX, and full-stack development.",
+    "lang": "en"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "experience": "Experience",
+    "contact": "Contact",
+    "language": "ID"
+  },
+  "loading": {
+    "label": "Loading Experience"
+  },
+  "hero": {
+    "greeting": "Hello, I'm",
+    "name": "Alea Farrel",
+    "title": "Creative Web Developer",
+    "subtitle": "Crafting immersive digital experiences at the intersection of design and technology.",
+    "cta_primary": "View My Work",
+    "cta_secondary": "Get in Touch",
+    "scroll_hint": "Scroll to explore"
+  },
+  "about": {
+    "section_label": "About Me",
+    "heading": "Passionate developer building the web of tomorrow.",
+    "bio_1": "I'm a web developer with a deep love for creating interactive, high-performance digital experiences. I specialize in bridging the gap between stunning visual design and solid, scalable engineering.",
+    "bio_2": "When I'm not pushing pixels or writing code, you'll find me exploring new creative technologies, contributing to open source, and collaborating with passionate teams to build meaningful products.",
+    "skills_label": "Core Skills",
+    "skills": [
+      "React / Next.js",
+      "TypeScript",
+      "Three.js / WebGL",
+      "Node.js",
+      "UI/UX Design",
+      "Astro.js"
+    ]
+  },
+  "projects": {
+    "section_label": "Projects",
+    "heading": "Selected Work",
+    "subheading": "A curated selection of projects that represent my passion for building things that matter.",
+    "view_project": "View Project",
+    "view_code": "Source Code",
+    "items": [
+      {
+        "id": "rapid-texter",
+        "title": "Rapid Texter",
+        "description": "A high-speed text generation tool built for productivity. Designed to help writers and developers scaffold content faster with intelligent templates and real-time preview.",
+        "tags": ["React", "TypeScript", "Tailwind CSS", "Node.js"],
+        "image": "/images/projects/rapid-texter.webp",
+        "url_live": "https://rapidtexter.example.com",
+        "url_code": "https://github.com/aleafarrel/rapid-texter",
+        "featured": true,
+        "year": "2024"
+      },
+      {
+        "id": "portfolio-3d",
+        "title": "3D Portfolio Engine",
+        "description": "The very website you're viewing now. Built with Astro.js, GSAP scroll canvas, and a bespoke 3D Neumorphism design system. A showcase of advanced front-end architecture.",
+        "tags": ["Astro.js", "GSAP", "Canvas API", "Tailwind CSS"],
+        "image": "/images/projects/portfolio.webp",
+        "url_live": "/",
+        "url_code": "https://github.com/aleafarrel/3d-portfolio",
+        "featured": true,
+        "year": "2025"
+      },
+      {
+        "id": "ui-component-lib",
+        "title": "Neomorphic UI Library",
+        "description": "An open-source UI component library with a soft, tactile 3D Neumorphism aesthetic. Fully typed, accessible, and production-ready.",
+        "tags": ["TypeScript", "Storybook", "CSS Custom Properties", "Web Components"],
+        "image": "/images/projects/ui-lib.webp",
+        "url_live": "https://neomorphic-ui.example.com",
+        "url_code": "https://github.com/aleafarrel/neomorphic-ui",
+        "featured": false,
+        "year": "2024"
+      }
+    ]
+  },
+  "experience": {
+    "section_label": "Experience",
+    "heading": "Where I've Grown",
+    "subheading": "The organizations and roles that have shaped my craft.",
+    "items": [
+      {
+        "id": "amcc",
+        "organization": "AMCC",
+        "full_name": "Arrayan Muda Computer Club",
+        "role": "Core Member & Web Developer",
+        "period": "2023 — Present",
+        "description": "Active core member of AMCC, a leading student technology organization. Led web development initiatives, mentored junior members in modern front-end technologies, and contributed to the organization's digital presence and internal tooling.",
+        "highlights": [
+          "Led a 5-member front-end team for the annual tech conference website",
+          "Introduced design system practices and Astro.js to the club's tech stack",
+          "Mentored 12+ junior members in React and TypeScript fundamentals"
+        ],
+        "type": "organization",
+        "icon": "building"
+      },
+      {
+        "id": "freelance",
+        "organization": "Self-Employed",
+        "full_name": "Freelance Web Developer",
+        "role": "Full-Stack Developer",
+        "period": "2022 — Present",
+        "description": "Delivering bespoke web solutions for clients across various industries — from e-commerce platforms to interactive portfolio sites and SaaS dashboards.",
+        "highlights": [
+          "Delivered 10+ projects for clients in Indonesia and internationally",
+          "Achieved 100% client satisfaction with repeat business",
+          "Specialized in high-performance, animated web experiences"
+        ],
+        "type": "work",
+        "icon": "code"
+      },
+      {
+        "id": "education",
+        "organization": "University",
+        "full_name": "Informatics Engineering",
+        "role": "Bachelor's Degree",
+        "period": "2022 — 2026",
+        "description": "Pursuing a degree in Informatics Engineering, with a focus on software engineering, data structures, and human-computer interaction. Consistently in the top 10% of the class.",
+        "highlights": [
+          "GPA: 3.85 / 4.00",
+          "Focus: Web Engineering & HCI",
+          "Thesis: AI-assisted UI Generation"
+        ],
+        "type": "education",
+        "icon": "graduation"
+      }
+    ]
+  },
+  "contact": {
+    "section_label": "Contact",
+    "heading": "Let's Build Something Together",
+    "subheading": "Have a project in mind or just want to say hello? My inbox is always open.",
+    "email_label": "Email Me",
+    "email": "aleafarrel@example.com",
+    "social_label": "Find Me Online",
+    "form": {
+      "name_label": "Your Name",
+      "name_placeholder": "John Doe",
+      "email_label": "Email Address",
+      "email_placeholder": "john@example.com",
+      "message_label": "Your Message",
+      "message_placeholder": "Tell me about your project...",
+      "submit": "Send Message",
+      "success": "Message sent! I'll get back to you soon.",
+      "error": "Something went wrong. Please try again."
+    },
+    "socials": [
+      { "platform": "GitHub", "url": "https://github.com/aleafarrel", "icon": "github" },
+      { "platform": "LinkedIn", "url": "https://linkedin.com/in/aleafarrel", "icon": "linkedin" },
+      { "platform": "Instagram", "url": "https://instagram.com/aleafarrel", "icon": "instagram" }
+    ]
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "made_with": "Made with",
+    "and": "and"
+  }
+}

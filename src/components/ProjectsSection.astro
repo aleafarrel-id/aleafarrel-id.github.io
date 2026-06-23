@@ -1,0 +1,328 @@
+---
+/**
+ * ProjectsSection.astro
+ * 3D Neumorphic project cards with tilt effect.
+ * Data consumed from locale JSON props.
+ */
+interface ProjectItem {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  image: string;
+  url_live: string;
+  url_code: string;
+  featured: boolean;
+  year: string;
+}
+
+interface Props {
+  section_label: string;
+  heading: string;
+  subheading: string;
+  view_project: string;
+  view_code: string;
+  items: ProjectItem[];
+}
+
+const { section_label, heading, subheading, view_project, view_code, items } = Astro.props;
+
+// Icon SVGs
+const externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+const githubIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>`;
+
+// Placeholder gradients for projects without images
+const placeholderGradients = [
+  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #0066FF 0%, #00C6FF 100%)',
+  'linear-gradient(135deg, #FF6B35 0%, #FFB347 100%)',
+];
+---
+
+<section id="projects" class="section py-32" aria-labelledby="projects-heading">
+  <div class="container">
+    <p class="section-label reveal tracking-widest">{section_label}</p>
+    <h2 class="projects-heading reveal reveal-delay-1 font-black tracking-tighter" id="projects-heading">{heading}</h2>
+    <p class="projects-subheading reveal reveal-delay-2">{subheading}</p>
+
+    <div class="projects-grid" role="list">
+      {items.map((project, i) => (
+        <article
+          class={`project-card reveal reveal-delay-${(i % 3) + 1}`}
+          id={`project-${project.id}`}
+          role="listitem"
+          aria-label={project.title}
+          data-tilt
+        >
+          <!-- Project Image -->
+          <div class="project-card-image">
+            <div
+              class="project-img-placeholder"
+              style={`background: ${placeholderGradients[i % placeholderGradients.length]};`}
+              aria-hidden="true"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Project Body -->
+          <div class="project-card-body">
+            <p class="project-year">{project.year}</p>
+            <h3 class="project-title">{project.title}</h3>
+            <p class="project-description">{project.description}</p>
+
+            <div class="project-tags" aria-label="Technologies used">
+              {project.tags.map(tag => (
+                <span class="project-tag">{tag}</span>
+              ))}
+            </div>
+
+            <div class="project-links">
+              <a
+                href={project.url_live}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-link-btn primary"
+                aria-label={`${view_project}: ${project.title}`}
+              >
+                <Fragment set:html={externalLinkIcon} />
+                {view_project}
+              </a>
+              <a
+                href={project.url_code}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-link-btn secondary"
+                aria-label={`${view_code}: ${project.title}`}
+              >
+                <Fragment set:html={githubIcon} />
+                {view_code}
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // 3D tilt effect on project cards
+  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach(card => {
+    card.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+
+      card.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform 0.1s ease';
+    });
+  });
+</script>
+
+<style is:global>
+/* ==========================================================
+   PROJECTS SECTION
+   ========================================================== */
+
+#projects {
+  position: relative;
+  z-index: var(--z-base);
+  background: var(--clr-bg);
+}
+
+.projects-heading {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--clr-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.projects-subheading {
+  font-size: var(--text-lg);
+  color: var(--clr-text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: var(--space-16);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .projects-grid .project-card:first-child {
+    grid-column: span 2;
+  }
+}
+
+.project-card {
+  background: var(--clr-bg);
+  box-shadow: var(--neu-raised-lg);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--duration-slow) var(--ease-out-expo);
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.project-card:hover {
+  box-shadow:
+    16px 16px 32px var(--shadow-dark),
+    -8px -8px 20px var(--shadow-light);
+  transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+}
+
+.project-card-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--clr-bg-deep), var(--clr-bg));
+  box-shadow: var(--neu-inset);
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.project-card:hover .project-card-image img {
+  transform: scale(1.05);
+}
+
+/* Placeholder gradient for images */
+.project-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.project-card-body {
+  padding: var(--space-6);
+}
+
+.project-year {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--clr-accent-blue);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.project-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-3);
+}
+
+.project-description {
+  font-size: var(--text-sm);
+  color: var(--clr-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-4);
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.project-tag {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px var(--space-3);
+  background: var(--clr-bg);
+  box-shadow: var(--neu-raised-sm);
+  border-radius: var(--radius-full);
+  color: var(--clr-text-muted);
+}
+
+.project-links {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.project-link-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-base) var(--ease-out-expo);
+}
+
+.project-link-btn.primary {
+  background: var(--clr-accent-blue);
+  color: #fff;
+  box-shadow: 4px 4px 8px var(--shadow-dark), -2px -2px 6px var(--shadow-light), 0 0 16px var(--clr-accent-blue-glow);
+}
+
+.project-link-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 8px 16px var(--shadow-dark), -2px -2px 8px var(--shadow-light), 0 0 24px var(--clr-accent-blue-glow);
+}
+
+.project-link-btn.secondary {
+  background: var(--clr-bg);
+  color: var(--clr-text-secondary);
+  box-shadow: var(--neu-raised-sm);
+}
+
+.project-link-btn.secondary:hover {
+  box-shadow: var(--neu-raised);
+  color: var(--clr-text-primary);
+  transform: translateY(-2px);
+}
+
+</style>

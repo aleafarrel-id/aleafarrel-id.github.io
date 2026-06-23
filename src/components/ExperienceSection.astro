@@ -1,0 +1,274 @@
+---
+/**
+ * ExperienceSection.astro
+ * Timeline-style experience section.
+ * Data consumed from locale JSON props.
+ */
+interface ExperienceItem {
+  id: string;
+  organization: string;
+  full_name: string;
+  role: string;
+  period: string;
+  description: string;
+  highlights: string[];
+  type: string;
+  icon: string;
+}
+
+interface Props {
+  section_label: string;
+  heading: string;
+  subheading: string;
+  items: ExperienceItem[];
+}
+
+const { section_label, heading, subheading, items } = Astro.props;
+
+// Icon map for experience types
+const iconMap: Record<string, string> = {
+  building: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+  code: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  graduation: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
+};
+
+const typeColorMap: Record<string, string> = {
+  organization: 'var(--clr-accent-blue)',
+  work:         'var(--clr-accent-orange)',
+  education:    '#10B981',
+};
+---
+
+<section id="experience" class="section py-32" aria-labelledby="experience-heading">
+  <div class="container">
+    <p class="section-label reveal tracking-widest">{section_label}</p>
+    <h2 class="experience-heading reveal reveal-delay-1 font-black tracking-tighter" id="experience-heading">{heading}</h2>
+    <p class="experience-subheading reveal reveal-delay-2">{subheading}</p>
+
+    <div class="timeline" role="list">
+      {items.map((item, i) => (
+        <div
+          class={`timeline-item reveal reveal-delay-${(i % 3) + 1}`}
+          role="listitem"
+          id={`exp-${item.id}`}
+        >
+          <!-- Dot indicator -->
+          <div class="timeline-dot" aria-hidden="true" style={`--dot-color: ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'}`}>
+            <div class="timeline-dot-inner" style={`background: ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'}; box-shadow: 0 0 8px ${typeColorMap[item.type] ?? 'var(--clr-accent-blue-glow)'}40;`}>
+            </div>
+          </div>
+
+          <!-- Card -->
+          <article class="timeline-card" aria-label={`${item.organization}: ${item.role}`}>
+            <!-- Header -->
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-3);">
+              <div>
+                <p class="timeline-role" style={`color: ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'};`}>
+                  {item.role}
+                </p>
+                <h3 class="timeline-org">{item.organization}</h3>
+                <p style="font-family:var(--font-ui);font-size:var(--text-xs);color:var(--clr-text-muted);margin-top:2px;">{item.full_name}</p>
+              </div>
+              <!-- Type icon badge -->
+              <div
+                class="neu-raised-sm"
+                style={`width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'};`}
+                aria-hidden="true"
+              >
+                <Fragment set:html={iconMap[item.icon] ?? iconMap.code} />
+              </div>
+            </div>
+
+            <p class="timeline-period">{item.period}</p>
+            <p class="timeline-description">{item.description}</p>
+
+            <!-- Highlights -->
+            <ul class="timeline-highlights" aria-label="Key highlights">
+              {item.highlights.map(highlight => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+/* ==========================================================
+   EXPERIENCE SECTION
+   ========================================================== */
+
+#experience {
+  position: relative;
+  z-index: var(--z-base);
+  background: var(--clr-bg);
+}
+
+.experience-heading {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--clr-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.experience-subheading {
+  font-size: var(--text-lg);
+  color: var(--clr-text-secondary);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: var(--space-16);
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--clr-accent-blue), transparent);
+  box-shadow: 0 0 8px var(--clr-accent-blue-glow);
+}
+
+@media (min-width: 768px) {
+  .timeline::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 72px;
+}
+
+@media (min-width: 768px) {
+  .timeline-item {
+    width: 45%;
+    padding-left: 0;
+  }
+
+  .timeline-item:nth-child(even) {
+    align-self: flex-end;
+  }
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 16px;
+  top: 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--clr-bg);
+  box-shadow: var(--neu-raised-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .timeline-dot {
+    left: auto;
+    right: -36px;
+  }
+
+  .timeline-item:nth-child(even) .timeline-dot {
+    left: -36px;
+    right: auto;
+  }
+}
+
+.timeline-dot-inner {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--clr-accent-blue);
+  box-shadow: 0 0 8px var(--clr-accent-blue-glow);
+}
+
+.timeline-card {
+  background: var(--clr-bg);
+  box-shadow: var(--neu-raised-lg);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  transition: all var(--duration-slow) var(--ease-out-expo);
+}
+
+.timeline-card:hover {
+  box-shadow: 14px 14px 28px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+  transform: translateY(-4px);
+}
+
+.timeline-org {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.timeline-role {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--clr-accent-blue);
+  margin-bottom: var(--space-1);
+}
+
+.timeline-period {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--clr-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.timeline-description {
+  font-size: var(--text-sm);
+  color: var(--clr-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-4);
+}
+
+.timeline-highlights {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.timeline-highlights li {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  color: var(--clr-text-secondary);
+  padding-left: var(--space-4);
+  position: relative;
+}
+
+.timeline-highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--clr-accent-blue);
+}
+
+</style>

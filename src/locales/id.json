@@ -1,0 +1,165 @@
+{
+  "meta": {
+    "title": "Alea Farrel — Creative Web Developer",
+    "description": "Portofolio Alea Farrel, seorang creative web developer yang berspesialisasi dalam pengalaman 3D interaktif, UI/UX modern, dan pengembangan full-stack.",
+    "lang": "id"
+  },
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "projects": "Proyek",
+    "experience": "Pengalaman",
+    "contact": "Kontak",
+    "language": "EN"
+  },
+  "loading": {
+    "label": "Memuat Pengalaman"
+  },
+  "hero": {
+    "greeting": "Halo, Saya",
+    "name": "Alea Farrel",
+    "title": "Creative Web Developer",
+    "subtitle": "Menciptakan pengalaman digital yang imersif di persimpangan desain dan teknologi.",
+    "cta_primary": "Lihat Karya Saya",
+    "cta_secondary": "Hubungi Saya",
+    "scroll_hint": "Scroll untuk menjelajahi"
+  },
+  "about": {
+    "section_label": "Tentang Saya",
+    "heading": "Developer yang bersemangat membangun web masa depan.",
+    "bio_1": "Saya seorang web developer dengan passion mendalam dalam menciptakan pengalaman digital yang interaktif dan berkinerja tinggi. Saya mengkhususkan diri dalam menjembatani gap antara desain visual yang menakjubkan dan rekayasa yang solid dan skalabel.",
+    "bio_2": "Ketika tidak sedang mendorong piksel atau menulis kode, saya menjelajahi teknologi kreatif baru, berkontribusi ke open source, dan berkolaborasi dengan tim yang bersemangat untuk membangun produk yang bermakna.",
+    "skills_label": "Keahlian Utama",
+    "skills": [
+      "React / Next.js",
+      "TypeScript",
+      "Three.js / WebGL",
+      "Node.js",
+      "UI/UX Design",
+      "Astro.js"
+    ]
+  },
+  "projects": {
+    "section_label": "Proyek",
+    "heading": "Karya Terpilih",
+    "subheading": "Seleksi proyek yang mewakili passion saya dalam membangun hal-hal yang berarti.",
+    "view_project": "Lihat Proyek",
+    "view_code": "Kode Sumber",
+    "items": [
+      {
+        "id": "rapid-texter",
+        "title": "Rapid Texter",
+        "description": "Alat generasi teks berkecepatan tinggi yang dibangun untuk produktivitas. Dirancang untuk membantu penulis dan developer membuat scaffold konten lebih cepat dengan template cerdas dan pratinjau real-time.",
+        "tags": ["React", "TypeScript", "Tailwind CSS", "Node.js"],
+        "image": "/images/projects/rapid-texter.webp",
+        "url_live": "https://rapidtexter.example.com",
+        "url_code": "https://github.com/aleafarrel/rapid-texter",
+        "featured": true,
+        "year": "2024"
+      },
+      {
+        "id": "portfolio-3d",
+        "title": "3D Portfolio Engine",
+        "description": "Website yang sedang Anda lihat sekarang. Dibangun dengan Astro.js, GSAP scroll canvas, dan sistem desain 3D Neumorphism yang bespoke. Sebuah showcase arsitektur front-end tingkat lanjut.",
+        "tags": ["Astro.js", "GSAP", "Canvas API", "Tailwind CSS"],
+        "image": "/images/projects/portfolio.webp",
+        "url_live": "/",
+        "url_code": "https://github.com/aleafarrel/3d-portfolio",
+        "featured": true,
+        "year": "2025"
+      },
+      {
+        "id": "ui-component-lib",
+        "title": "Neomorphic UI Library",
+        "description": "Library komponen UI open-source dengan estetika Neumorphism 3D yang lembut dan taktil. Fully typed, aksesibel, dan siap produksi.",
+        "tags": ["TypeScript", "Storybook", "CSS Custom Properties", "Web Components"],
+        "image": "/images/projects/ui-lib.webp",
+        "url_live": "https://neomorphic-ui.example.com",
+        "url_code": "https://github.com/aleafarrel/neomorphic-ui",
+        "featured": false,
+        "year": "2024"
+      }
+    ]
+  },
+  "experience": {
+    "section_label": "Pengalaman",
+    "heading": "Di Mana Saya Berkembang",
+    "subheading": "Organisasi dan peran yang telah membentuk keahlian saya.",
+    "items": [
+      {
+        "id": "amcc",
+        "organization": "AMCC",
+        "full_name": "Arrayan Muda Computer Club",
+        "role": "Anggota Inti & Web Developer",
+        "period": "2023 — Sekarang",
+        "description": "Anggota inti aktif di AMCC, organisasi teknologi mahasiswa terkemuka. Memimpin inisiatif pengembangan web, membimbing anggota junior dalam teknologi front-end modern, dan berkontribusi pada kehadiran digital dan internal tooling organisasi.",
+        "highlights": [
+          "Memimpin tim front-end 5 orang untuk website konferensi teknologi tahunan",
+          "Memperkenalkan praktik design system dan Astro.js ke tech stack klub",
+          "Membimbing 12+ anggota junior dalam React dan TypeScript"
+        ],
+        "type": "organization",
+        "icon": "building"
+      },
+      {
+        "id": "freelance",
+        "organization": "Mandiri",
+        "full_name": "Freelance Web Developer",
+        "role": "Full-Stack Developer",
+        "period": "2022 — Sekarang",
+        "description": "Menghadirkan solusi web bespoke untuk klien di berbagai industri — dari platform e-commerce hingga situs portofolio interaktif dan dashboard SaaS.",
+        "highlights": [
+          "Menyelesaikan 10+ proyek untuk klien di Indonesia dan internasional",
+          "Mencapai 100% kepuasan klien dengan bisnis berulang",
+          "Spesialisasi dalam pengalaman web berkinerja tinggi dengan animasi"
+        ],
+        "type": "work",
+        "icon": "code"
+      },
+      {
+        "id": "education",
+        "organization": "Universitas",
+        "full_name": "Teknik Informatika",
+        "role": "Sarjana",
+        "period": "2022 — 2026",
+        "description": "Menempuh gelar Teknik Informatika, dengan fokus pada rekayasa perangkat lunak, struktur data, dan interaksi manusia-komputer. Konsisten masuk dalam 10% terbaik di kelas.",
+        "highlights": [
+          "IPK: 3.85 / 4.00",
+          "Fokus: Rekayasa Web & HCI",
+          "Skripsi: Generasi UI berbasis AI"
+        ],
+        "type": "education",
+        "icon": "graduation"
+      }
+    ]
+  },
+  "contact": {
+    "section_label": "Kontak",
+    "heading": "Mari Membangun Sesuatu Bersama",
+    "subheading": "Punya proyek di benak Anda atau hanya ingin menyapa? Kotak masuk saya selalu terbuka.",
+    "email_label": "Kirim Email",
+    "email": "aleafarrel@example.com",
+    "social_label": "Temukan Saya Online",
+    "form": {
+      "name_label": "Nama Anda",
+      "name_placeholder": "Budi Santoso",
+      "email_label": "Alamat Email",
+      "email_placeholder": "budi@example.com",
+      "message_label": "Pesan Anda",
+      "message_placeholder": "Ceritakan tentang proyek Anda...",
+      "submit": "Kirim Pesan",
+      "success": "Pesan terkirim! Saya akan segera membalas.",
+      "error": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "socials": [
+      { "platform": "GitHub", "url": "https://github.com/aleafarrel", "icon": "github" },
+      { "platform": "LinkedIn", "url": "https://linkedin.com/in/aleafarrel", "icon": "linkedin" },
+      { "platform": "Instagram", "url": "https://instagram.com/aleafarrel", "icon": "instagram" }
+    ]
+  },
+  "footer": {
+    "rights": "Semua hak dilindungi.",
+    "made_with": "Dibuat dengan",
+    "and": "dan"
+  }
+}

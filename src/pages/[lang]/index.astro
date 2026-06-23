@@ -1,0 +1,106 @@
+---
+/**
+ * src/pages/[lang]/index.astro
+ * ─────────────────────────────────────────────────────────────
+ * SINGLE TEMPLATE for ALL languages.
+ * getStaticPaths generates /en/ and /id/ from one file.
+ * Content is 100% driven from src/locales/[lang].json
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroSection from "../../components/HeroSection.astro";
+import AboutSection from "../../components/AboutSection.astro";
+import ProjectsSection from "../../components/ProjectsSection.astro";
+import ExperienceSection from "../../components/ExperienceSection.astro";
+import ContactSection from "../../components/ContactSection.astro";
+import { getLocaleData, type Locale } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "id" } }];
+}
+
+// All content fetched from JSON by lang param — no hardcoded text
+const { lang } = Astro.params;
+const locale = (lang ?? "en") as Locale;
+const data = getLocaleData(locale);
+
+const projectsAnchor = `/${locale}/#projects`;
+const contactAnchor = `/${locale}/#contact`;
+---
+
+<BaseLayout locale={locale}>
+  <!--
+    ╔══════════════════════════════════════════════════════╗
+    ║  SCROLL CANVAS DRIVER                                ║
+    ║  A tall sticky container that GSAP ScrollTrigger     ║
+    ║  uses to map scroll progress → frame index.          ║
+    ║  Height controls scroll speed (frames per vh).       ║
+    ╚══════════════════════════════════════════════════════╝
+  -->
+  <div
+    id="scroll-canvas-driver"
+    aria-hidden="true"
+    style="height: 600vh; position: relative;"
+  >
+    <!-- Hero floats over the canvas during the pinned scroll zone -->
+    <div
+      style="position: sticky; top: 0; height: 100dvh; pointer-events: none; z-index: 10;"
+    >
+      <HeroSection
+        greeting={data.hero.greeting}
+        name={data.hero.name}
+        title={data.hero.title}
+        subtitle={data.hero.subtitle}
+        cta_primary={data.hero.cta_primary}
+        cta_secondary={data.hero.cta_secondary}
+        scroll_hint={data.hero.scroll_hint}
+        projects_anchor={projectsAnchor}
+        contact_anchor={contactAnchor}
+      />
+    </div>
+  </div>
+
+  <!-- ── ABOUT ────────────────────────────────────────── -->
+  <AboutSection
+    section_label={data.about.section_label}
+    heading={data.about.heading}
+    bio_1={data.about.bio_1}
+    bio_2={data.about.bio_2}
+    skills_label={data.about.skills_label}
+    skills={data.about.skills}
+  />
+
+  <!-- ── PROJECTS ─────────────────────────────────────── -->
+  <ProjectsSection
+    section_label={data.projects.section_label}
+    heading={data.projects.heading}
+    subheading={data.projects.subheading}
+    view_project={data.projects.view_project}
+    view_code={data.projects.view_code}
+    items={data.projects.items}
+  />
+
+  <!-- ── EXPERIENCE ───────────────────────────────────── -->
+  <ExperienceSection
+    section_label={data.experience.section_label}
+    heading={data.experience.heading}
+    subheading={data.experience.subheading}
+    items={data.experience.items}
+  />
+
+  <!-- ── CONTACT ──────────────────────────────────────── -->
+  <ContactSection
+    section_label={data.contact.section_label}
+    heading={data.contact.heading}
+    subheading={data.contact.subheading}
+    email_label={data.contact.email_label}
+    email={data.contact.email}
+    social_label={data.contact.social_label}
+    form={data.contact.form}
+    socials={data.contact.socials}
+  />
+</BaseLayout>
+
+<!-- Canvas scroll animation loaded client-side only -->
+<script>
+  import "../../scripts/canvas-scroll";
+</script>
