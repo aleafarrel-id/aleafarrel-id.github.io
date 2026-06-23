@@ -79,7 +79,7 @@ const targetSocials = socials.filter((s) =>
             href={targetSocials.find((s) => s.icon === "instagram")?.url}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#1A1A1A] text-gray-200 shadow-[8px_8px_16px_#0a0a0a,-8px_-8px_16px_rgba(255,255,255,0.05)] transition-all duration-300 hover:text-white hover:shadow-[12px_12px_20px_#0a0a0a,-4px_-4px_10px_rgba(255,255,255,0.05)] active:shadow-[inset_4px_4px_8px_#0a0a0a,inset_-4px_-4px_8px_rgba(255,255,255,0.05)]"
+            class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full contact-social-btn"
             aria-label="Instagram"
             title="Instagram"
           >
@@ -88,10 +88,9 @@ const targetSocials = socials.filter((s) =>
         )
       }
 
-      {/* Gmail Button */}
       <a
         href={`mailto:${email}`}
-        class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#1A1A1A] text-gray-200 shadow-[8px_8px_16px_#0a0a0a,-8px_-8px_16px_rgba(255,255,255,0.05)] transition-all duration-300 hover:text-white hover:shadow-[12px_12px_20px_#0a0a0a,-4px_-4px_10px_rgba(255,255,255,0.05)] active:shadow-[inset_4px_4px_8px_#0a0a0a,inset_-4px_-4px_8px_rgba(255,255,255,0.05)]"
+        class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full contact-social-btn"
         aria-label={`${email_label}: ${email}`}
         title={email}
       >
@@ -105,7 +104,7 @@ const targetSocials = socials.filter((s) =>
             href={targetSocials.find((s) => s.icon === "github")?.url}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#1A1A1A] text-gray-200 shadow-[8px_8px_16px_#0a0a0a,-8px_-8px_16px_rgba(255,255,255,0.05)] transition-all duration-300 hover:text-white hover:shadow-[12px_12px_20px_#0a0a0a,-4px_-4px_10px_rgba(255,255,255,0.05)] active:shadow-[inset_4px_4px_8px_#0a0a0a,inset_-4px_-4px_8px_rgba(255,255,255,0.05)]"
+            class="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full contact-social-btn"
             aria-label="GitHub"
             title="GitHub"
           >
@@ -198,6 +197,23 @@ const targetSocials = socials.filter((s) =>
   transform: translateY(-3px);
 }
 
+.contact-social-btn {
+  background: var(--clr-bg);
+  color: var(--clr-text-secondary);
+  box-shadow: var(--neu-raised);
+  transition: all var(--duration-base) var(--ease-out-expo);
+}
+
+.contact-social-btn:hover {
+  color: var(--clr-text-primary);
+  box-shadow: var(--neu-raised-lg);
+}
+
+.contact-social-btn:active {
+  box-shadow: var(--neu-inset);
+}
+
+
 /* Contact Form */
 .contact-form {
   display: flex;
@@ -258,7 +274,7 @@ const targetSocials = socials.filter((s) =>
   font-size: var(--text-sm);
   padding: var(--space-5) var(--space-8);
   background: var(--clr-accent-blue);
-  color: #fff;
+  color: var(--clr-text-primary);
   border-radius: var(--radius-full);
   border: none;
   cursor: pointer;

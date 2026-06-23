@@ -171,11 +171,11 @@ const {
     font-size: var(--text-sm);
     padding: var(--space-3) var(--space-6);
     background: linear-gradient(135deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
-    color: #ffffff;
+    color: var(--clr-text-primary);
     border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 20px -2px var(--clr-accent-blue-glow), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
     transition: all var(--duration-base) var(--ease-out-expo);
     letter-spacing: 0.02em;
     display: inline-flex;
@@ -186,12 +186,12 @@ const {
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px 0 var(--clr-accent-blue-glow), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 24px 0 var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, var(--clr-text-primary) 40%, transparent);
   }
 
   .btn-primary:active {
     transform: translateY(0px);
-    box-shadow: 0 2px 10px -2px var(--clr-accent-blue-glow), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 10px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
   }
 
   .btn-secondary {
@@ -199,12 +199,12 @@ const {
     font-weight: 600;
     font-size: var(--text-sm);
     padding: var(--space-3) var(--space-6);
-    background: rgba(255, 255, 255, 0.03);
+    background: color-mix(in srgb, var(--clr-text-primary) 3%, transparent);
     color: var(--clr-text-primary);
     border-radius: var(--radius-full);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
     cursor: pointer;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--shadow-dark) 50%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: all var(--duration-base) var(--ease-out-expo);
@@ -217,13 +217,13 @@ const {
 
   .btn-secondary:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: color-mix(in srgb, var(--clr-text-primary) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
   }
 
   .btn-secondary:active {
     transform: translateY(0);
-    background: rgba(255, 255, 255, 0.02);
+    background: color-mix(in srgb, var(--clr-text-primary) 2%, transparent);
   }
 
   .hero-scroll-hint {
@@ -255,34 +255,30 @@ const {
 
   .scroll-arrow-long {
     width: 2px;
-    height: 120px;
-    background: linear-gradient(to bottom, color-mix(in srgb, var(--clr-text-secondary) 50%, transparent), transparent);
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--clr-accent-blue));
     position: relative;
     display: flex;
     justify-content: center;
-    animation: scrollLineBounce 2.5s ease-in-out infinite;
+    animation: scrollLineBounce 2s var(--ease-inout) infinite;
+    border-radius: var(--radius-full);
   }
 
   .scroll-arrow-long::after {
     content: '';
     position: absolute;
-    top: 10px;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid color-mix(in srgb, var(--clr-text-secondary) 70%, transparent);
-    border-bottom: 2px solid color-mix(in srgb, var(--clr-text-secondary) 70%, transparent);
+    bottom: -2px;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--clr-accent-blue);
+    border-bottom: 2px solid var(--clr-accent-blue);
     transform: rotate(45deg);
-    animation: scrollArrowSlide 2.5s ease-in-out infinite;
+    box-shadow: 2px 2px 4px var(--clr-accent-blue-glow);
   }
 
   @keyframes scrollLineBounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(15px); }
-  }
-
-  @keyframes scrollArrowSlide {
-    0%, 100% { top: 10px; opacity: 1; }
-    50% { top: 100px; opacity: 0.2; }
   }
 
   @keyframes scrollHintFade {

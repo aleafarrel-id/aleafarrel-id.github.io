@@ -45,7 +45,7 @@ const base = `/${locale}`;
     <meta property="og:title"       content={data.meta.title} />
     <meta property="og:description" content={data.meta.description} />
     <meta property="og:type"        content="website" />
-    <meta name="theme-color"        content="#E8ECF0" />
+    <meta name="theme-color"        content="#1A1A1A" />
 
     <!-- i18n alternate links -->
     <link rel="alternate" hreflang={locale}  href={Astro.url.href} />
@@ -269,12 +269,14 @@ const base = `/${locale}`;
 }
 
 .loader-bar-track {
-  width: 260px;
-  height: 6px;
+  width: 300px;
+  height: 12px;
   border-radius: var(--radius-full);
   box-shadow: var(--neu-inset);
   background: var(--clr-bg-deep);
   overflow: hidden;
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--shadow-dark) 20%, transparent);
 }
 
 .loader-bar-fill {
@@ -283,7 +285,7 @@ const base = `/${locale}`;
   border-radius: var(--radius-full);
   background: linear-gradient(90deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
   transition: width 0.1s linear;
-  box-shadow: 0 0 12px var(--clr-accent-blue-glow);
+  box-shadow: 0 0 16px var(--clr-accent-blue-glow);
 }
 
 .loader-label {
@@ -296,10 +298,11 @@ const base = `/${locale}`;
 }
 
 .loader-percent {
-  font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: 800;
-  color: var(--clr-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-5xl);
+  font-weight: 700;
+  color: var(--clr-accent-blue);
+  text-shadow: 0 0 20px var(--clr-accent-blue-glow);
   line-height: 1;
   min-width: 4ch;
   text-align: center;
@@ -421,7 +424,7 @@ const base = `/${locale}`;
   z-index: var(--z-base);
   background: var(--clr-bg);
   padding: var(--space-8) 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
 }
 
 .footer-inner {
@@ -496,7 +499,7 @@ const base = `/${locale}`;
   position: fixed;
   inset: 0;
   z-index: calc(var(--z-sticky) + 1);
-  background: rgba(232, 236, 240, 0.98);
+  background: color-mix(in srgb, var(--clr-bg) 98%, transparent);
   backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;

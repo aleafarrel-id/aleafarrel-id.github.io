@@ -35,7 +35,7 @@ const iconMap: Record<string, string> = {
 const typeColorMap: Record<string, string> = {
   organization: 'var(--clr-accent-blue)',
   work:         'var(--clr-accent-orange)',
-  education:    '#10B981',
+  education:    'var(--clr-success)',
 };
 ---
 
@@ -54,7 +54,7 @@ const typeColorMap: Record<string, string> = {
         >
           <!-- Dot indicator -->
           <div class="timeline-dot" aria-hidden="true" style={`--dot-color: ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'}`}>
-            <div class="timeline-dot-inner" style={`background: ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'}; box-shadow: 0 0 8px ${typeColorMap[item.type] ?? 'var(--clr-accent-blue-glow)'}40;`}>
+            <div class="timeline-dot-inner" style={`background: ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'}; box-shadow: 0 0 8px color-mix(in srgb, ${typeColorMap[item.type] ?? 'var(--clr-accent-blue)'} 40%, transparent);`}>
             </div>
           </div>
 
