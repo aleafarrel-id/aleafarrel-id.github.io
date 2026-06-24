@@ -161,49 +161,53 @@
     "subheading": "The organizations and roles that have shaped my craft.",
     "items": [
       {
-        "id": "amcc",
-        "organization": "AMCC",
-        "full_name": "Arrayan Muda Computer Club",
-        "role": "Core Member & Web Developer",
-        "period": "2023 — Present",
-        "description": "Active core member of AMCC, a leading student technology organization. Led web development initiatives, mentored junior members in modern front-end technologies, and contributed to the organization's digital presence and internal tooling.",
-        "highlights": [
-          "Led a 5-member front-end team for the annual tech conference website",
-          "Introduced design system practices and Astro.js to the club's tech stack",
-          "Mentored 12+ junior members in React and TypeScript fundamentals"
-        ],
-        "type": "organization",
-        "icon": "building"
+          "id": 1,
+          "name": "MTCNA",
+          "title": "MikroTik Certified Network Associate",
+          "description": "Entry-level MikroTik certification covering fundamental networking and router configuration using RouterOS.",
+          "image": "/certificate/mtcna.webp"
       },
       {
-        "id": "freelance",
-        "organization": "Self-Employed",
-        "full_name": "Freelance Web Developer",
-        "role": "Full-Stack Developer",
-        "period": "2022 — Present",
-        "description": "Delivering bespoke web solutions for clients across various industries — from e-commerce platforms to interactive portfolio sites and SaaS dashboards.",
-        "highlights": [
-          "Delivered 10+ projects for clients in Indonesia and internationally",
-          "Achieved 100% client satisfaction with repeat business",
-          "Specialized in high-performance, animated web experiences"
-        ],
-        "type": "work",
-        "icon": "code"
+          "id": 2,
+          "name": "MTCTCE",
+          "title": "MikroTik Certified Traffic Control Engineer",
+          "description": "Advanced MikroTik certification focused on traffic control, Quality of Service (QoS), and bandwidth management.",
+          "image": "/certificate/mtctce.webp"
       },
       {
-        "id": "education",
-        "organization": "University",
-        "full_name": "Informatics Engineering",
-        "role": "Bachelor's Degree",
-        "period": "2022 — 2026",
-        "description": "Pursuing a degree in Informatics Engineering, with a focus on software engineering, data structures, and human-computer interaction. Consistently in the top 10% of the class.",
-        "highlights": [
-          "GPA: 3.85 / 4.00",
-          "Focus: Web Engineering & HCI",
-          "Thesis: AI-assisted UI Generation"
-        ],
-        "type": "education",
-        "icon": "graduation"
+          "id": 3,
+          "name": "TKJ Skanesga Award",
+          "title": "TKJ Best Graduate Award Certificate",
+          "description": "Recognition award for outstanding achievement in Computer Network Engineering program at SMKN 1 Seyegan.",
+          "image": "/certificate/tkj-award.webp"
+      },
+      {
+          "id": 4,
+          "name": "Cluster Training 1",
+          "title": "Cable-Based Network Installation",
+          "description": "Certificate of completion for cable-based network installation training at SMKN 1 Seyegan.",
+          "image": "/certificate/cluster1.webp"
+      },
+      {
+          "id": 5,
+          "name": "Cluster Training 2",
+          "title": "Computer Network Device Configuration",
+          "description": "Certificate of completion for computer network device configuration training at SMKN 1 Seyegan.",
+          "image": "/certificate/cluster2.webp"
+      },
+      {
+          "id": 6,
+          "name": "Cluster Training 3",
+          "title": "Routing Configuration",
+          "description": "Certificate of completion for routing configuration and computer network device configuration training at SMKN 1 Seyegan.",
+          "image": "/certificate/cluster3.webp"
+      },
+      {
+          "id": 7,
+          "name": "OJM Finalist",
+          "title": "MikroTik Network Olympiad Finalist",
+          "description": "Finalist in the MikroTik Network Olympiad, competition for network engineering students in Indonesia.",
+          "image": "/certificate/ojm.webp"
       }
     ]
   },

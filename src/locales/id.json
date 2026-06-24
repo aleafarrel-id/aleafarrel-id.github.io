@@ -161,49 +161,53 @@
     "subheading": "Organisasi dan peran yang telah membentuk keahlian saya.",
     "items": [
       {
-        "id": "amcc",
-        "organization": "AMCC",
-        "full_name": "Arrayan Muda Computer Club",
-        "role": "Anggota Inti & Web Developer",
-        "period": "2023 — Sekarang",
-        "description": "Anggota inti aktif di AMCC, organisasi teknologi mahasiswa terkemuka. Memimpin inisiatif pengembangan web, membimbing anggota junior dalam teknologi front-end modern, dan berkontribusi pada kehadiran digital dan internal tooling organisasi.",
-        "highlights": [
-          "Memimpin tim front-end 5 orang untuk website konferensi teknologi tahunan",
-          "Memperkenalkan praktik design system dan Astro.js ke tech stack klub",
-          "Membimbing 12+ anggota junior dalam React dan TypeScript"
-        ],
-        "type": "organization",
-        "icon": "building"
+          "id": 1,
+          "name": "MTCNA",
+          "title": "MikroTik Certified Network Associate",
+          "description": "Sertifikasi entry-level MikroTik yang mencakup dasar-dasar jaringan dan konfigurasi router menggunakan RouterOS.",
+          "image": "/certificate/mtcna.webp"
       },
       {
-        "id": "freelance",
-        "organization": "Mandiri",
-        "full_name": "Freelance Web Developer",
-        "role": "Full-Stack Developer",
-        "period": "2022 — Sekarang",
-        "description": "Menghadirkan solusi web bespoke untuk klien di berbagai industri — dari platform e-commerce hingga situs portofolio interaktif dan dashboard SaaS.",
-        "highlights": [
-          "Menyelesaikan 10+ proyek untuk klien di Indonesia dan internasional",
-          "Mencapai 100% kepuasan klien dengan bisnis berulang",
-          "Spesialisasi dalam pengalaman web berkinerja tinggi dengan animasi"
-        ],
-        "type": "work",
-        "icon": "code"
+          "id": 2,
+          "name": "MTCTCE",
+          "title": "MikroTik Certified Traffic Control Engineer",
+          "description": "Sertifikasi lanjutan MikroTik yang berfokus pada traffic control, Quality of Service (QoS), dan manajemen bandwidth.",
+          "image": "/certificate/mtctce.webp"
       },
       {
-        "id": "education",
-        "organization": "Universitas",
-        "full_name": "Teknik Informatika",
-        "role": "Sarjana",
-        "period": "2022 — 2026",
-        "description": "Menempuh gelar Teknik Informatika, dengan fokus pada rekayasa perangkat lunak, struktur data, dan interaksi manusia-komputer. Konsisten masuk dalam 10% terbaik di kelas.",
-        "highlights": [
-          "IPK: 3.85 / 4.00",
-          "Fokus: Rekayasa Web & HCI",
-          "Skripsi: Generasi UI berbasis AI"
-        ],
-        "type": "education",
-        "icon": "graduation"
+          "id": 3,
+          "name": "TKJ Skanesga Award",
+          "title": "TKJ Best Graduate Award Certificate",
+          "description": "Penghargaan atas pencapaian luar biasa dalam program keahlian Teknik Komputer dan Jaringan di SMKN 1 Seyegan.",
+          "image": "/certificate/tkj-award.webp"
+      },
+      {
+          "id": 4,
+          "name": "Cluster Training 1",
+          "title": "Cable-Based Network Installation",
+          "description": "Sertifikat penyelesaian pelatihan instalasi jaringan berbasis kabel di SMKN 1 Seyegan.",
+          "image": "/certificate/cluster1.webp"
+      },
+      {
+          "id": 5,
+          "name": "Cluster Training 2",
+          "title": "Computer Network Device Configuration",
+          "description": "Sertifikat penyelesaian pelatihan konfigurasi perangkat jaringan komputer di SMKN 1 Seyegan.",
+          "image": "/certificate/cluster2.webp"
+      },
+      {
+          "id": 6,
+          "name": "Cluster Training 3",
+          "title": "Routing Configuration",
+          "description": "Sertifikat penyelesaian pelatihan konfigurasi routing dan perangkat jaringan komputer di SMKN 1 Seyegan.",
+          "image": "/certificate/cluster3.webp"
+      },
+      {
+          "id": 7,
+          "name": "OJM Finalist",
+          "title": "MikroTik Network Olympiad Finalist",
+          "description": "Finalis Olimpiade Jaringan MikroTik, kompetisi untuk siswa keahlian jaringan di Indonesia.",
+          "image": "/certificate/ojm.webp"
       }
     ]
   },
