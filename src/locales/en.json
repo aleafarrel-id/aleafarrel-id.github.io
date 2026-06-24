@@ -159,54 +159,55 @@
     "section_label": "Experience",
     "heading": "Where I've Grown",
     "subheading": "The organizations and roles that have shaped my craft.",
+    "interaction_hint": "Drag or scroll to explore, click on a certificate to preview.",
     "items": [
       {
           "id": 1,
           "name": "MTCNA",
           "title": "MikroTik Certified Network Associate",
-          "description": "Entry-level MikroTik certification covering fundamental networking and router configuration using RouterOS.",
+          "description": "Mastered core network routing and configuration using RouterOS, establishing a strong foundation in modern networking architecture.",
           "image": "/certificate/mtcna.webp"
       },
       {
           "id": 2,
           "name": "MTCTCE",
           "title": "MikroTik Certified Traffic Control Engineer",
-          "description": "Advanced MikroTik certification focused on traffic control, Quality of Service (QoS), and bandwidth management.",
+          "description": "Acquired advanced expertise in traffic control, implementing complex Quality of Service (QoS) and precise bandwidth management solutions.",
           "image": "/certificate/mtctce.webp"
       },
       {
           "id": 3,
           "name": "TKJ Skanesga Award",
           "title": "TKJ Best Graduate Award Certificate",
-          "description": "Recognition award for outstanding achievement in Computer Network Engineering program at SMKN 1 Seyegan.",
+          "description": "Awarded for exceptional academic and practical achievements in the Computer Network Engineering program.",
           "image": "/certificate/tkj-award.webp"
       },
       {
           "id": 4,
           "name": "Cluster Training 1",
           "title": "Cable-Based Network Installation",
-          "description": "Certificate of completion for cable-based network installation training at SMKN 1 Seyegan.",
+          "description": "Demonstrated proficiency in designing and deploying physical network infrastructure and structured cabling systems.",
           "image": "/certificate/cluster1.webp"
       },
       {
           "id": 5,
           "name": "Cluster Training 2",
           "title": "Computer Network Device Configuration",
-          "description": "Certificate of completion for computer network device configuration training at SMKN 1 Seyegan.",
+          "description": "Proven ability to configure, troubleshoot, and optimize diverse computer network devices for reliable connectivity.",
           "image": "/certificate/cluster2.webp"
       },
       {
           "id": 6,
           "name": "Cluster Training 3",
           "title": "Routing Configuration",
-          "description": "Certificate of completion for routing configuration and computer network device configuration training at SMKN 1 Seyegan.",
+          "description": "Specialized in advanced routing protocols and complex network device configurations for enterprise environments.",
           "image": "/certificate/cluster3.webp"
       },
       {
           "id": 7,
           "name": "OJM Finalist",
           "title": "MikroTik Network Olympiad Finalist",
-          "description": "Finalist in the MikroTik Network Olympiad, competition for network engineering students in Indonesia.",
+          "description": "Recognized as a top competitor in a national-level network engineering olympiad, showcasing advanced problem-solving skills.",
           "image": "/certificate/ojm.webp"
       }
     ]

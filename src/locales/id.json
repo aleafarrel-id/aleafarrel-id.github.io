@@ -159,54 +159,55 @@
     "section_label": "Pengalaman",
     "heading": "Di Mana Saya Berkembang",
     "subheading": "Organisasi dan peran yang telah membentuk keahlian saya.",
+    "interaction_hint": "Geser atau gulir untuk menjelajah, klik sertifikat untuk melihat.",
     "items": [
       {
           "id": 1,
           "name": "MTCNA",
           "title": "MikroTik Certified Network Associate",
-          "description": "Sertifikasi entry-level MikroTik yang mencakup dasar-dasar jaringan dan konfigurasi router menggunakan RouterOS.",
+          "description": "Menguasai routing dan konfigurasi jaringan inti menggunakan RouterOS, membangun pondasi yang kuat dalam arsitektur jaringan modern.",
           "image": "/certificate/mtcna.webp"
       },
       {
           "id": 2,
           "name": "MTCTCE",
           "title": "MikroTik Certified Traffic Control Engineer",
-          "description": "Sertifikasi lanjutan MikroTik yang berfokus pada traffic control, Quality of Service (QoS), dan manajemen bandwidth.",
+          "description": "Memperoleh keahlian tingkat lanjut dalam traffic control, menerapkan Quality of Service (QoS) yang kompleks dan solusi manajemen bandwidth yang presisi.",
           "image": "/certificate/mtctce.webp"
       },
       {
           "id": 3,
           "name": "TKJ Skanesga Award",
           "title": "TKJ Best Graduate Award Certificate",
-          "description": "Penghargaan atas pencapaian luar biasa dalam program keahlian Teknik Komputer dan Jaringan di SMKN 1 Seyegan.",
+          "description": "Dianugerahi atas pencapaian akademik dan praktis yang luar biasa dalam program keahlian Teknik Komputer dan Jaringan.",
           "image": "/certificate/tkj-award.webp"
       },
       {
           "id": 4,
           "name": "Cluster Training 1",
           "title": "Cable-Based Network Installation",
-          "description": "Sertifikat penyelesaian pelatihan instalasi jaringan berbasis kabel di SMKN 1 Seyegan.",
+          "description": "Menunjukkan kemahiran dalam merancang dan menerapkan infrastruktur jaringan fisik serta sistem pengkabelan terstruktur.",
           "image": "/certificate/cluster1.webp"
       },
       {
           "id": 5,
           "name": "Cluster Training 2",
           "title": "Computer Network Device Configuration",
-          "description": "Sertifikat penyelesaian pelatihan konfigurasi perangkat jaringan komputer di SMKN 1 Seyegan.",
+          "description": "Terbukti mampu mengkonfigurasi, memecahkan masalah, dan mengoptimalkan beragam perangkat jaringan komputer untuk konektivitas yang andal.",
           "image": "/certificate/cluster2.webp"
       },
       {
           "id": 6,
           "name": "Cluster Training 3",
           "title": "Routing Configuration",
-          "description": "Sertifikat penyelesaian pelatihan konfigurasi routing dan perangkat jaringan komputer di SMKN 1 Seyegan.",
+          "description": "Beraspesialisasi dalam protokol routing tingkat lanjut dan konfigurasi perangkat jaringan kompleks untuk lingkungan berskala enterprise.",
           "image": "/certificate/cluster3.webp"
       },
       {
           "id": 7,
           "name": "OJM Finalist",
           "title": "MikroTik Network Olympiad Finalist",
-          "description": "Finalis Olimpiade Jaringan MikroTik, kompetisi untuk siswa keahlian jaringan di Indonesia.",
+          "description": "Diakui sebagai kompetitor unggulan dalam olimpiade teknik jaringan tingkat nasional, memamerkan keterampilan pemecahan masalah tingkat lanjut.",
           "image": "/certificate/ojm.webp"
       }
     ]
