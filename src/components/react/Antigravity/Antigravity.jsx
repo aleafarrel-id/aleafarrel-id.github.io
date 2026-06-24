@@ -27,6 +27,7 @@ const AntigravityInner = ({
   const lastMousePos = useRef({ x: 0, y: 0 });
   const lastMouseMoveTime = useRef(0);
   const virtualMouse = useRef({ x: 0, y: 0 });
+  const totalTimeRef = useRef(0);
 
   const particles = useMemo(() => {
     const temp = [];
@@ -87,9 +88,11 @@ const AntigravityInner = ({
     return () => window.removeEventListener('pointermove', handlePointerMove);
   }, []);
 
-  useFrame(state => {
+  useFrame((state, delta) => {
     const mesh = meshRef.current;
     if (!mesh) return;
+
+    totalTimeRef.current += delta;
 
     const { viewport: v } = state;
     const m = globalPointer.current;
@@ -105,7 +108,7 @@ const AntigravityInner = ({
     let destY = (m.y * v.height) / 2;
 
     if (autoAnimate && Date.now() - lastMouseMoveTime.current > 2000) {
-      const time = state.clock.getElapsedTime();
+      const time = totalTimeRef.current;
       destX = Math.sin(time * 0.5) * (v.width / 4);
       destY = Math.cos(time * 0.5 * 2) * (v.height / 4);
     }
@@ -117,7 +120,7 @@ const AntigravityInner = ({
     const targetX = virtualMouse.current.x;
     const targetY = virtualMouse.current.y;
 
-    const globalRotation = state.clock.getElapsedTime() * rotationSpeed;
+    const globalRotation = totalTimeRef.current * rotationSpeed;
 
     particles.forEach((particle, i) => {
       let { t, speed, mx, my, mz, cz, randomRadiusOffset } = particle;
@@ -166,7 +169,7 @@ const AntigravityInner = ({
       scaleFactor = Math.max(0, Math.min(1, scaleFactor));
 
       // Smoothly fade in over the first 2.5 seconds to prevent sudden pop/explosion on mount
-      const globalFade = Math.min(1, state.clock.elapsedTime * 0.4);
+      const globalFade = Math.min(1, totalTimeRef.current * 0.4);
 
       const finalScale = scaleFactor * (0.8 + Math.sin(t * pulseSpeed) * 0.2 * particleVariance) * particleSize * globalFade;
       dummy.scale.set(finalScale, finalScale, finalScale);
