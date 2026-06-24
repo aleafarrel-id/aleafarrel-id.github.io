@@ -165,7 +165,10 @@ const AntigravityInner = ({
 
       scaleFactor = Math.max(0, Math.min(1, scaleFactor));
 
-      const finalScale = scaleFactor * (0.8 + Math.sin(t * pulseSpeed) * 0.2 * particleVariance) * particleSize;
+      // Smoothly fade in over the first 2.5 seconds to prevent sudden pop/explosion on mount
+      const globalFade = Math.min(1, state.clock.elapsedTime * 0.4);
+
+      const finalScale = scaleFactor * (0.8 + Math.sin(t * pulseSpeed) * 0.2 * particleVariance) * particleSize * globalFade;
       dummy.scale.set(finalScale, finalScale, finalScale);
 
       dummy.updateMatrix();

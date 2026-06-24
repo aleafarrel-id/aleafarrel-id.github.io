@@ -89,9 +89,7 @@
   text-transform: uppercase;
   letter-spacing: 0.2em;
   color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(30, 30, 30, 0.95);
   padding: 6px 16px;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -128,10 +126,8 @@
   font-weight: 500;
   padding: 6px 14px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.9);
+  background: rgba(40, 40, 40, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -153,8 +149,6 @@
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   text-decoration: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 .project-link-btn.primary {

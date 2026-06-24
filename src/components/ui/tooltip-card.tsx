@@ -98,12 +98,14 @@ export const Tooltip = ({
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
           className="pointer-events-none fixed z-[999999] overflow-hidden rounded-xl"
+          role="tooltip"
+          aria-hidden={!isVisible}
           style={{
             top: position.y,
             left: position.x,
             background: 'var(--clr-bg-raised)',
-            boxShadow: 'var(--neu-raised-lg), 0 10px 40px rgba(0, 229, 255, 0.12)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: 'var(--neu-raised-lg), 0 10px 40px var(--clr-accent-blue-glow)',
+            border: '1px solid var(--shadow-light)',
             width: 'max-content',
             minWidth: '280px',
             maxWidth: '380px'

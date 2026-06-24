@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Lens } from '../../ui/lens';
 import { Tooltip } from '../../ui/tooltip-card';
@@ -15,20 +15,13 @@ import {
   ReactFlowProvider
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import './CertificatesFlow.css';
 
 const CenterNode = ({ data }) => (
-  <div style={{
-    padding: 'var(--space-12) var(--space-16)',
-    borderRadius: 'var(--radius-xl)',
-    background: 'var(--clr-bg)',
-    boxShadow: 'var(--neu-raised)',
-    border: '1px solid var(--shadow-light)',
-    textAlign: 'center',
-    position: 'relative'
-  }}>
-    <h2 style={{ color: 'var(--clr-text-primary)', fontFamily: 'var(--font-display)', margin: 0, fontSize: 'var(--text-4xl)', fontWeight: '900', textShadow: '0 4px 12px var(--shadow-dark)' }}>{data.label}</h2>
-    <p style={{ color: 'var(--clr-text-secondary)', marginTop: 'var(--space-3)', fontSize: 'var(--text-base)', letterSpacing: '0.02em', opacity: 0.9 }}>Scroll or drag to explore &rarr;</p>
-    <Handle type="source" position={Position.Right} style={{ background: 'var(--clr-accent-blue)', width: '16px', height: '16px', border: '3px solid var(--clr-bg)', boxShadow: '0 0 16px var(--clr-accent-blue-glow)', right: '-8px' }} />
+  <div className="cert-flow-center-node">
+    <h2 className="cert-flow-center-title">{data.label}</h2>
+    <p className="cert-flow-center-subtitle">Scroll or drag to explore &rarr;</p>
+    <Handle type="source" position={Position.Right} className="cert-flow-handle-right" />
   </div>
 );
 
@@ -36,20 +29,20 @@ const CertificateNode = ({ data }) => {
   const imagePath = data.image.startsWith('/') ? data.image : `/certificate/${data.image.split('/').pop()}`;
 
   const tooltipContent = (
-    <div style={{ width: '320px', padding: 0 }}>
-      <div style={{ position: 'relative', width: '100%', height: '180px', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem', overflow: 'hidden', background: 'var(--clr-bg-deep)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <img src={imagePath} alt={data.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 'var(--space-4)', background: 'linear-gradient(to top, rgba(18,18,18,0.95) 0%, rgba(18,18,18,0) 100%)', display: 'flex', alignItems: 'flex-end' }}>
-          <p style={{ color: 'var(--clr-accent-blue)', fontFamily: 'var(--font-ui)', fontSize: 'var(--text-xs)', margin: 0, fontWeight: '800', letterSpacing: '0.15em', textTransform: 'uppercase', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>{data.name}</p>
+    <div className="cert-tooltip-container">
+      <div className="cert-tooltip-image-wrapper">
+        <img src={imagePath} alt={data.title} className="cert-tooltip-image" loading="lazy" />
+        <div className="cert-tooltip-gradient-overlay">
+          <p className="cert-tooltip-provider">{data.name}</p>
         </div>
-        <div style={{ position: 'absolute', top: 'var(--space-3)', right: 'var(--space-3)', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', padding: '4px 10px', borderRadius: 'var(--radius-full)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
-          <span style={{ fontSize: '10px', color: 'var(--clr-text-primary)', fontWeight: 'bold', letterSpacing: '0.05em' }}>PREVIEW</span>
+        <div className="cert-tooltip-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+          <span className="cert-tooltip-badge-text">PREVIEW</span>
         </div>
       </div>
-      <div style={{ padding: 'var(--space-4) var(--space-5)' }}>
-        <h3 style={{ color: 'var(--clr-text-primary)', fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', margin: '0 0 var(--space-2) 0', fontWeight: '800', lineHeight: '1.3' }}>{data.title}</h3>
-        <p style={{ color: 'var(--clr-text-secondary)', fontSize: 'var(--text-xs)', margin: 0, lineHeight: '1.6' }}>{data.description}</p>
+      <div className="cert-tooltip-body">
+        <h3 className="cert-tooltip-title">{data.title}</h3>
+        <p className="cert-tooltip-description">{data.description}</p>
       </div>
     </div>
   );
@@ -57,46 +50,32 @@ const CertificateNode = ({ data }) => {
   return (
     <Tooltip content={tooltipContent}>
       <div
-        style={{
-          padding: 'var(--space-4) var(--space-5)',
-          borderRadius: 'var(--radius-lg)',
-          background: 'linear-gradient(145deg, var(--clr-bg-raised), var(--clr-bg-deep))',
-          border: '1px solid var(--shadow-light)',
-          boxShadow: 'var(--neu-raised-sm)',
-          display: 'flex',
-          flexDirection: 'column',
-          minWidth: '240px',
-          maxWidth: '260px',
-          color: 'var(--clr-text-primary)',
-          transition: 'all var(--duration-fast) var(--ease-out-expo)',
-          cursor: 'pointer'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
-          e.currentTarget.style.boxShadow = 'var(--neu-raised), 0 8px 24px var(--clr-accent-blue-glow)';
-          e.currentTarget.style.borderColor = 'var(--clr-accent-blue)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0) scale(1)';
-          e.currentTarget.style.boxShadow = 'var(--neu-raised-sm)';
-          e.currentTarget.style.borderColor = 'var(--shadow-light)';
+        className="cert-node-container"
+        tabIndex={0}
+        role="button"
+        aria-label={`Preview certificate for ${data.title}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.currentTarget.click();
+          }
         }}
       >
-        <Handle type="target" position={Position.Left} style={{ background: 'var(--clr-accent-blue)', width: '12px', height: '12px', border: '2px solid var(--clr-bg-raised)', left: '-6px' }} />
+        <Handle type="target" position={Position.Left} className="cert-flow-handle-left-blue" />
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-accent-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
-            <span style={{ fontFamily: 'var(--font-ui)', fontWeight: '800', fontSize: 'var(--text-sm)', letterSpacing: '0.05em' }}>{data.name}</span>
+        <div className="cert-node-header">
+          <div className="cert-node-header-left">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-accent-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+            <span className="cert-node-provider">{data.name}</span>
           </div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ opacity: 0.5 }}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
         </div>
 
-        <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--clr-text-secondary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.5', opacity: 0.8 }}>
+        <p className="cert-node-title">
           {data.title}
         </p>
 
-        <Handle type="source" position={Position.Right} style={{ background: 'var(--clr-accent-orange)', width: '12px', height: '12px', border: '2px solid var(--clr-bg-raised)', right: '-6px' }} />
+        <Handle type="source" position={Position.Right} className="cert-flow-handle-right-orange" />
       </div>
     </Tooltip>
   );
@@ -174,7 +153,6 @@ function FlowContent({ items, onNodeClick }) {
 
   // Focus the view with a more reasonable padding
   useEffect(() => {
-    // Adding a short timeout ensures the dom is ready for fitView
     const timer = setTimeout(() => {
       fitView({ padding: 0.15, duration: 1000 });
     }, 150);
@@ -208,10 +186,32 @@ export default function CertificatesFlow({ items }) {
   const [isClosing, setIsClosing] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const closeButtonRef = useRef(null);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Trap focus and close on Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && previewImage) {
+        handleClose();
+      }
+    };
+    
+    if (previewImage) {
+      document.addEventListener('keydown', handleKeyDown);
+      // Ensure focus on close button for accessibility
+      setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [previewImage]);
 
   const onNodeClick = useCallback((event, node) => {
     if (node.type === 'certificate' && node.data && node.data.image) {
@@ -226,68 +226,35 @@ export default function CertificatesFlow({ items }) {
     setTimeout(() => {
       setPreviewImage(null);
       setIsClosing(false);
+      setHovering(false); // Reset hovering state so lens doesn't persist on next open
     }, 300); // Matches the animation duration
   };
 
   const modalContent = previewImage && (
     <div
-      style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
-        zIndex: 99999,
-        background: 'rgba(10,10,12,0.9)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'zoom-out',
-        animation: isClosing ? 'certFadeOut 0.3s ease-out forwards' : 'certFadeIn 0.3s ease-out forwards'
-      }}
+      className={`cert-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
       onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Certificate preview"
     >
       <button
-        style={{
-          position: 'absolute',
-          top: '32px', right: '32px',
-          background: 'var(--clr-bg-raised)',
-          border: '1px solid var(--shadow-light)',
-          color: 'var(--clr-text-primary)',
-          width: '56px', height: '56px',
-          borderRadius: '50%',
-          fontSize: '32px',
-          cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: 'var(--neu-raised)',
-          zIndex: 100000,
-          transition: 'transform 0.2s, background 0.2s'
-        }}
+        ref={closeButtonRef}
+        className="cert-modal-close-btn"
         onClick={handleClose}
-        onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.background = 'var(--clr-error)'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'var(--clr-bg-raised)'; }}
+        aria-label="Close certificate preview"
       >
         &times;
       </button>
       <div
-        style={{
-          maxWidth: '90%',
-          maxHeight: '90vh',
-          animation: isClosing ? 'certScaleOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' : 'certScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards'
-        }}
+        className={`cert-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
           <img
             src={previewImage}
-            alt="Certificate Preview"
-            style={{
-              maxWidth: '100%',
-              maxHeight: '90vh',
-              objectFit: 'contain',
-              borderRadius: '0',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1)',
-              cursor: 'crosshair'
-            }}
+            alt="Certificate detailed preview"
+            className="cert-modal-image"
           />
         </Lens>
       </div>
@@ -296,30 +263,13 @@ export default function CertificatesFlow({ items }) {
 
   return (
     <>
-      <div style={{
-        width: '100%',
-        height: '650px',
-        borderRadius: 'var(--radius-xl)',
-        overflow: 'hidden',
-        border: '1px solid var(--shadow-light)',
-        boxShadow: 'var(--neu-inset)',
-        position: 'relative'
-      }}>
+      <div className="cert-flow-wrapper">
         <ReactFlowProvider>
           <FlowContent items={items} onNodeClick={onNodeClick} />
         </ReactFlowProvider>
       </div>
 
       {isClient && previewImage && createPortal(modalContent, document.body)}
-
-      <style>
-        {`
-          @keyframes certFadeIn { from { opacity: 0; } to { opacity: 1; } }
-          @keyframes certScaleIn { from { transform: scale(0.95) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-          @keyframes certFadeOut { from { opacity: 1; } to { opacity: 0; } }
-          @keyframes certScaleOut { from { transform: scale(1) translateY(0); opacity: 1; } to { transform: scale(0.95) translateY(20px); opacity: 0; } }
-        `}
-      </style>
     </>
   );
 }
