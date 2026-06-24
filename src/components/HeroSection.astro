@@ -4,7 +4,7 @@
  * Full-screen hero with canvas scroll animation.
  * All text consumed from locale JSON.
  */
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 interface Props {
   greeting: string;
   name: string;
@@ -45,15 +45,14 @@ const {
         <span>{cta_secondary}</span>
       </a>
     </div>
-    </div>
-  </div>
-
-  <!-- Scroll hint -->
-  <div class="hero-scroll-hint" id="hero-scroll-hint" aria-hidden="true">
-    <span class="scroll-text-vertical">{scroll_hint}</span>
-    <div class="scroll-arrow-long"></div>
   </div>
 </section>
+
+<!-- Scroll hint -->
+<div class="hero-scroll-hint" id="hero-scroll-hint" aria-hidden="true">
+  <span class="scroll-text-vertical">{scroll_hint}</span>
+  <div class="scroll-arrow-long"></div>
+</div>
 
 <script>
   // Hero entrance animation — runs after preloader hides
@@ -113,7 +112,7 @@ const {
   }
 
   .hero-greeting::before {
-    content: '';
+    content: "";
     display: block;
     width: 40px;
     height: 2px;
@@ -170,12 +169,18 @@ const {
     font-weight: 700;
     font-size: var(--text-sm);
     padding: var(--space-3) var(--space-6);
-    background: linear-gradient(135deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
+    background: linear-gradient(
+      135deg,
+      var(--clr-accent-blue),
+      var(--clr-accent-blue-light)
+    );
     color: var(--clr-bg-deep);
     border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 20px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, #ffffff 40%, transparent);
+    box-shadow:
+      0 4px 20px -2px var(--clr-accent-blue-glow),
+      inset 0 1px 1px color-mix(in srgb, #ffffff 40%, transparent);
     transition: all var(--duration-base) var(--ease-out-expo);
     letter-spacing: 0.02em;
     display: inline-flex;
@@ -186,12 +191,16 @@ const {
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px 0 var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, #ffffff 60%, transparent);
+    box-shadow:
+      0 6px 24px 0 var(--clr-accent-blue-glow),
+      inset 0 1px 1px color-mix(in srgb, #ffffff 60%, transparent);
   }
 
   .btn-primary:active {
     transform: translateY(0px);
-    box-shadow: 0 2px 10px -2px var(--clr-accent-blue-glow), inset 0 1px 1px color-mix(in srgb, #ffffff 20%, transparent);
+    box-shadow:
+      0 2px 10px -2px var(--clr-accent-blue-glow),
+      inset 0 1px 1px color-mix(in srgb, #ffffff 20%, transparent);
   }
 
   .btn-secondary {
@@ -202,9 +211,11 @@ const {
     background: color-mix(in srgb, var(--clr-text-primary) 3%, transparent);
     color: var(--clr-text-primary);
     border-radius: var(--radius-full);
-    border: 1px solid color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
     cursor: pointer;
-    box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--shadow-dark) 50%, transparent);
+    box-shadow: 0 4px 20px -2px
+      color-mix(in srgb, var(--shadow-dark) 50%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: all var(--duration-base) var(--ease-out-expo);
@@ -218,7 +229,8 @@ const {
   .btn-secondary:hover {
     transform: translateY(-2px);
     background: color-mix(in srgb, var(--clr-text-primary) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
   }
 
   .btn-secondary:active {
@@ -265,7 +277,7 @@ const {
   }
 
   .scroll-arrow-long::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -2px;
     width: 12px;
@@ -277,11 +289,18 @@ const {
   }
 
   @keyframes scrollLineBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(15px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(15px);
+    }
   }
 
   @keyframes scrollHintFade {
-    to { opacity: 1; }
+    to {
+      opacity: 1;
+    }
   }
 </style>

@@ -5,7 +5,7 @@
  * Data consumed from locale JSON props.
  */
 import { Icon } from "astro-icon/components";
-import MetaBalls from "./react/MetaBalls/MetaBalls.jsx";
+import Antigravity from "./react/Antigravity/Antigravity.jsx";
 interface SocialLink {
   platform: string;
   url: string;
@@ -60,19 +60,19 @@ const github = targetSocials.find((s) => s.icon === "github");
   class="section contact-section"
   aria-labelledby="contact-heading"
 >
-  <div class="metaballs-background">
-    <MetaBalls
+  <div class="antigravity-background">
+    <Antigravity
       client:visible
-      color="#222222"
-      cursorBallColor="#00E5FF"
-      cursorBallSize={2}
-      ballCount={15}
-      animationSize={30}
-      enableMouseInteraction={true}
-      enableTransparency={true}
-      hoverSmoothness={0.05}
-      clumpFactor={1}
-      speed={0.3}
+      count={300}
+      magnetRadius={6}
+      ringRadius={7}
+      waveSpeed={0.4}
+      waveAmplitude={1}
+      particleSize={1.5}
+      lerpSpeed={0.05}
+      color="#00E5FF"
+      autoAnimate={true}
+      particleVariance={1}
     />
   </div>
   <div class="container">
@@ -143,9 +143,10 @@ const github = targetSocials.find((s) => s.icon === "github");
     z-index: var(--z-base);
     background: var(--clr-bg);
     padding-bottom: var(--space-20);
+    overflow: hidden;
   }
 
-  .metaballs-background {
+  .antigravity-background {
     position: absolute;
     top: 0;
     left: 0;

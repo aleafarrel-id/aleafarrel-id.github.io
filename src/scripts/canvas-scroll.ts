@@ -103,6 +103,19 @@ async function initCanvasScroll(): Promise<void> {
   // ── Progress update ────────────────────────────────────────
   function updateProgress(loaded: number): void {
     const pct = Math.round((loaded / FRAME_COUNT) * 100);
+
+    let activePhrase = "";
+    if (phrases.length > 0) {
+      const phraseIndex = Math.min(
+        Math.floor((loaded / FRAME_COUNT) * phrases.length),
+        phrases.length - 1
+      );
+      activePhrase = phrases[phraseIndex];
+    }
+    
+    // Dispatch event for React loader component
+    window.dispatchEvent(new CustomEvent('loader-progress', { detail: { pct, phrase: activePhrase } }));
+
     if (loaderBar) loaderBar.style.width = `${pct}%`;
     if (loaderPct) loaderPct.textContent = `${pct}%`;
     if (loaderAria) loaderAria.setAttribute('aria-valuenow', String(pct));
@@ -153,7 +166,6 @@ async function initCanvasScroll(): Promise<void> {
 
   // ── Brief pause so 100% is visible, then hide preloader ───
   await new Promise<void>(r => setTimeout(r, 600));
-  preloader?.classList.add('hidden');
   document.dispatchEvent(new CustomEvent('preloader-done'));
 
   // ── GSAP ScrollTrigger ─────────────────────────────────────
