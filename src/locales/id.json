@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Alea Farrel — Creative Web Developer",
-    "description": "Portofolio Alea Farrel, seorang creative web developer yang berspesialisasi dalam pengalaman 3D interaktif, UI/UX modern, dan pengembangan full-stack.",
+    "title": "Alea Farrel | Computer and Network Engineer",
+    "description": "Portofolio Alea Farrel, seorang Computer and Network Engineer yang mengeksplorasi aplikasi web berkinerja tinggi, scripting, sistem tingkat rendah, dan pengalaman digital modern.",
     "lang": "id"
   },
   "nav": {
@@ -24,23 +24,23 @@
   "hero": {
     "greeting": "Halo, Saya",
     "name": "Alea Farrel",
-    "title": "Creative Web Developer",
-    "subtitle": "Menciptakan pengalaman digital yang imersif di persimpangan desain dan teknologi.",
+    "title": "Computer and Network Engineer",
+    "subtitle": "Menciptakan pengalaman digital yang imersif di antara desain dan teknologi.",
     "cta_primary": "Lihat Karya Saya",
     "cta_secondary": "Hubungi Saya",
-    "scroll_hint": "Scroll untuk menjelajahi"
+    "scroll_hint": "Gulir ke bawah"
   },
   "about": {
     "section_label": "Tentang Saya",
-    "heading": "Bersemangat terhadap teknologi dan pembelajaran berkelanjutan.",
-    "bio_1": "Saya adalah developer yang gemar menciptakan pengalaman digital interaktif. Saya terus mengeksplorasi berbagai teknologi, mulai dari pengembangan web hingga scripting dan sistem tingkat rendah.",
-    "bio_2": "Saya selalu antusias untuk belajar, mencoba teknologi baru, dan berkolaborasi membangun solusi yang inovatif.",
+    "heading": "Tertarik pada teknologi dan belajar hal baru.",
+    "bio_1": "Saya seorang developer yang gemar menciptakan pengalaman digital interaktif. Saya selalu tertarik mengeksplorasi berbagai teknologi, mulai dari pengembangan web hingga scripting dan sistem tingkat rendah.",
+    "bio_2": "Dengan rasa ingin tahu yang tinggi, saya selalu antusias mempelajari teknologi baru dan berkolaborasi untuk membangun solusi inovatif.",
     "skills_label": "Keahlian"
   },
   "projects": {
     "section_label": "Proyek",
     "heading": "Karya Terpilih",
-    "subheading": "Seleksi proyek yang mewakili passion saya dalam membangun hal-hal yang berarti.",
+    "subheading": "Kumpulan proyek yang mencerminkan minat saya dalam menciptakan karya yang bermakna.",
     "view_project": "Lihat Proyek",
     "view_code": "Kode Sumber",
     "items": [
@@ -157,65 +157,68 @@
   },
   "experience": {
     "section_label": "Pengalaman",
-    "heading": "Di Mana Saya Berkembang",
-    "subheading": "Organisasi dan peran yang telah membentuk keahlian saya.",
+    "heading": "Sertifikasi Saya",
+    "subheading": "Sertifikasi dan pencapaian yang membuktikan keahlian saya.",
     "interaction_hint": "Geser atau gulir untuk menjelajah, klik sertifikat untuk melihat.",
+    "center_label": "Sertifikat Saya",
+    "center_subtitle": "Geser atau gulir untuk menjelajah",
+    "preview_label": "PRATINJAU",
     "items": [
       {
-          "id": 1,
-          "name": "MTCNA",
-          "title": "MikroTik Certified Network Associate",
-          "description": "Menguasai routing dan konfigurasi jaringan inti menggunakan RouterOS, membangun pondasi yang kuat dalam arsitektur jaringan modern.",
-          "image": "/certificate/mtcna.webp"
+        "id": 1,
+        "name": "MTCNA",
+        "title": "MikroTik Certified Network Associate",
+        "description": "Menguasai routing dan konfigurasi jaringan inti menggunakan RouterOS, membangun pondasi yang kuat dalam arsitektur jaringan modern.",
+        "image": "/certificate/mtcna.webp"
       },
       {
-          "id": 2,
-          "name": "MTCTCE",
-          "title": "MikroTik Certified Traffic Control Engineer",
-          "description": "Memperoleh keahlian tingkat lanjut dalam traffic control, menerapkan Quality of Service (QoS) yang kompleks dan solusi manajemen bandwidth yang presisi.",
-          "image": "/certificate/mtctce.webp"
+        "id": 2,
+        "name": "MTCTCE",
+        "title": "MikroTik Certified Traffic Control Engineer",
+        "description": "Memperoleh keahlian tingkat lanjut dalam traffic control, menerapkan Quality of Service (QoS) yang kompleks dan solusi manajemen bandwidth yang presisi.",
+        "image": "/certificate/mtctce.webp"
       },
       {
-          "id": 3,
-          "name": "TKJ Skanesga Award",
-          "title": "TKJ Best Graduate Award Certificate",
-          "description": "Dianugerahi atas pencapaian akademik dan praktis yang luar biasa dalam program keahlian Teknik Komputer dan Jaringan.",
-          "image": "/certificate/tkj-award.webp"
+        "id": 3,
+        "name": "TKJ Skanesga Award",
+        "title": "TKJ Best Graduate Award Certificate",
+        "description": "Dianugerahi atas pencapaian akademik dan praktis yang luar biasa dalam program keahlian Teknik Komputer dan Jaringan.",
+        "image": "/certificate/tkj-award.webp"
       },
       {
-          "id": 4,
-          "name": "Cluster Training 1",
-          "title": "Cable-Based Network Installation",
-          "description": "Menunjukkan kemahiran dalam merancang dan menerapkan infrastruktur jaringan fisik serta sistem pengkabelan terstruktur.",
-          "image": "/certificate/cluster1.webp"
+        "id": 4,
+        "name": "Cluster Training 1",
+        "title": "Cable-Based Network Installation",
+        "description": "Menunjukkan kemahiran dalam merancang dan menerapkan infrastruktur jaringan fisik serta sistem pengkabelan terstruktur.",
+        "image": "/certificate/cluster1.webp"
       },
       {
-          "id": 5,
-          "name": "Cluster Training 2",
-          "title": "Computer Network Device Configuration",
-          "description": "Terbukti mampu mengkonfigurasi, memecahkan masalah, dan mengoptimalkan beragam perangkat jaringan komputer untuk konektivitas yang andal.",
-          "image": "/certificate/cluster2.webp"
+        "id": 5,
+        "name": "Cluster Training 2",
+        "title": "Computer Network Device Configuration",
+        "description": "Terbukti mampu mengkonfigurasi, memecahkan masalah, dan mengoptimalkan beragam perangkat jaringan komputer untuk konektivitas yang andal.",
+        "image": "/certificate/cluster2.webp"
       },
       {
-          "id": 6,
-          "name": "Cluster Training 3",
-          "title": "Routing Configuration",
-          "description": "Beraspesialisasi dalam protokol routing tingkat lanjut dan konfigurasi perangkat jaringan kompleks untuk lingkungan berskala enterprise.",
-          "image": "/certificate/cluster3.webp"
+        "id": 6,
+        "name": "Cluster Training 3",
+        "title": "Routing Configuration",
+        "description": "Beraspesialisasi dalam protokol routing tingkat lanjut dan konfigurasi perangkat jaringan kompleks untuk lingkungan berskala enterprise.",
+        "image": "/certificate/cluster3.webp"
       },
       {
-          "id": 7,
-          "name": "OJM Finalist",
-          "title": "MikroTik Network Olympiad Finalist",
-          "description": "Diakui sebagai kompetitor unggulan dalam olimpiade teknik jaringan tingkat nasional, memamerkan keterampilan pemecahan masalah tingkat lanjut.",
-          "image": "/certificate/ojm.webp"
+        "id": 7,
+        "name": "OJM Finalist",
+        "title": "MikroTik Network Olympiad Finalist",
+        "description": "Diakui sebagai kompetitor unggulan dalam olimpiade teknik jaringan tingkat nasional, memamerkan keterampilan pemecahan masalah tingkat lanjut.",
+        "image": "/certificate/ojm.webp"
       }
     ]
   },
   "contact": {
     "section_label": "Kontak",
-    "heading": "Mari Membangun Sesuatu Bersama",
-    "subheading": "Punya proyek di benak Anda atau hanya ingin menyapa? Kotak masuk saya selalu terbuka.",
+    "heading": "Mari Berkarya Bersama",
+    "subheading": "Punya ide proyek atau sekadar ingin menyapa? Jangan ragu untuk menghubungi saya.",
     "email_label": "Kirim Email",
     "email": "aleafarrel@example.com",
     "social_label": "Temukan Saya Online",

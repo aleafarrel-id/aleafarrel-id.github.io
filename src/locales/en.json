@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Alea Farrel — Creative Web Developer",
-    "description": "Portfolio of Alea Farrel, a creative web developer specializing in interactive 3D experiences, modern UI/UX, and full-stack development.",
+    "title": "Alea Farrel | Computer and Network Engineer",
+    "description": "Portfolio of Alea Farrel, a Computer and Network Engineer exploring high-performance web applications, scripting, lower-level systems, and modern digital experiences.",
     "lang": "en"
   },
   "nav": {
@@ -24,7 +24,7 @@
   "hero": {
     "greeting": "Hello, I'm",
     "name": "Alea Farrel",
-    "title": "Creative Web Developer",
+    "title": "Computer and Network Engineer",
     "subtitle": "Crafting immersive digital experiences at the intersection of design and technology.",
     "cta_primary": "View My Work",
     "cta_secondary": "Get in Touch",
@@ -157,9 +157,12 @@
   },
   "experience": {
     "section_label": "Experience",
-    "heading": "Where I've Grown",
-    "subheading": "The organizations and roles that have shaped my craft.",
+    "heading": "My Certifications",
+    "subheading": "The certifications and milestones that validate my expertise.",
     "interaction_hint": "Drag or scroll to explore, click on a certificate to preview.",
+    "center_label": "My Certificates",
+    "center_subtitle": "Scroll or drag to explore",
+    "preview_label": "PREVIEW",
     "items": [
       {
           "id": 1,

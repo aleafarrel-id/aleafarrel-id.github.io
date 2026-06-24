@@ -44,15 +44,15 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
             
             {/* Text & Percentage Header */}
             <div className="flex justify-between items-end w-full">
-              <div className="h-6 overflow-hidden relative flex items-center">
-                <AnimatePresence mode="wait">
+              <div className="h-6 overflow-hidden relative grid items-center">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.span
                     key={phrase}
                     initial={{ opacity: 0, filter: "blur(4px)", y: 5 }}
                     animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                     exit={{ opacity: 0, filter: "blur(4px)", y: -5 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="font-ui text-xs md:text-sm font-medium text-gray-400 tracking-widest uppercase"
+                    className="col-start-1 row-start-1 font-ui text-xs md:text-sm font-medium text-gray-400 tracking-widest uppercase whitespace-nowrap"
                   >
                     {phrase}
                   </motion.span>

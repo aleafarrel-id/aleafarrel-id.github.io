@@ -20,7 +20,7 @@ import './CertificatesFlow.css';
 const CenterNode = ({ data }) => (
   <div className="cert-flow-center-node">
     <h2 className="cert-flow-center-title">{data.label}</h2>
-    <p className="cert-flow-center-subtitle">Scroll or drag to explore &rarr;</p>
+    <p className="cert-flow-center-subtitle">{data.subtitle} &rarr;</p>
     <Handle type="source" position={Position.Right} className="cert-flow-handle-right" />
   </div>
 );
@@ -37,7 +37,7 @@ const CertificateNode = ({ data }) => {
         </div>
         <div className="cert-tooltip-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
-          <span className="cert-tooltip-badge-text">PREVIEW</span>
+          <span className="cert-tooltip-badge-text">{data.previewLabel}</span>
         </div>
       </div>
       <div className="cert-tooltip-body">
@@ -86,14 +86,17 @@ const nodeTypes = {
   certificate: CertificateNode,
 };
 
-function FlowContent({ items, onNodeClick }) {
+function FlowContent({ items, strings, onNodeClick }) {
   const { initialNodes, initialEdges } = useMemo(() => {
     const nodes = [
       {
         id: 'start',
         type: 'center',
         position: { x: -200, y: 0 },
-        data: { label: 'My Certificates' }
+        data: { 
+          label: strings?.centerLabel || 'My Certificates',
+          subtitle: strings?.centerSubtitle || 'Scroll or drag to explore'
+        }
       }
     ];
     const edges = [];
@@ -117,7 +120,7 @@ function FlowContent({ items, onNodeClick }) {
           id: currentId,
           type: 'certificate',
           position: { x: xPos, y: yPos },
-          data: cert
+          data: { ...cert, previewLabel: strings?.previewLabel || 'PREVIEW' }
         });
 
         const isBlue = i % 2 === 0;
@@ -181,7 +184,7 @@ function FlowContent({ items, onNodeClick }) {
   );
 }
 
-export default function CertificatesFlow({ items }) {
+export default function CertificatesFlow({ items, strings }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -265,7 +268,7 @@ export default function CertificatesFlow({ items }) {
     <>
       <div className="cert-flow-wrapper">
         <ReactFlowProvider>
-          <FlowContent items={items} onNodeClick={onNodeClick} />
+          <FlowContent items={items} strings={strings} onNodeClick={onNodeClick} />
         </ReactFlowProvider>
       </div>
 

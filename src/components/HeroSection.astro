@@ -86,14 +86,20 @@ const {
     justify-content: flex-end;
     text-align: left;
     pointer-events: none;
-    padding-bottom: var(--space-24);
+    padding-bottom: var(--space-16);
     padding-left: var(--space-8);
   }
 
   .hero-content {
     pointer-events: auto;
     padding: var(--space-6);
-    max-width: 800px;
+    max-width: min(700px, 60vw);
+  }
+
+  @media (max-width: 768px) {
+    .hero-content {
+      max-width: 100%;
+    }
   }
 
   .hero-greeting {
@@ -125,10 +131,11 @@ const {
     font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
     font-weight: 900;
     line-height: 0.95;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
     color: var(--clr-text-primary);
     margin-bottom: var(--space-4);
     width: min-content;
+    text-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translateY(30px);
   }
@@ -137,9 +144,13 @@ const {
     font-family: var(--font-display);
     font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
     font-weight: 700;
+    line-height: 1.15;
     letter-spacing: -0.02em;
     color: var(--clr-text-secondary);
     margin-bottom: var(--space-6);
+    max-width: 600px;
+    text-wrap: balance;
+    text-shadow: 0 4px 32px rgba(0, 0, 0, 0.6);
     opacity: 0;
     transform: translateY(20px);
   }
@@ -151,6 +162,7 @@ const {
     margin: 0 0 var(--space-10) 0;
     line-height: 1.7;
     letter-spacing: 0.05em;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
     opacity: 0;
     transform: translateY(20px);
   }
@@ -267,7 +279,7 @@ const {
 
   .scroll-arrow-long {
     width: 2px;
-    height: 80px;
+    height: 40px;
     background: linear-gradient(to bottom, transparent, var(--clr-accent-blue));
     position: relative;
     display: flex;
