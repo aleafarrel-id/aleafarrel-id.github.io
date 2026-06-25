@@ -11,6 +11,7 @@ import HeroSection from "../../components/HeroSection.astro";
 import AboutSection from "../../components/AboutSection.astro";
 import ProjectsSection from "../../components/ProjectsSection.astro";
 import ExperienceSection from "../../components/ExperienceSection.astro";
+import GallerySection from "../../components/GallerySection.astro";
 import ContactSection from "../../components/ContactSection.astro";
 import { getLocaleData, type Locale } from "../../i18n/utils";
 
@@ -87,6 +88,14 @@ const contactAnchor = `/${locale}/#contact`;
     center_subtitle={data.experience.center_subtitle}
     preview_label={data.experience.preview_label}
     items={data.experience.items}
+  />
+
+  <!-- ── GALLERY ──────────────────────────────────────── -->
+  <GallerySection
+    section_label={data.gallery.section_label}
+    heading={data.gallery.heading}
+    subheading={data.gallery.subheading}
+    items={data.gallery.images}
   />
 
   <!-- ── CONTACT ──────────────────────────────────────── -->

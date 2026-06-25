@@ -1,0 +1,153 @@
+---
+/**
+ * GallerySection.astro
+ * Circular Gallery section using React Bits component.
+ */
+import CircularGallery from "./react/CircularGallery/CircularGallery.jsx";
+
+interface GalleryImage {
+  src: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  section_label: string;
+  heading: string;
+  subheading: string;
+  items: GalleryImage[];
+}
+
+const { section_label, heading, subheading, items } = Astro.props;
+
+// Map the items to what CircularGallery expects: { image: string, text: string }
+const galleryItems = items.map((item) => ({
+  image: item.src,
+  text: item.title,
+}));
+---
+
+<section id="gallery" class="section py-32" aria-labelledby="gallery-heading">
+  {/* Decorative Background Elements */}
+  <div class="gallery-glow gallery-glow-1"></div>
+  <div class="gallery-glow gallery-glow-2"></div>
+
+  <div class="container relative z-10">
+    <div class="gallery-header-wrapper">
+      <p class="section-label reveal inline-block">{section_label}</p>
+      <h2
+        class="gallery-heading reveal reveal-delay-1 font-black tracking-tighter"
+        id="gallery-heading"
+      >
+        {heading}
+      </h2>
+      <p class="gallery-subheading reveal reveal-delay-2 mx-auto md:mx-0">
+        {subheading}
+      </p>
+    </div>
+
+    <div class="reveal reveal-delay-3 mt-12">
+      <div
+        class="gallery-flow-wrapper"
+        style="height: 600px; position: relative; border-radius: var(--radius-xl); overflow: hidden;"
+      >
+        <CircularGallery
+          client:visible
+          items={galleryItems}
+          bend={3}
+          textColor="#ffffff"
+          borderRadius={0.05}
+          scrollEase={0.05}
+          font="bold 18px 'Space Grotesk', sans-serif"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* ==========================================================
+   GALLERY SECTION
+   ========================================================== */
+
+  #gallery {
+    position: relative;
+    z-index: var(--z-base);
+    background: var(--clr-bg);
+    overflow: hidden; /* Contains the glowing orbs */
+  }
+
+  /* Decorative Glows */
+  .gallery-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .gallery-glow-1 {
+    top: 20%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: var(--clr-accent-purple, #8b5cf6);
+    animation: float 10s ease-in-out infinite alternate;
+  }
+
+  .gallery-glow-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: var(--clr-accent-blue, #3b82f6);
+    animation: float 12s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      transform: translateY(-40px) scale(1.05);
+    }
+  }
+
+  .gallery-heading {
+    font-family: var(--font-display);
+    font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-4);
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .gallery-subheading {
+    font-size: var(--text-lg);
+    color: var(--clr-text-secondary);
+    max-width: 560px;
+    line-height: 1.7;
+    opacity: 0.9;
+  }
+
+  .gallery-flow-wrapper {
+    background: var(--clr-bg-deep);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  }
+
+  .gallery-header-wrapper {
+    text-align: center;
+    margin-bottom: var(--space-8);
+    position: relative;
+    z-index: 10;
+  }
+
+  @media (min-width: 768px) {
+    .gallery-header-wrapper {
+      text-align: left;
+    }
+  }
+</style>

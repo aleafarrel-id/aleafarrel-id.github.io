@@ -9,6 +9,7 @@
     "about": "Tentang",
     "projects": "Proyek",
     "experience": "Pengalaman",
+    "gallery": "Galeri",
     "contact": "Kontak",
     "language": "EN"
   },
@@ -157,10 +158,10 @@
   },
   "experience": {
     "section_label": "Pengalaman",
-    "heading": "Sertifikasi Saya",
-    "subheading": "Sertifikasi dan pencapaian yang membuktikan keahlian saya.",
-    "interaction_hint": "Geser atau gulir untuk menjelajah, klik sertifikat untuk melihat.",
-    "center_label": "Sertifikat Saya",
+    "heading": "Pencapaian",
+    "subheading": "Pencapaian, sertifikasi, dan penghargaan yang membuktikan keahlian saya.",
+    "interaction_hint": "Geser atau gulir untuk menjelajah, klik penghargaan untuk melihat.",
+    "center_label": "Pencapaian",
     "center_subtitle": "Geser atau gulir untuk menjelajah",
     "preview_label": "PRATINJAU",
     "items": [
@@ -212,6 +213,64 @@
         "title": "MikroTik Network Olympiad Finalist",
         "description": "Diakui sebagai kompetitor unggulan dalam olimpiade teknik jaringan tingkat nasional, memamerkan keterampilan pemecahan masalah tingkat lanjut.",
         "image": "/certificate/ojm.webp"
+      }
+    ]
+  },
+  "gallery": {
+    "section_label": "Galeri",
+    "heading": "Jejak Visual",
+    "subheading": "Sekilas tentang pekerjaan dan aktivitas profesional saya.",
+    "autoSlideInterval": 6000,
+    "images": [
+      {
+        "src": "/gallery/configurations.webp",
+        "title": "Konfigurasi Jaringan",
+        "description": "Mengatur topologi jaringan yang kompleks"
+      },
+      {
+        "src": "/gallery/splicing.webp",
+        "title": "Splicing Fiber Optik",
+        "description": "Pengerjaan presisi kabel fiber optik"
+      },
+      {
+        "src": "/gallery/voip-configurations.webp",
+        "title": "Pengaturan VoIP",
+        "description": "Mengonfigurasi sistem Voice over IP"
+      },
+      {
+        "src": "/gallery/potting.webp",
+        "title": "Manajemen Kabel",
+        "description": "Infrastruktur jaringan yang terorganisir"
+      },
+      {
+        "src": "/gallery/lsp23.webp",
+        "title": "Sertifikasi LSP",
+        "description": "Sertifikasi teknik jaringan"
+      },
+      {
+        "src": "/gallery/ojm1.webp",
+        "title": "Olimpiade Jaringan MikroTik",
+        "description": "Olimpiade Jaringan MikroTik"
+      },
+      {
+        "src": "/gallery/ojm2.webp",
+        "title": "Olimpiade Jaringan MikroTik",
+        "description": "Olimpiade Jaringan MikroTik"
+      },
+      {
+        "src": "/gallery/ojm3.webp",
+        "title": "Olimpiade Jaringan MikroTik",
+        "description": "Olimpiade Jaringan MikroTik"
+      },
+      {
+        "src": "/gallery/ojm4.webp",
+        "title": "Olimpiade Jaringan MikroTik",
+        "description": "Olimpiade Jaringan MikroTik"
+      },
+      {
+        "src": "/gallery/ojm5.webp",
+        "title": "Olimpiade Jaringan MikroTik",
+        "description": "Olimpiade Jaringan MikroTik"
       }
     ]
   },

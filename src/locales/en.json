@@ -9,6 +9,7 @@
     "about": "About",
     "projects": "Projects",
     "experience": "Experience",
+    "gallery": "Gallery",
     "contact": "Contact",
     "language": "ID"
   },
@@ -157,10 +158,10 @@
   },
   "experience": {
     "section_label": "Experience",
-    "heading": "My Certifications",
-    "subheading": "The certifications and milestones that validate my expertise.",
-    "interaction_hint": "Drag or scroll to explore, click on a certificate to preview.",
-    "center_label": "My Certificates",
+    "heading": "Awards",
+    "subheading": "The awards, certifications, and milestones that validate my expertise.",
+    "interaction_hint": "Drag or scroll to explore, click on an award to preview.",
+    "center_label": "Awards",
     "center_subtitle": "Scroll or drag to explore",
     "preview_label": "PREVIEW",
     "items": [
@@ -212,6 +213,64 @@
           "title": "MikroTik Network Olympiad Finalist",
           "description": "Recognized as a top competitor in a national-level network engineering olympiad, showcasing advanced problem-solving skills.",
           "image": "/certificate/ojm.webp"
+      }
+    ]
+  },
+  "gallery": {
+    "section_label": "Gallery",
+    "heading": "Visual Journey",
+    "subheading": "A glimpse into my professional work and activities.",
+    "autoSlideInterval": 6000,
+    "images": [
+      {
+        "src": "/gallery/configurations.webp",
+        "title": "Network Configurations",
+        "description": "Setting up complex network topologies"
+      },
+      {
+        "src": "/gallery/splicing.webp",
+        "title": "Fiber Optic Splicing",
+        "description": "Precision fiber optic cable work"
+      },
+      {
+        "src": "/gallery/voip-configurations.webp",
+        "title": "VoIP Setup",
+        "description": "Configuring voice over IP systems"
+      },
+      {
+        "src": "/gallery/potting.webp",
+        "title": "Cable Management",
+        "description": "Organized network infrastructure"
+      },
+      {
+        "src": "/gallery/lsp23.webp",
+        "title": "LSP Certification",
+        "description": "Network engineering certification"
+      },
+      {
+        "src": "/gallery/ojm1.webp",
+        "title": "MikroTik Network Olympiad",
+        "description": "MikroTik Network Olympiad"
+      },
+      {
+        "src": "/gallery/ojm2.webp",
+        "title": "MikroTik Network Olympiad",
+        "description": "MikroTik Network Olympiad"
+      },
+      {
+        "src": "/gallery/ojm3.webp",
+        "title": "MikroTik Network Olympiad",
+        "description": "MikroTik Network Olympiad"
+      },
+      {
+        "src": "/gallery/ojm4.webp",
+        "title": "MikroTik Network Olympiad",
+        "description": "MikroTik Network Olympiad"
+      },
+      {
+        "src": "/gallery/ojm5.webp",
+        "title": "MikroTik Network Olympiad",
+        "description": "MikroTik Network Olympiad"
       }
     ]
   },
