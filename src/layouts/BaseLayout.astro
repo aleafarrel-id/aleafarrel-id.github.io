@@ -325,13 +325,14 @@ const base = `/${locale}`;
     border-radius: var(--radius-full);
     transition: width var(--duration-base) var(--ease-out-expo);
   }
+  @media (hover: hover) {
+    .nav-links a:hover {
+      color: var(--clr-text-primary);
+    }
 
-  .nav-links a:hover {
-    color: var(--clr-text-primary);
-  }
-
-  .nav-links a:hover::after {
-    width: 100%;
+    .nav-links a:hover::after {
+      width: 100%;
+    }
   }
 
   .nav-lang-btn {
@@ -354,10 +355,11 @@ const base = `/${locale}`;
     transition-duration: var(--duration-base);
     transition-timing-function: var(--ease-out-expo);
   }
-
-  .nav-lang-btn:hover {
-    color: var(--clr-accent-blue);
-    box-shadow: var(--neu-raised);
+  @media (hover: hover) {
+    .nav-lang-btn:hover {
+      color: var(--clr-accent-blue);
+      box-shadow: var(--neu-raised);
+    }
   }
 
   /* ==========================================================
@@ -446,6 +448,8 @@ const base = `/${locale}`;
     align-items: center;
     justify-content: center;
     gap: var(--space-8);
+    padding: var(--space-8);
+    text-align: center;
     opacity: 0;
     visibility: hidden;
     transition-property: opacity, visibility;
@@ -460,15 +464,16 @@ const base = `/${locale}`;
 
   .mobile-menu a {
     font-family: var(--font-display);
-    font-size: var(--text-4xl);
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
     font-weight: 800;
     color: var(--clr-text-primary);
     letter-spacing: -0.02em;
     transition: color var(--duration-fast) ease;
   }
-
-  .mobile-menu a:hover {
-    color: var(--clr-accent-blue);
+  @media (hover: hover) {
+    .mobile-menu a:hover {
+      color: var(--clr-accent-blue);
+    }
   }
 
   /* ==========================================================

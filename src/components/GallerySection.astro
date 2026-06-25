@@ -167,8 +167,10 @@ const galleryItems = items.map((item) => ({
     transition: background-position 0.5s ease-out;
   }
   
-  .gallery-flow-wrapper:hover {
-    background-position: 12px 12px;
+  @media (hover: hover) {
+    .gallery-flow-wrapper:hover {
+      background-position: 12px 12px;
+    }
   }
 
   .gallery-header-wrapper {

@@ -238,11 +238,13 @@ const {
     gap: 0.5rem;
   }
 
-  .btn-primary:hover {
-    transform: translateY(-2px) scale(0.98);
-    box-shadow:
-      0 6px 24px 0 var(--clr-accent-blue-glow),
-      inset 0 1px 1px color-mix(in srgb, #ffffff 60%, transparent);
+  @media (hover: hover) {
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(0.98);
+      box-shadow:
+        0 6px 24px 0 var(--clr-accent-blue-glow),
+        inset 0 1px 1px color-mix(in srgb, #ffffff 60%, transparent);
+    }
   }
 
   .btn-primary:active {
@@ -279,11 +281,13 @@ const {
     gap: 0.5rem;
   }
 
-  .btn-secondary:hover {
-    transform: translateY(-2px) scale(0.98);
-    background: color-mix(in srgb, var(--clr-text-primary) 8%, transparent);
-    border: 1px solid
-      color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
+  @media (hover: hover) {
+    .btn-secondary:hover {
+      transform: translateY(-2px) scale(0.98);
+      background: color-mix(in srgb, var(--clr-text-primary) 8%, transparent);
+      border: 1px solid
+        color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
+    }
   }
 
   .btn-secondary:active {

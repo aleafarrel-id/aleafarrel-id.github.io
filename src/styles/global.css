@@ -326,9 +326,11 @@ a {
     transform var(--duration-base) var(--ease-out-expo);
 }
 
-.neu-button:hover {
-  box-shadow: var(--neu-raised);
-  transform: translateY(-2px) scale(0.98);
+@media (hover: hover) {
+  .neu-button:hover {
+    box-shadow: var(--neu-raised);
+    transform: translateY(-2px) scale(0.98);
+  }
 }
 
 .neu-button:active {

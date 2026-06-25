@@ -121,8 +121,6 @@ const emailDomain = emailParts[1] || "";
   </div>
 </section>
 
-
-
 <style is:global>
   /* ---------- Contact Section ---------- */
 
@@ -141,6 +139,7 @@ const emailDomain = emailParts[1] || "";
     width: 100%;
     height: 100%;
     z-index: 1;
+    opacity: 0.25;
   }
 
   .contact-section .container {
@@ -183,15 +182,15 @@ const emailDomain = emailParts[1] || "";
   }
 
   .contact-icon {
-    width: var(--space-8);
-    height: var(--space-8);
+    width: clamp(1.5rem, 5vw, 2rem);
+    height: clamp(1.5rem, 5vw, 2rem);
   }
 
   /* ---------- Contact Social Buttons ---------- */
 
   .contact-social-btn {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: clamp(3.5rem, 12vw, 4.5rem);
+    height: clamp(3.5rem, 12vw, 4.5rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,13 +203,15 @@ const emailDomain = emailParts[1] || "";
     transition-timing-function: var(--ease-out-expo);
   }
 
-  .contact-social-btn:hover {
-    color: var(--clr-accent-blue);
-    box-shadow:
-      12px 12px 24px var(--shadow-dark),
-      -12px -12px 24px var(--shadow-light),
-      0 0 24px var(--clr-accent-blue-glow);
-    transform: translateY(-4px) scale(0.98);
+  @media (hover: hover) {
+    .contact-social-btn:hover {
+      color: var(--clr-accent-blue);
+      box-shadow:
+        12px 12px 24px var(--shadow-dark),
+        -12px -12px 24px var(--shadow-light),
+        0 0 24px var(--clr-accent-blue-glow);
+      transform: translateY(-4px) scale(0.98);
+    }
   }
 
   .contact-social-btn:active {

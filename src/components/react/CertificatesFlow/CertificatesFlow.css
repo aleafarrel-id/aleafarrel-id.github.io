@@ -74,13 +74,20 @@
   cursor: pointer;
 }
 
-.cert-node-container:hover,
 .cert-node-container:focus-visible {
   transform: translateY(-4px) scale(1.02);
   box-shadow: var(--neu-raised), 0 8px 24px var(--clr-accent-blue-glow);
   border-color: var(--clr-accent-blue);
   outline: none;
-  /* Focus handled visually by hover state */
+}
+
+@media (hover: hover) {
+  .cert-node-container:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--neu-raised), 0 8px 24px var(--clr-accent-blue-glow);
+    border-color: var(--clr-accent-blue);
+    outline: none;
+  }
 }
 
 .cert-node-header {
@@ -258,11 +265,18 @@
   transition: transform var(--duration-fast), background var(--duration-fast);
 }
 
-.cert-modal-close-btn:hover,
 .cert-modal-close-btn:focus-visible {
   transform: scale(1.1);
   background: var(--clr-error);
   outline: none;
+}
+
+@media (hover: hover) {
+  .cert-modal-close-btn:hover {
+    transform: scale(1.1);
+    background: var(--clr-error);
+    outline: none;
+  }
 }
 
 .cert-modal-content-wrapper {

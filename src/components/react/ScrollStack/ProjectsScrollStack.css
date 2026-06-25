@@ -54,8 +54,10 @@
   pointer-events: none;
 }
 
-.project-card-inner:hover .project-card-image-section img {
-  transform: scale(1.08);
+@media (hover: hover) {
+  .project-card-inner:hover .project-card-image-section img {
+    transform: scale(1.08);
+  }
 }
 
 .project-card-content {
@@ -155,9 +157,11 @@
   color: var(--clr-bg-deep);
 }
 
-.project-link-btn.primary:hover {
-  background: color-mix(in srgb, var(--clr-text-primary) 90%, transparent);
-  transform: scale(0.98);
+@media (hover: hover) {
+  .project-link-btn.primary:hover {
+    background: color-mix(in srgb, var(--clr-text-primary) 90%, transparent);
+    transform: scale(0.98);
+  }
 }
 
 .project-link-btn.primary:active {
@@ -170,9 +174,11 @@
   border: 1px solid color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
 }
 
-.project-link-btn.secondary:hover {
-  background: color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
-  transform: scale(0.98);
+@media (hover: hover) {
+  .project-link-btn.secondary:hover {
+    background: color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
+    transform: scale(0.98);
+  }
 }
 
 .project-link-btn.secondary:active {

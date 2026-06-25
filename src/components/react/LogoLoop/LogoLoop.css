@@ -84,15 +84,17 @@
   overflow: visible;
 }
 
-.logoloop--scale-hover .logoloop__item:hover img {
-  transform: scale(1.2);
-  transform-origin: center center;
-}
+@media (hover: hover) {
+  .logoloop--scale-hover .logoloop__item:hover img {
+    transform: scale(1.2);
+    transform-origin: center center;
+  }
 
-.logoloop--scale-hover .logoloop__item:hover .logoloop__node {
-  transform: scale(1.2);
-  transform-origin: center center;
-  color: var(--clr-accent-blue);
+  .logoloop--scale-hover .logoloop__item:hover .logoloop__node {
+    transform: scale(1.2);
+    transform-origin: center center;
+    color: var(--clr-accent-blue);
+  }
 }
 
 .logoloop__link {
@@ -103,8 +105,10 @@
   transition: opacity var(--duration-fast) var(--ease-inout);
 }
 
-.logoloop__link:hover {
-  opacity: 0.8;
+@media (hover: hover) {
+  .logoloop__link:hover {
+    opacity: 0.8;
+  }
 }
 
 .logoloop__link:focus-visible {
