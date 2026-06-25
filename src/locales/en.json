@@ -280,36 +280,7 @@
     "heading": "Let's Build Something Together",
     "subheading": "Have a project in mind or just want to say hello? My inbox is always open.",
     "email_label": "Email Me",
-    "email": "aleafarrel@example.com",
-    "social_label": "Find Me Online",
-    "form": {
-      "name_label": "Your Name",
-      "name_placeholder": "John Doe",
-      "email_label": "Email Address",
-      "email_placeholder": "john@example.com",
-      "message_label": "Your Message",
-      "message_placeholder": "Tell me about your project...",
-      "submit": "Send Message",
-      "success": "Message sent! I'll get back to you soon.",
-      "error": "Something went wrong. Please try again."
-    },
-    "socials": [
-      {
-        "platform": "GitHub",
-        "url": "https://github.com/aleafarrel",
-        "icon": "github"
-      },
-      {
-        "platform": "LinkedIn",
-        "url": "https://linkedin.com/in/aleafarrel",
-        "icon": "linkedin"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/aleafarrel",
-        "icon": "instagram"
-      }
-    ]
+    "social_label": "Find Me Online"
   },
   "footer": {
     "rights": "All rights reserved.",

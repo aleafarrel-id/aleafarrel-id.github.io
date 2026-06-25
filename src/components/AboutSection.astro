@@ -67,9 +67,7 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
 </section>
 
 <style is:global>
-  /* ==========================================================
-   ABOUT SECTION
-   ========================================================== */
+  /* ---------- About Section ---------- */
 
   .about-section {
     overflow-x: hidden;
@@ -84,10 +82,10 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Place above background but below content */
+    z-index: 1;
   }
 
-  /* Make sure content is above the particles */
+  /* ---------- Content Container ---------- */
   .container, .skills-wrapper {
     position: relative;
     z-index: 2;

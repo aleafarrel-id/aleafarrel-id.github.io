@@ -68,7 +68,9 @@
   min-width: 240px;
   max-width: 260px;
   color: var(--clr-text-primary);
-  transition: all var(--duration-fast) var(--ease-out-expo);
+  transition-property: transform, box-shadow, border-color;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out-expo);
   cursor: pointer;
 }
 
@@ -141,7 +143,7 @@
   left: 0;
   right: 0;
   padding: var(--space-4);
-  background: linear-gradient(to top, rgba(18,18,18,0.95) 0%, rgba(18,18,18,0) 100%);
+  background: linear-gradient(to top, color-mix(in srgb, var(--clr-bg-deep) 95%, transparent) 0%, transparent 100%);
   display: flex;
   align-items: flex-end;
 }
@@ -150,7 +152,7 @@
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
-  background: rgba(0,0,0,0.5);
+  background: color-mix(in srgb, var(--shadow-dark) 50%, transparent);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   padding: var(--space-1) var(--space-2);
@@ -176,7 +178,7 @@
   font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 4px color-mix(in srgb, var(--shadow-dark) 80%, transparent);
 }
 
 .cert-tooltip-body {
@@ -218,7 +220,7 @@
   right: 0;
   bottom: 0;
   z-index: var(--z-modal);
-  background: rgba(10,10,12,0.9);
+  background: color-mix(in srgb, var(--clr-bg-deep) 90%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   display: flex;
@@ -280,7 +282,7 @@
   max-height: 90vh;
   object-fit: contain;
   border-radius: 0;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.8), 0 0 0 1px var(--shadow-light);
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 80%, transparent), 0 0 0 1px var(--shadow-light);
   cursor: crosshair;
 }
 

@@ -41,6 +41,10 @@
   --clr-accent-orange: #FF6B35;
   --clr-accent-orange-glow: rgba(255, 107, 53, 0.15);
 
+  /* ---------- Glow & Decorative Colors ---------- */
+  --clr-glow-1: #10B981;
+  --clr-glow-2: #6366F1;
+
   /* ---------- Semantic Colors ---------- */
   --clr-success: #10B981;
   --clr-error: #EF4444;
@@ -223,6 +227,32 @@ video {
   display: block;
 }
 
+/* Neutral Image Outlines */
+img {
+  outline: 1px solid color-mix(in srgb, var(--shadow-dark) 10%, transparent);
+  outline-offset: -1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  img {
+    outline-color: color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+  }
+}
+
+/* Typography Polish */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p, caption, li {
+  text-wrap: pretty;
+}
+
+/* Counters, tables, prices */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 /* Links */
 a {
   color: inherit;
@@ -301,12 +331,12 @@ a {
 
 .neu-button:hover {
   box-shadow: var(--neu-raised);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(0.98);
 }
 
 .neu-button:active {
   box-shadow: var(--neu-inset);
-  transform: translateY(0);
+  transform: translateY(0) scale(0.96);
 }
 
 /* ==========================================================

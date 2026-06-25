@@ -33,7 +33,7 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
   class="section py-32"
   aria-labelledby="experience-heading"
 >
-  {/* Decorative Background Elements */}
+  <!-- ---------- Decorative Background Elements ---------- -->
   <div class="experience-glow experience-glow-1"></div>
   <div class="experience-glow experience-glow-2"></div>
 
@@ -68,18 +68,16 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
 </section>
 
 <style is:global>
-  /* ==========================================================
-   EXPERIENCE SECTION
-   ========================================================== */
+  /* ---------- Experience Section ---------- */
 
   #experience {
     position: relative;
     z-index: var(--z-base);
     background: var(--clr-bg);
-    overflow: hidden; /* Contains the glowing orbs */
+    overflow: hidden;
   }
 
-  /* Decorative Glows */
+  /* ---------- Decorative Glows ---------- */
   .experience-glow {
     position: absolute;
     border-radius: 50%;
@@ -119,7 +117,7 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     letter-spacing: -0.03em;
     color: var(--clr-text-primary);
     margin-bottom: var(--space-4);
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 4px 24px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
   }
 
   .experience-subheading {
@@ -134,8 +132,8 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: var(--clr-bg-deep);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    border: 1px solid color-mix(in srgb, var(--clr-text-primary) 5%, transparent);
+    box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
   }
 
   .experience-header-wrapper {

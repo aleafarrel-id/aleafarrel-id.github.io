@@ -242,9 +242,7 @@ const base = `/${locale}`;
 </html>
 
 <style is:global>
-  /* ==========================================================
-   CANVAS BACKGROUND
-   ========================================================== */
+  /* ---------- Canvas Background ---------- */
 
   #hero-canvas {
     position: fixed;
@@ -257,9 +255,7 @@ const base = `/${locale}`;
     object-fit: cover;
   }
 
-  /* ==========================================================
-   NAVIGATION
-   ========================================================== */
+  /* ---------- Navigation ---------- */
 
   #main-nav {
     position: fixed;
@@ -273,7 +269,9 @@ const base = `/${locale}`;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: all var(--duration-base) var(--ease-out-expo);
+    transition-property: background, backdrop-filter, box-shadow, padding, top;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-out-expo);
     border-radius: var(--radius-full);
   }
 
@@ -352,7 +350,9 @@ const base = `/${locale}`;
     color: var(--clr-text-secondary);
     border: none;
     cursor: pointer;
-    transition: all var(--duration-base) var(--ease-out-expo);
+    transition-property: color, box-shadow, transform;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-out-expo);
   }
 
   .nav-lang-btn:hover {
@@ -423,6 +423,10 @@ const base = `/${locale}`;
     border: none;
     cursor: pointer;
     padding: var(--space-2);
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    align-items: center;
   }
 
   @media (min-width: 768px) {
@@ -437,7 +441,9 @@ const base = `/${locale}`;
     height: 2px;
     background: var(--clr-text-primary);
     border-radius: 2px;
-    transition: all var(--duration-base) var(--ease-out-expo);
+    transition-property: transform, opacity, background-color;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-out-expo);
   }
 
   .mobile-menu {
@@ -453,7 +459,9 @@ const base = `/${locale}`;
     gap: var(--space-8);
     opacity: 0;
     visibility: hidden;
-    transition: all var(--duration-base) var(--ease-out-expo);
+    transition-property: opacity, visibility;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-out-expo);
   }
 
   .mobile-menu.open {

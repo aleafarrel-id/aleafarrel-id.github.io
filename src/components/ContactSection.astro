@@ -6,22 +6,12 @@
  */
 import { Icon } from "astro-icon/components";
 import Antigravity from "./react/Antigravity/Antigravity.jsx";
+import siteConfig from "../siteConfig.json";
+
 interface SocialLink {
   platform: string;
   url: string;
   icon: string;
-}
-
-interface FormData {
-  name_label: string;
-  name_placeholder: string;
-  email_label: string;
-  email_placeholder: string;
-  message_label: string;
-  message_placeholder: string;
-  submit: string;
-  success: string;
-  error: string;
 }
 
 interface Props {
@@ -29,22 +19,14 @@ interface Props {
   heading: string;
   subheading: string;
   email_label: string;
-  email: string;
-  social_label: string;
-  form: FormData;
-  socials: SocialLink[];
 }
 
-const {
-  section_label,
-  heading,
-  subheading,
-  email_label,
-  email,
-  social_label,
-  form,
-  socials,
-} = Astro.props;
+const { section_label, heading, subheading, email_label } = Astro.props;
+
+const { email, socials } = siteConfig as {
+  email: string;
+  socials: SocialLink[];
+};
 
 // Filter socials to grab only Github and Instagram to pair with Mail
 const targetSocials = socials.filter((s) =>
@@ -53,6 +35,10 @@ const targetSocials = socials.filter((s) =>
 
 const instagram = targetSocials.find((s) => s.icon === "instagram");
 const github = targetSocials.find((s) => s.icon === "github");
+
+const emailParts = email.split("@");
+const emailUser = emailParts[0];
+const emailDomain = emailParts[1] || "";
 ---
 
 <section
@@ -106,10 +92,12 @@ const github = targetSocials.find((s) => s.icon === "github");
         }
 
         <a
-          href={`mailto:${email}`}
-          class="contact-social-btn"
-          aria-label={`${email_label}: ${email}`}
-          title={email}
+          class="contact-social-btn email-btn"
+          aria-label={email_label}
+          title={email_label}
+          role="button"
+          tabindex="0"
+          onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}
         >
           <Icon name="bx:bxs-envelope" class="contact-icon" />
         </a>
@@ -133,10 +121,10 @@ const github = targetSocials.find((s) => s.icon === "github");
   </div>
 </section>
 
+
+
 <style is:global>
-  /* ==========================================================
-   CONTACT SECTION
-   ========================================================== */
+  /* ---------- Contact Section ---------- */
 
   #contact {
     position: relative;
@@ -199,9 +187,7 @@ const github = targetSocials.find((s) => s.icon === "github");
     height: var(--space-8);
   }
 
-  /* ==========================================================
-   CONTACT SOCIAL BUTTONS
-   ========================================================== */
+  /* ---------- Contact Social Buttons ---------- */
 
   .contact-social-btn {
     width: 4.5rem;
@@ -213,7 +199,9 @@ const github = targetSocials.find((s) => s.icon === "github");
     box-shadow: var(--neu-raised);
     border-radius: 50%;
     color: var(--clr-text-secondary);
-    transition: all var(--duration-slow) var(--ease-out-expo);
+    transition-property: color, box-shadow, transform;
+    transition-duration: var(--duration-slow);
+    transition-timing-function: var(--ease-out-expo);
   }
 
   .contact-social-btn:hover {
@@ -222,11 +210,11 @@ const github = targetSocials.find((s) => s.icon === "github");
       12px 12px 24px var(--shadow-dark),
       -12px -12px 24px var(--shadow-light),
       0 0 24px var(--clr-accent-blue-glow);
-    transform: translateY(-4px);
+    transform: translateY(-4px) scale(0.98);
   }
 
   .contact-social-btn:active {
     box-shadow: var(--neu-inset);
-    transform: translateY(0);
+    transform: translateY(0) scale(0.96);
   }
 </style>

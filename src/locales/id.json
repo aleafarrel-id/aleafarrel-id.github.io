@@ -280,36 +280,7 @@
     "heading": "Mari Berkarya Bersama",
     "subheading": "Punya ide proyek atau sekadar ingin menyapa? Jangan ragu untuk menghubungi saya.",
     "email_label": "Kirim Email",
-    "email": "aleafarrel@example.com",
-    "social_label": "Temukan Saya Online",
-    "form": {
-      "name_label": "Nama Anda",
-      "name_placeholder": "Budi Santoso",
-      "email_label": "Alamat Email",
-      "email_placeholder": "budi@example.com",
-      "message_label": "Pesan Anda",
-      "message_placeholder": "Ceritakan tentang proyek Anda...",
-      "submit": "Kirim Pesan",
-      "success": "Pesan terkirim! Saya akan segera membalas.",
-      "error": "Terjadi kesalahan. Silakan coba lagi."
-    },
-    "socials": [
-      {
-        "platform": "GitHub",
-        "url": "https://github.com/aleafarrel",
-        "icon": "github"
-      },
-      {
-        "platform": "LinkedIn",
-        "url": "https://linkedin.com/in/aleafarrel",
-        "icon": "linkedin"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/aleafarrel",
-        "icon": "instagram"
-      }
-    ]
+    "social_label": "Temukan Saya Online"
   },
   "footer": {
     "rights": "Semua hak dilindungi.",
