@@ -28,7 +28,7 @@ const { section_label, heading, subheading, view_project, items } = Astro.props;
 import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
 ---
 
-<section id="projects" class="section py-32" aria-labelledby="projects-heading">
+<section id="projects" class="section" aria-labelledby="projects-heading">
   <!-- ---------- Decorative Background Elements ---------- -->
   <div class="projects-glow projects-glow-1"></div>
   <div class="projects-glow projects-glow-2"></div>
@@ -125,6 +125,12 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     color: var(--clr-text-secondary);
     max-width: 560px;
     line-height: 1.7;
-    margin-bottom: var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .projects-subheading {
+      margin-bottom: var(--space-16);
+    }
   }
 </style>

@@ -31,7 +31,8 @@ const {
 ---
 
 <section id="hero" aria-label="Hero">
-  <div class="hero-content">
+  <div class="hero-fade-overlay" id="hero-fade-overlay"></div>
+  <div class="hero-content" id="hero-content-wrapper">
     <p class="hero-greeting" id="hero-greeting">{greeting}</p>
     <h1 class="hero-name" id="hero-name">{name}</h1>
     <p class="hero-title" id="hero-title">{title}</p>
@@ -69,6 +70,45 @@ const {
 
   // Listen for preloader-done event dispatched by canvas script
   document.addEventListener("preloader-done", animateHeroIn, { once: true });
+
+  // Mobile Scroll Fade Interaction
+  function initHeroScrollFade() {
+    const heroContent = document.getElementById('hero-content-wrapper');
+    const heroOverlay = document.getElementById('hero-fade-overlay');
+    const scrollHint = document.getElementById('hero-scroll-hint');
+    
+    if (!heroContent || !heroOverlay) return;
+    
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth <= 768) {
+        const scrollY = window.scrollY;
+        // Fade out completely by 250px of scrolling
+        const opacity = Math.max(1 - (scrollY / 250), 0);
+        
+        heroContent.style.opacity = opacity.toString();
+        heroContent.style.pointerEvents = opacity === 0 ? 'none' : 'auto';
+        
+        heroOverlay.style.opacity = opacity.toString();
+        
+        if (scrollHint) {
+          if (scrollY > 10) {
+            scrollHint.style.opacity = opacity.toString();
+          } else {
+            scrollHint.style.opacity = '';
+          }
+        }
+      } else {
+        // Desktop - Ensure it's fully visible and overlay hidden
+        heroContent.style.opacity = '1';
+        heroContent.style.pointerEvents = 'auto';
+        heroOverlay.style.opacity = '0';
+        if (scrollHint) scrollHint.style.opacity = '';
+      }
+    }, { passive: true });
+  }
+
+  // Initialize the scroll fade on load
+  initHeroScrollFade();
 </script>
 
 <style is:global>
@@ -94,11 +134,6 @@ const {
     max-width: min(700px, 60vw);
   }
 
-  @media (max-width: 768px) {
-    .hero-content {
-      max-width: 100%;
-    }
-  }
 
   .hero-greeting {
     font-family: var(--font-ui);
@@ -179,6 +214,7 @@ const {
     font-weight: 700;
     font-size: var(--text-sm);
     padding: var(--space-3) var(--space-6);
+    min-height: 44px;
     background: linear-gradient(
       135deg,
       var(--clr-accent-blue),
@@ -188,6 +224,7 @@ const {
     border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
+    touch-action: manipulation;
     box-shadow:
       0 4px 20px -2px var(--clr-accent-blue-glow),
       inset 0 1px 1px color-mix(in srgb, #ffffff 40%, transparent);
@@ -220,12 +257,14 @@ const {
     font-weight: 600;
     font-size: var(--text-sm);
     padding: var(--space-3) var(--space-6);
+    min-height: 44px;
     background: color-mix(in srgb, var(--clr-text-primary) 3%, transparent);
     color: var(--clr-text-primary);
     border-radius: var(--radius-full);
     border: 1px solid
       color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
     cursor: pointer;
+    touch-action: manipulation;
     box-shadow: 0 4px 20px -2px
       color-mix(in srgb, var(--shadow-dark) 50%, transparent);
     backdrop-filter: blur(10px);
@@ -316,6 +355,94 @@ const {
   @keyframes scrollHintFade {
     to {
       opacity: 1;
+    }
+  }
+
+  .hero-fade-overlay {
+    display: none;
+  }
+
+  /* ==========================================================
+     MEDIA QUERIES (CONSOLIDATED)
+     ========================================================== */
+
+  @media (max-width: 768px) {
+    #hero {
+      padding-left: 0;
+      padding-bottom: 0;
+    }
+    .hero-fade-overlay {
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%);
+      z-index: -1;
+    }
+    .hero-content {
+      max-width: 100%;
+      padding-left: var(--space-4);
+      padding-right: var(--space-4);
+      padding-bottom: 3.5rem;
+    }
+    .hero-greeting {
+      font-size: 0.65rem;
+      margin-bottom: var(--space-3);
+      word-spacing: 0.1em;
+    }
+    .hero-greeting::before {
+      width: 24px;
+    }
+    .hero-name {
+      font-size: clamp(2rem, 10vw, 3rem);
+      margin-bottom: var(--space-2);
+      line-height: 1;
+    }
+    .hero-title {
+      font-size: clamp(1rem, 5vw, 1.5rem);
+      margin-bottom: var(--space-3);
+      line-height: 1.3;
+      word-spacing: 0.05em;
+    }
+    .hero-subtitle {
+      font-size: 0.85rem;
+      margin-bottom: var(--space-4);
+      line-height: 1.5;
+      word-spacing: 0.05em;
+    }
+    .hero-ctas {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: var(--space-3);
+      width: 100%;
+      padding-right: 0;
+    }
+    .btn-primary, .btn-secondary {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-xs);
+      min-height: 40px;
+      flex: 1;
+      justify-content: center;
+    }
+    .hero-scroll-hint {
+      right: 50%;
+      top: auto;
+      bottom: 12px;
+      transform: translateX(50%);
+      flex-direction: row;
+      gap: 0;
+      width: 100%;
+      justify-content: center;
+    }
+    .scroll-text-vertical {
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
+      transform: none;
+      letter-spacing: 0.15em;
+      font-size: 0.65rem;
+      white-space: nowrap;
+    }
+    .scroll-arrow-long {
+      display: none;
     }
   }
 </style>

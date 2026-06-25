@@ -29,7 +29,7 @@ const galleryItems = items.map((item) => ({
 }));
 ---
 
-<section id="gallery" class="section py-32" aria-labelledby="gallery-heading">
+<section id="gallery" class="section" aria-labelledby="gallery-heading">
   <!-- ---------- Decorative Background Elements ---------- -->
   <div class="gallery-glow gallery-glow-1"></div>
   <div class="gallery-glow gallery-glow-2"></div>
@@ -178,29 +178,44 @@ const galleryItems = items.map((item) => ({
     z-index: 10;
   }
 
-  @media (min-width: 768px) {
-    .gallery-header-wrapper {
-      text-align: left;
-    }
-  }
 
   .gallery-interaction-hint {
     text-align: center;
     margin-top: var(--space-8);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--clr-text-muted);
     font-family: var(--font-ui);
     letter-spacing: 0.025em;
     font-weight: 500;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .gallery-interaction-hint svg {
     opacity: 0.7;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ==========================================================
+     MEDIA QUERIES (CONSOLIDATED)
+     ========================================================== */
+
+  @media (min-width: 768px) {
+    .gallery-header-wrapper {
+      text-align: left;
+    }
+    .gallery-interaction-hint {
+      flex-direction: row;
+      font-size: var(--text-sm);
+    }
+    .gallery-interaction-hint svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 </style>

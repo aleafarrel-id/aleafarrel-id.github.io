@@ -20,7 +20,7 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
 
 <section
   id="about"
-  class="section py-32 about-section"
+  class="section about-section"
   aria-labelledby="about-heading"
 >
   <div class="particles-background">
@@ -29,7 +29,7 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
       particleColors={["#ffffff", "#00E5FF", "#FF6B35"]}
       particleCount={250}
       particleSpread={10}
-      speed={0.1}
+      speed={0.2}
       particleBaseSize={100}
       moveParticlesOnHover={true}
       alphaParticles={true}
@@ -86,7 +86,8 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
   }
 
   /* ---------- Content Container ---------- */
-  .container, .skills-wrapper {
+  .container,
+  .skills-wrapper {
     position: relative;
     z-index: 2;
   }
@@ -131,12 +132,18 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
   }
 
   .skills-wrapper {
-    margin-top: var(--space-12);
+    margin-top: var(--space-8);
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .skills-wrapper {
+      margin-top: var(--space-12);
+    }
   }
 
   .skills-label {

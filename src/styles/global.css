@@ -182,6 +182,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -233,11 +235,6 @@ img {
   outline-offset: -1px;
 }
 
-@media (prefers-color-scheme: dark) {
-  img {
-    outline-color: color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
-  }
-}
 
 /* Typography Polish */
 h1, h2, h3, h4, h5, h6 {
@@ -350,28 +347,13 @@ a {
   padding: 0 var(--space-6);
 }
 
-@media (min-width: 768px) {
-  .container {
-    padding: 0 var(--space-8);
-  }
-}
 
-@media (min-width: 1024px) {
-  .container {
-    padding: 0 var(--space-12);
-  }
-}
 
 /* Section spacing */
 .section {
-  padding: var(--space-24) 0;
+  padding: var(--space-16) 0;
 }
 
-@media (min-width: 768px) {
-  .section {
-    padding: var(--space-32) 0;
-  }
-}
 
 .section-label {
   font-family: var(--font-ui);
@@ -420,8 +402,32 @@ a {
    REDUCED MOTION SUPPORT
    ========================================================== */
 
-@media (prefers-reduced-motion: reduce) {
+/* ==========================================================
+   MEDIA QUERIES (CONSOLIDATED)
+   ========================================================== */
 
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
+  .section {
+    padding: var(--space-32) 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--space-12);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  img {
+    outline-color: color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
@@ -429,7 +435,6 @@ a {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
   .reveal {
     opacity: 1;
     transform: none;

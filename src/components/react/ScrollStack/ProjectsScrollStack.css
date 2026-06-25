@@ -17,7 +17,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   border-radius: 32px;
   overflow: hidden;
   width: 100%;
@@ -49,7 +49,7 @@
 .project-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, color-mix(in srgb, var(--clr-bg-deep) 95%, transparent) 0%, color-mix(in srgb, var(--clr-bg-deep) 40%, transparent) 50%, color-mix(in srgb, var(--clr-bg-deep) 10%, transparent) 100%);
+  background: linear-gradient(to top, color-mix(in srgb, var(--clr-bg-deep) 90%, transparent) 0%, color-mix(in srgb, var(--clr-bg-deep) 50%, transparent) 60%, transparent 100%), rgba(0, 0, 0, 0.2);
   z-index: 1;
   pointer-events: none;
 }
@@ -61,44 +61,32 @@
 .project-card-content {
   position: relative;
   z-index: 2;
-  padding: 40px 30px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
 }
 
-@media (min-width: 768px) {
-  .project-card-content {
-    padding: 60px;
-    width: 75%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .project-card-content {
-    width: 60%;
-  }
-}
 
 .project-card-category {
   display: inline-block;
   align-self: flex-start;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   color: var(--clr-text-primary);
   background: color-mix(in srgb, var(--clr-bg-raised) 95%, transparent);
-  padding: 6px 16px;
+  padding: 4px 12px;
   border-radius: 9999px;
   border: 1px solid var(--shadow-light);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .project-card-title {
   font-family: var(--font-display, system-ui);
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(1.25rem, 6vw, 4rem);
   font-weight: 800;
   color: var(--clr-text-primary);
   margin: 0;
@@ -108,23 +96,23 @@
 
 .project-card-description {
   color: var(--clr-text-secondary);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-size: clamp(0.875rem, 2vw, 1.25rem);
   line-height: 1.6;
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
   max-width: 600px;
 }
 
 .project-card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
 .project-card-tag {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
-  padding: 6px 14px;
+  padding: 4px 10px;
   border-radius: 8px;
   background: color-mix(in srgb, var(--clr-bg-raised) 90%, transparent);
   color: var(--clr-text-primary);
@@ -133,24 +121,33 @@
 
 .project-card-links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 8px;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
 }
 
 .project-link-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 24px;
+  gap: 8px;
+  padding: 8px 12px;
+  min-height: 40px;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 12px;
   transition-property: background-color, color, transform, box-shadow, border-color;
   transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  touch-action: manipulation;
   text-decoration: none;
+  width: 100%;
+  justify-content: center;
+}
+
+.project-link-btn svg {
+  width: 14px !important;
+  height: 14px !important;
 }
 
 .project-link-btn.primary {
@@ -180,4 +177,72 @@
 
 .project-link-btn.secondary:active {
   transform: scale(0.96);
+}
+
+/* ==========================================================
+   MEDIA QUERIES (CONSOLIDATED)
+   ========================================================== */
+
+@media (min-width: 768px) {
+  .project-card-inner {
+    justify-content: flex-end;
+  }
+  
+  .project-card-content {
+    padding: 60px;
+    width: 75%;
+    gap: 16px;
+  }
+  
+  .project-card-category {
+    font-size: 12px;
+    padding: 6px 16px;
+    margin-bottom: 8px;
+  }
+
+  .project-card-title {
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  .project-card-description {
+    margin: 0 0 16px 0;
+  }
+
+  .project-card-tags {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .project-card-tag {
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+
+  .project-card-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .project-link-btn {
+    padding: 12px 24px;
+    min-height: 44px;
+    font-size: 15px;
+    gap: 10px;
+    width: auto;
+    flex: none;
+    justify-content: flex-start;
+  }
+
+  .project-link-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-card-content {
+    width: 60%;
+  }
 }

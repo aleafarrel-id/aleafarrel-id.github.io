@@ -304,11 +304,6 @@ const base = `/${locale}`;
     list-style: none;
   }
 
-  @media (min-width: 768px) {
-    .nav-links {
-      display: flex;
-    }
-  }
 
   .nav-links a {
     font-family: var(--font-ui);
@@ -344,12 +339,17 @@ const base = `/${locale}`;
     font-size: var(--text-sm);
     font-weight: 600;
     padding: var(--space-2) var(--space-4);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--clr-bg);
     box-shadow: var(--neu-raised-sm);
     border-radius: var(--radius-full);
     color: var(--clr-text-secondary);
     border: none;
     cursor: pointer;
+    touch-action: manipulation;
     transition-property: color, box-shadow, transform;
     transition-duration: var(--duration-base);
     transition-timing-function: var(--ease-out-expo);
@@ -381,13 +381,6 @@ const base = `/${locale}`;
     text-align: center;
   }
 
-  @media (min-width: 768px) {
-    .footer-inner {
-      flex-direction: row;
-      justify-content: space-between;
-      text-align: left;
-    }
-  }
 
   .footer-text {
     font-family: var(--font-ui);
@@ -427,13 +420,9 @@ const base = `/${locale}`;
     min-height: 44px;
     justify-content: center;
     align-items: center;
+    touch-action: manipulation;
   }
 
-  @media (min-width: 768px) {
-    .nav-hamburger {
-      display: none;
-    }
-  }
 
   .nav-hamburger span {
     display: block;
@@ -480,5 +469,45 @@ const base = `/${locale}`;
 
   .mobile-menu a:hover {
     color: var(--clr-accent-blue);
+  }
+
+  /* ==========================================================
+     MEDIA QUERIES (CONSOLIDATED)
+     ========================================================== */
+
+  @media (max-width: 767px) {
+    #main-nav {
+      top: var(--space-2);
+      left: var(--space-2);
+      right: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+    }
+    .nav-logo {
+      font-size: var(--text-lg);
+    }
+    .nav-lang-btn {
+      min-height: 36px;
+      padding: 0 var(--space-3);
+      font-size: var(--text-xs);
+    }
+    .nav-hamburger {
+      min-width: 36px;
+      min-height: 36px;
+      padding: var(--space-1);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .nav-links {
+      display: flex;
+    }
+    .footer-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .nav-hamburger {
+      display: none;
+    }
   }
 </style>

@@ -79,7 +79,8 @@
   transform: translateY(-4px) scale(1.02);
   box-shadow: var(--neu-raised), 0 8px 24px var(--clr-accent-blue-glow);
   border-color: var(--clr-accent-blue);
-  outline: none; /* Focus handled visually by hover state */
+  outline: none;
+  /* Focus handled visually by hover state */
 }
 
 .cert-node-header {
@@ -204,7 +205,7 @@
 /* ---------- React Flow Container ---------- */
 .cert-flow-wrapper {
   width: 100%;
-  height: 650px;
+  height: 480px;
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--shadow-light);
@@ -288,21 +289,98 @@
 
 /* ---------- Animations ---------- */
 @keyframes certFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes certFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes certScaleIn {
-  from { transform: scale(0.95) translateY(20px); opacity: 0; }
-  to { transform: scale(1) translateY(0); opacity: 1; }
+  from {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes certScaleOut {
-  from { transform: scale(1) translateY(0); opacity: 1; }
-  to { transform: scale(0.95) translateY(20px); opacity: 0; }
+  from {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================
+   MEDIA QUERIES
+   ========================================================== */
+
+@media (max-width: 767px) {
+  .cert-tooltip-container {
+    width: 260px;
+  }
+
+  .cert-tooltip-image-wrapper {
+    height: 120px;
+  }
+
+  .cert-tooltip-body {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .cert-tooltip-title {
+    font-size: var(--text-base);
+  }
+
+  .cert-tooltip-description {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .cert-tooltip-badge {
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .cert-tooltip-badge-text {
+    font-size: 8px;
+  }
+
+  .cert-tooltip-provider {
+    font-size: 10px;
+  }
+
+  .cert-modal-close-btn {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-xl);
+    top: var(--space-4);
+    right: var(--space-4);
+  }
+}
+
+@media (min-width: 768px) {
+  .cert-flow-wrapper {
+    height: 650px;
+  }
 }

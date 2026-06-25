@@ -26,6 +26,8 @@ export const Tooltip = ({
     setMounted(true);
   }, []);
 
+  const isTouchDevice = typeof window !== "undefined" && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
   const calculatePosition = (mouseX: number, mouseY: number) => {
     if (!contentRef.current) return { x: mouseX + 16, y: mouseY + 16 };
 
@@ -43,10 +45,18 @@ export const Tooltip = ({
     if (finalX + tooltipWidth > viewportWidth - 16) {
       finalX = mouseX - tooltipWidth - 16;
     }
+    // Prevent left edge cutoff
+    if (finalX < 16) {
+      finalX = 16;
+    }
 
     // Check bottom edge
     if (finalY + tooltipHeight > viewportHeight - 16) {
       finalY = mouseY - tooltipHeight - 16;
+    }
+    // Prevent top edge cutoff
+    if (finalY < 16) {
+      finalY = 16;
     }
 
     return { x: finalX, y: finalY };
@@ -58,30 +68,60 @@ export const Tooltip = ({
   };
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isTouchDevice) return;
     setIsVisible(true);
     updatePosition(e.clientX, e.clientY);
   };
 
   const handleMouseLeave = () => {
+    if (isTouchDevice) return;
     setIsVisible(false);
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isTouchDevice) return;
     if (!isVisible) return;
     updatePosition(e.clientX, e.clientY);
   };
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0];
-    updatePosition(touch.clientX, touch.clientY);
-    setIsVisible(true);
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isTouchDevice) {
+      if (!isVisible) {
+        updatePosition(e.clientX, e.clientY);
+        setIsVisible(true);
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 6000);
+      } else {
+        setIsVisible(false);
+      }
+    }
   };
 
-  const handleTouchEnd = () => {
-    setTimeout(() => {
+  useEffect(() => {
+    if (!isVisible || !isTouchDevice) return;
+
+    const handleGlobalClick = (e: MouseEvent | TouchEvent) => {
+      if (
+        contentRef.current?.contains(e.target as Node) ||
+        containerRef.current?.contains(e.target as Node)
+      ) {
+        return;
+      }
       setIsVisible(false);
-    }, 2000);
-  };
+    };
+
+    const timeout = setTimeout(() => {
+      document.addEventListener("click", handleGlobalClick);
+      document.addEventListener("touchstart", handleGlobalClick);
+    }, 10);
+
+    return () => {
+      clearTimeout(timeout);
+      document.removeEventListener("click", handleGlobalClick);
+      document.removeEventListener("touchstart", handleGlobalClick);
+    };
+  }, [isVisible, isTouchDevice]);
 
   useEffect(() => {
     if (isVisible && contentRef.current) {
@@ -97,7 +137,10 @@ export const Tooltip = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="pointer-events-none fixed z-[999999] overflow-hidden rounded-xl"
+          className={cn(
+            "fixed z-[999999] overflow-hidden rounded-xl",
+            isTouchDevice ? "pointer-events-auto" : "pointer-events-none"
+          )}
           role="tooltip"
           aria-hidden={!isVisible}
           style={{
@@ -107,11 +150,11 @@ export const Tooltip = ({
             boxShadow: 'var(--neu-raised-lg), 0 10px 40px var(--clr-accent-blue-glow)',
             border: '1px solid var(--shadow-light)',
             width: 'max-content',
-            minWidth: '280px',
-            maxWidth: '380px'
+            minWidth: isTouchDevice ? '200px' : '280px',
+            maxWidth: isTouchDevice ? '260px' : '380px'
           }}
         >
-          <div ref={contentRef}>
+          <div ref={contentRef} onClick={() => { if (isTouchDevice) setIsVisible(false); }}>
             {content}
           </div>
         </motion.div>
@@ -127,8 +170,7 @@ export const Tooltip = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onClick={handleClick}
     >
       {children}
       {tooltipPortal}

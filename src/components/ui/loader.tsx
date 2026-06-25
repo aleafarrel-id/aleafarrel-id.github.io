@@ -37,14 +37,14 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
           className={cn(
-            "fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-[#1A1A1A] px-8"
+            "fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-[#1A1A1A] px-6"
           )}
         >
-          <div className="w-full max-w-md flex flex-col gap-3">
+          <div className="w-[85%] sm:w-3/4 max-w-sm flex flex-col gap-3">
             
             {/* Text & Percentage Header */}
-            <div className="flex justify-between items-end w-full">
-              <div className="h-6 overflow-hidden relative grid items-center">
+            <div className="flex justify-between items-end w-full gap-2">
+              <div className="h-auto overflow-visible relative grid items-center flex-1 min-w-0">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.span
                     key={phrase}
@@ -52,7 +52,7 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
                     animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                     exit={{ opacity: 0, filter: "blur(4px)", y: -5 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="col-start-1 row-start-1 font-ui text-xs md:text-sm font-medium text-gray-400 tracking-widest uppercase whitespace-nowrap"
+                    className="col-start-1 row-start-1 font-ui text-[10px] sm:text-xs md:text-sm font-medium text-gray-400 tracking-wider md:tracking-widest uppercase leading-tight"
                   >
                     {phrase}
                   </motion.span>

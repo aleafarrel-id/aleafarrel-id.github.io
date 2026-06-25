@@ -16,11 +16,6 @@
   padding-bottom: calc(var(--logoloop-logoHeight) * 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  .logoloop {
-    --logoloop-fadeColorAuto: var(--clr-bg);
-  }
-}
 
 .logoloop__track {
   display: flex;
@@ -182,5 +177,18 @@
   .logoloop__item img,
   .logoloop__node {
     transition: none !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .logoloop {
+    --logoloop-fadeColorAuto: var(--clr-bg);
+  }
+}
+
+@media (max-width: 768px) {
+  .logoloop {
+    --logoloop-logoHeight: 40px;
+    --logoloop-gap: var(--space-8);
   }
 }

@@ -429,8 +429,9 @@ class Media {
       }
     }
     this.scale = this.screen.height / 1500;
-    this.plane.scale.y = (this.viewport.height * (900 * this.scale)) / this.screen.height;
-    this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
+    const sizeFactor = this.screen.width < 768 ? 0.6 : 1;
+    this.plane.scale.y = (this.viewport.height * (900 * this.scale * sizeFactor)) / this.screen.height;
+    this.plane.scale.x = (this.viewport.width * (700 * this.scale * sizeFactor)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
     
     if (this.title) {

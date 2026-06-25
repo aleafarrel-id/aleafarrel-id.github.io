@@ -29,7 +29,13 @@ const CertificateNode = ({ data }) => {
   const imagePath = data.image.startsWith('/') ? data.image : `/certificate/${data.image.split('/').pop()}`;
 
   const tooltipContent = (
-    <div className="cert-tooltip-container">
+    <div 
+      className="cert-tooltip-container" 
+      onClick={(e) => {
+        if (data.onPreview) data.onPreview();
+      }}
+      style={{ cursor: 'pointer' }}
+    >
       <div className="cert-tooltip-image-wrapper">
         <img src={imagePath} alt={data.title} className="cert-tooltip-image" loading="lazy" />
         <div className="cert-tooltip-gradient-overlay">
@@ -86,7 +92,7 @@ const nodeTypes = {
   certificate: CertificateNode,
 };
 
-function FlowContent({ items, strings, onNodeClick }) {
+function FlowContent({ items, strings, onNodeClick, openPreview }) {
   const { initialNodes, initialEdges } = useMemo(() => {
     const nodes = [
       {
@@ -120,7 +126,11 @@ function FlowContent({ items, strings, onNodeClick }) {
           id: currentId,
           type: 'certificate',
           position: { x: xPos, y: yPos },
-          data: { ...cert, previewLabel: strings?.previewLabel || 'PREVIEW' }
+          data: { 
+            ...cert, 
+            previewLabel: strings?.previewLabel || 'PREVIEW',
+            onPreview: () => openPreview && openPreview({ type: 'certificate', data: cert })
+          }
         });
 
         const isBlue = i % 2 === 0;
@@ -157,7 +167,13 @@ function FlowContent({ items, strings, onNodeClick }) {
   // Focus the view with a more reasonable padding
   useEffect(() => {
     const timer = setTimeout(() => {
-      fitView({ padding: 0.15, duration: 1000 });
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        // Focus only on the start node and first few items on mobile to prevent tiny zoom
+        const subset = nodes.slice(0, 3).map(n => ({ id: n.id }));
+        fitView({ nodes: subset, padding: 0.1, duration: 1000, maxZoom: 0.8 });
+      } else {
+        fitView({ padding: 0.15, duration: 1000 });
+      }
     }, 150);
     return () => clearTimeout(timer);
   }, [fitView, nodes.length]);
@@ -218,13 +234,19 @@ export default function CertificatesFlow({ items, strings }) {
     };
   }, [previewImage]);
 
-  const onNodeClick = useCallback((event, node) => {
+  const openPreview = useCallback((node) => {
     if (node.type === 'certificate' && node.data && node.data.image) {
       const imagePath = node.data.image.startsWith('/') ? node.data.image : `/certificate/${node.data.image.split('/').pop()}`;
       setIsClosing(false);
       setPreviewImage(imagePath);
     }
   }, []);
+
+  const onNodeClick = useCallback((event, node) => {
+    const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (isTouch) return; // Let touch events show the tooltip, and clicking tooltip opens preview
+    openPreview(node);
+  }, [openPreview]);
 
   const closeTimeoutRef = useRef(null);
 
@@ -278,7 +300,7 @@ export default function CertificatesFlow({ items, strings }) {
     <>
       <div className="cert-flow-wrapper">
         <ReactFlowProvider>
-          <FlowContent items={items} strings={strings} onNodeClick={onNodeClick} />
+          <FlowContent items={items} strings={strings} onNodeClick={onNodeClick} openPreview={openPreview} />
         </ReactFlowProvider>
       </div>
 
