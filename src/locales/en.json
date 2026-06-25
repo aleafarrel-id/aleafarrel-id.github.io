@@ -220,6 +220,7 @@
     "section_label": "Gallery",
     "heading": "Visual Journey",
     "subheading": "A glimpse into my professional work and activities.",
+    "interaction_hint": "Drag or scroll to explore the gallery.",
     "autoSlideInterval": 6000,
     "images": [
       {

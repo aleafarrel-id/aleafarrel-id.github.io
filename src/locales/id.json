@@ -220,6 +220,7 @@
     "section_label": "Galeri",
     "heading": "Jejak Visual",
     "subheading": "Sekilas tentang pekerjaan dan aktivitas profesional saya.",
+    "interaction_hint": "Geser atau gulir untuk menjelajah galeri.",
     "autoSlideInterval": 6000,
     "images": [
       {

@@ -29,7 +29,12 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
 ---
 
 <section id="projects" class="section py-32" aria-labelledby="projects-heading">
-  <div class="container">
+  {/* Decorative Background Elements */}
+  <div class="projects-glow projects-glow-1"></div>
+  <div class="projects-glow projects-glow-2"></div>
+  <div class="projects-grid-bg"></div>
+
+  <div class="container relative z-10">
     <p class="section-label reveal">{section_label}</p>
     <h2
       class="projects-heading reveal reveal-delay-1 font-black tracking-tighter"
@@ -56,6 +61,56 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     position: relative;
     z-index: var(--z-base);
     background: var(--clr-bg);
+    overflow: hidden; /* Contains the background elements */
+  }
+
+  /* Decorative Glows */
+  .projects-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .projects-glow-1 {
+    top: 5%;
+    left: 20%;
+    width: 600px;
+    height: 600px;
+    background: #10b981; /* Emerald green */
+    animation: float-projects 14s ease-in-out infinite alternate;
+  }
+
+  .projects-glow-2 {
+    bottom: 10%;
+    right: 5%;
+    width: 500px;
+    height: 500px;
+    background: #6366f1; /* Deep indigo */
+    animation: float-projects 18s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes float-projects {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -40px) scale(1.05); }
+    100% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  /* Grid Texture Background */
+  .projects-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.15;
+    background-image: 
+      linear-gradient(to right, color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
   }
 
   .projects-heading {
