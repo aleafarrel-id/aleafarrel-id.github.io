@@ -4,20 +4,9 @@
  * Consumed by [lang]/index.astro — locale passed as prop.
  */
 import "../styles/global.css";
-import "@fontsource/space-grotesk/300.css";
-import "@fontsource/space-grotesk/400.css";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/600.css";
-import "@fontsource/space-grotesk/700.css";
-import "@fontsource/syne/400.css";
-import "@fontsource/syne/500.css";
-import "@fontsource/syne/600.css";
-import "@fontsource/syne/700.css";
-import "@fontsource/syne/800.css";
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/syne";
+import "@fontsource-variable/inter";
 import { Icon } from "astro-icon/components";
 import { getLocale, getLocaleData, getAlternateUrl } from "../i18n/utils";
 import { LoaderOne } from "../components/ui/loader";
@@ -177,14 +166,20 @@ const base = `/${locale}`;
 
       gsap.registerPlugin(ScrollTrigger);
 
+      // ── Respect Reduced Motion ──────────────────────────────
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
       // ── Smooth Scroll (Lenis + GSAP) ───────────────────────
       const lenis = new Lenis();
-      lenis.on("scroll", ScrollTrigger.update);
+      
+      if (!prefersReducedMotion) {
+        lenis.on("scroll", ScrollTrigger.update);
 
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      }
 
       // ── Scroll nav ────────────────────────────────────────
       const nav = document.getElementById("main-nav");

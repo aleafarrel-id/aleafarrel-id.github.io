@@ -203,16 +203,18 @@ export default function CertificatesFlow({ items, strings }) {
       }
     };
     
+    let focusTimer;
     if (previewImage) {
       document.addEventListener('keydown', handleKeyDown);
       // Ensure focus on close button for accessibility
-      setTimeout(() => {
+      focusTimer = setTimeout(() => {
         closeButtonRef.current?.focus();
       }, 100);
     }
     
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      if (focusTimer) clearTimeout(focusTimer);
     };
   }, [previewImage]);
 
@@ -224,9 +226,17 @@ export default function CertificatesFlow({ items, strings }) {
     }
   }, []);
 
+  const closeTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
+
   const handleClose = () => {
     setIsClosing(true);
-    setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setPreviewImage(null);
       setIsClosing(false);
       setHovering(false); // Reset hovering state so lens doesn't persist on next open

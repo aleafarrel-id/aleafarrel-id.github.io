@@ -19,9 +19,29 @@ export default defineConfig({
   integrations: [icon(), react()],
   vite: {
     plugins: [tailwindcss()],
-    optimizeDeps: {
-      // force Vite to re-bundle on start
-      force: true,
-    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              const modulePath = id.split('node_modules/')[1];
+              const topLevelFolder = modulePath.split('/')[0];
+              if (topLevelFolder !== '.pnpm') {
+                return topLevelFolder;
+              }
+              const scopedMatch = modulePath.match(/\.pnpm\/(@[^/]+\/[^/@]+)/);
+              if (scopedMatch) {
+                return scopedMatch[1].replace('@', '').replace('/', '-');
+              }
+              const match = modulePath.match(/\.pnpm\/([^/@]+)/);
+              if (match) {
+                return match[1];
+              }
+              return 'vendor';
+            }
+          }
+        }
+      }
+    }
   },
 });

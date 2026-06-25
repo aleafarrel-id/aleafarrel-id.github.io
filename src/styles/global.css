@@ -47,11 +47,11 @@
   --clr-warning: #F59E0B;
 
   /* ---------- Typography Scale ---------- */
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Syne Variable', 'Syne', sans-serif;
   /* Bold 3D headings */
-  --font-body: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Grotesk Variable', 'Space Grotesk', sans-serif;
   /* Clean body */
-  --font-ui: 'Inter', sans-serif;
+  --font-ui: 'Inter Variable', 'Inter', sans-serif;
   /* UI labels & data */
 
   --text-xs: 0.75rem;

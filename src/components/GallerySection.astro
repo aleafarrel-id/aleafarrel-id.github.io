@@ -52,13 +52,13 @@ const galleryItems = items.map((item) => ({
         style="height: 600px; position: relative; border-radius: var(--radius-xl); overflow: hidden;"
       >
         <CircularGallery
-          client:visible
+          client:visible={{ rootMargin: "300px" }}
           items={galleryItems}
           bend={3}
           textColor="#ffffff"
           borderRadius={0.05}
           scrollEase={0.05}
-          font="bold 18px 'Space Grotesk', sans-serif"
+          font="bold 16px 'Space Grotesk', sans-serif"
         />
       </div>
     </div>

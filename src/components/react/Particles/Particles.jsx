@@ -137,7 +137,7 @@ const Particles = ({
 
     if (moveParticlesOnHover) {
       // Changed to listen on window so hover works even if content is over it
-      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
     }
 
     const count = particleCount;
@@ -183,12 +183,22 @@ const Particles = ({
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
+    let isVisible = true;
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    });
+    observer.observe(container);
+
     let animationFrameId;
     let lastTime = performance.now();
     let elapsed = 0;
 
     const update = t => {
       animationFrameId = requestAnimationFrame(update);
+      if (!isVisible) {
+        lastTime = t;
+        return;
+      }
       const delta = t - lastTime;
       lastTime = t;
       elapsed += delta * speed;
@@ -215,6 +225,7 @@ const Particles = ({
     animationFrameId = requestAnimationFrame(update);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', resize);
       if (moveParticlesOnHover) {
         window.removeEventListener('mousemove', handleMouseMove);

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const AntigravityInner = ({
@@ -18,7 +18,8 @@ const AntigravityInner = ({
   depthFactor = 1,
   pulseSpeed = 3,
   particleShape = 'capsule',
-  fieldStrength = 10
+  fieldStrength = 10,
+  isVisible = true
 }) => {
   const meshRef = useRef(null);
   const { viewport } = useThree();
@@ -73,10 +74,13 @@ const AntigravityInner = ({
   const globalPointer = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
+    let sectionCache = null;
     const handlePointerMove = (e) => {
-      const section = document.getElementById('contact');
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
+      if (!sectionCache) {
+        sectionCache = document.getElementById('contact');
+      }
+      if (!sectionCache) return;
+      const rect = sectionCache.getBoundingClientRect();
       // Only track if mouse is within the section bounds roughly
       if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
         const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -84,11 +88,13 @@ const AntigravityInner = ({
         globalPointer.current = { x, y };
       }
     };
-    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
     return () => window.removeEventListener('pointermove', handlePointerMove);
   }, []);
 
   useFrame((state, delta) => {
+    if (!isVisible) return;
+
     const mesh = meshRef.current;
     if (!mesh) return;
 
@@ -194,10 +200,25 @@ const AntigravityInner = ({
 };
 
 const Antigravity = props => {
+  const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <Canvas camera={{ position: [0, 0, 50], fov: 35 }}>
-      <AntigravityInner {...props} />
-    </Canvas>
+    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+      <Canvas camera={{ position: [0, 0, 50], fov: 35 }}>
+        <AntigravityInner {...props} isVisible={isVisible} />
+      </Canvas>
+    </div>
   );
 };
 

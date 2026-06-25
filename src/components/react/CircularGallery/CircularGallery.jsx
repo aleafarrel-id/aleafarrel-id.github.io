@@ -214,7 +214,8 @@ class Media {
     bend,
     textColor,
     borderRadius = 0,
-    font
+    font,
+    textureCache = null
   }) {
     this.extra = 0;
     this.geometry = geometry;
@@ -231,15 +232,37 @@ class Media {
     this.textColor = textColor;
     this.borderRadius = borderRadius;
     this.font = font;
+    this.textureCache = textureCache;
     this.createShader();
     this.createMesh();
     this.createTitle();
     this.onResize();
   }
   createShader() {
-    const texture = new Texture(this.gl, {
-      generateMipmaps: true
-    });
+    let textureInfo;
+    
+    if (this.textureCache && this.textureCache[this.image]) {
+      textureInfo = this.textureCache[this.image];
+    } else {
+      const texture = new Texture(this.gl, {
+        generateMipmaps: false
+      });
+      textureInfo = { texture, loaded: false, sizes: [0, 0], callbacks: [] };
+      if (this.textureCache) this.textureCache[this.image] = textureInfo;
+      
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.decoding = 'async'; // MASSIVE PERFORMANCE BOOST
+      img.src = this.image;
+      img.onload = () => {
+        texture.image = img;
+        textureInfo.sizes = [img.naturalWidth, img.naturalHeight];
+        textureInfo.loaded = true;
+        textureInfo.callbacks.forEach(cb => cb());
+        textureInfo.callbacks = []; // Clear callbacks
+      };
+    }
+
     this.program = new Program(this.gl, {
       depthTest: false,
       depthWrite: false,
@@ -296,22 +319,25 @@ class Media {
         }
       `,
       uniforms: {
-        tMap: { value: texture },
+        tMap: { value: textureInfo.texture },
         uPlaneSizes: { value: [0, 0] },
-        uImageSizes: { value: [0, 0] },
+        uImageSizes: { value: textureInfo.sizes },
         uSpeed: { value: 0 },
         uTime: { value: 100 * Math.random() },
         uBorderRadius: { value: this.borderRadius }
       },
       transparent: true
     });
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = this.image;
-    img.onload = () => {
-      texture.image = img;
-      this.program.uniforms.uImageSizes.value = [img.naturalWidth, img.naturalHeight];
-    };
+
+    if (textureInfo.loaded) {
+      this.program.uniforms.uImageSizes.value = textureInfo.sizes;
+    } else {
+      textureInfo.callbacks.push(() => {
+        if (this.program) {
+          this.program.uniforms.uImageSizes.value = textureInfo.sizes;
+        }
+      });
+    }
   }
   createMesh() {
     this.plane = new Mesh(this.gl, {
@@ -321,14 +347,20 @@ class Media {
     this.plane.setParent(this.scene);
   }
   createTitle() {
-    this.title = new Title({
-      gl: this.gl,
-      plane: this.plane,
-      renderer: this.renderer,
-      text: this.text,
-      textColor: this.textColor,
-      font: this.font
-    });
+    setTimeout(() => {
+      if (!this.gl) return;
+      this.title = new Title({
+        gl: this.gl,
+        plane: this.plane,
+        renderer: this.renderer,
+        text: this.text,
+        textColor: this.textColor,
+        font: this.font
+      });
+      if (this.plane.scale && this.plane.scale.x > 0) {
+        this.title.resize(this.plane.scale.x, this.plane.scale.y);
+      }
+    }, this.index * 50); // Stagger by 50ms each
   }
   update(scroll, direction) {
     this.plane.position.x = this.x - scroll.current - this.extra;
@@ -421,6 +453,16 @@ class App {
     this.createMedias(items, bend, textColor, borderRadius, font);
     this.update();
     this.addEventListeners();
+    this.setupIntersectionObserver();
+  }
+  setupIntersectionObserver() {
+    this.isVisible = true;
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        this.isVisible = entry.isIntersecting;
+      });
+    }, { threshold: 0 });
+    this.observer.observe(this.container);
   }
   createRenderer() {
     this.renderer = new Renderer({
@@ -463,8 +505,17 @@ class App {
     ];
     const galleryItems = items && items.length ? items : defaultItems;
     this.mediasImages = galleryItems.concat(galleryItems);
-    this.medias = this.mediasImages.map((data, index) => {
-      return new Media({
+    this.medias = [];
+    this.textureCache = {};
+    
+    let index = 0;
+    const processNext = () => {
+      // Check if component was destroyed before this fires
+      if (!this.gl || !this.scene) return; 
+      if (index >= this.mediasImages.length) return;
+      
+      const data = this.mediasImages[index];
+      this.medias.push(new Media({
         geometry: this.planeGeometry,
         gl: this.gl,
         image: data.image,
@@ -478,9 +529,18 @@ class App {
         bend,
         textColor,
         borderRadius,
-        font
-      });
-    });
+        font,
+        textureCache: this.textureCache
+      }));
+      index++;
+      
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(processNext);
+      } else {
+        setTimeout(processNext, 16);
+      }
+    };
+    processNext();
   }
   onTouchDown(e) {
     this.isDown = true;
@@ -488,7 +548,7 @@ class App {
     this.start = e.touches ? e.touches[0].clientX : e.clientX;
   }
   onTouchMove(e) {
-    if (!this.isDown) return;
+    if (!this.isDown || !this.isVisible) return;
     const x = e.touches ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
     this.scroll.target = this.scroll.position + distance;
@@ -498,11 +558,13 @@ class App {
     this.onCheck();
   }
   onWheel(e) {
+    if (!this.isVisible) return;
     const delta = e.deltaY || e.wheelDelta || e.detail;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
   onKeyDown(e) {
+    if (!this.isVisible) return;
     switch (e.key) {
       case 'ArrowRight':
         e.preventDefault();
@@ -552,13 +614,15 @@ class App {
     }
   }
   update() {
-    this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
-    const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
-    if (this.medias) {
-      this.medias.forEach(media => media.update(this.scroll, direction));
+    if (this.isVisible) {
+      this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
+      const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
+      if (this.medias) {
+        this.medias.forEach(media => media.update(this.scroll, direction));
+      }
+      this.renderer.render({ scene: this.scene, camera: this.camera });
+      this.scroll.last = this.scroll.current;
     }
-    this.renderer.render({ scene: this.scene, camera: this.camera });
-    this.scroll.last = this.scroll.current;
     this.raf = window.requestAnimationFrame(this.update.bind(this));
   }
   addEventListeners() {
@@ -570,13 +634,13 @@ class App {
     this.boundOnKeyDown = this.onKeyDown.bind(this);
 
     window.addEventListener('resize', this.boundOnResize);
-    window.addEventListener('mousewheel', this.boundOnWheel);
-    window.addEventListener('wheel', this.boundOnWheel);
+    window.addEventListener('mousewheel', this.boundOnWheel, { passive: true });
+    window.addEventListener('wheel', this.boundOnWheel, { passive: true });
     window.addEventListener('mousedown', this.boundOnTouchDown);
     window.addEventListener('mousemove', this.boundOnTouchMove);
     window.addEventListener('mouseup', this.boundOnTouchUp);
-    window.addEventListener('touchstart', this.boundOnTouchDown);
-    window.addEventListener('touchmove', this.boundOnTouchMove);
+    window.addEventListener('touchstart', this.boundOnTouchDown, { passive: true });
+    window.addEventListener('touchmove', this.boundOnTouchMove, { passive: true });
     window.addEventListener('touchend', this.boundOnTouchUp);
 
     this.container?.addEventListener('keydown', this.boundOnKeyDown);
@@ -598,6 +662,9 @@ class App {
 
     if (this.container) {
       this.container.removeEventListener('keydown', this.boundOnKeyDown);
+    }
+    if (this.observer) {
+      this.observer.disconnect();
     }
   }
 }
