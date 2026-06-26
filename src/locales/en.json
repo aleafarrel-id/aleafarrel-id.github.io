@@ -168,53 +168,53 @@
     "preview_label": "PREVIEW",
     "items": [
       {
-          "id": 1,
-          "name": "MTCNA",
-          "title": "MikroTik Certified Network Associate",
-          "description": "Mastered core network routing and configuration using RouterOS, establishing a strong foundation in modern networking architecture.",
-          "image": "/certificate/mtcna.webp"
+        "id": 1,
+        "name": "MTCNA",
+        "title": "MikroTik Certified Network Associate",
+        "description": "Mastered core network routing and configuration using RouterOS, establishing a strong foundation in modern networking architecture.",
+        "image": "/certificate/mtcna.webp"
       },
       {
-          "id": 2,
-          "name": "MTCTCE",
-          "title": "MikroTik Certified Traffic Control Engineer",
-          "description": "Acquired advanced expertise in traffic control, implementing complex Quality of Service (QoS) and precise bandwidth management solutions.",
-          "image": "/certificate/mtctce.webp"
+        "id": 2,
+        "name": "MTCTCE",
+        "title": "MikroTik Certified Traffic Control Engineer",
+        "description": "Acquired advanced expertise in traffic control, implementing complex Quality of Service (QoS) and precise bandwidth management solutions.",
+        "image": "/certificate/mtctce.webp"
       },
       {
-          "id": 3,
-          "name": "TKJ Skanesga Award",
-          "title": "TKJ Best Graduate Award Certificate",
-          "description": "Awarded for exceptional academic and practical achievements in the Computer Network Engineering program.",
-          "image": "/certificate/tkj-award.webp"
+        "id": 3,
+        "name": "TKJ Skanesga Award",
+        "title": "TKJ Best Graduate Award Certificate",
+        "description": "Awarded for exceptional academic and practical achievements in the Computer Network Engineering program.",
+        "image": "/certificate/tkj-award.webp"
       },
       {
-          "id": 4,
-          "name": "Cluster Training 1",
-          "title": "Cable-Based Network Installation",
-          "description": "Demonstrated proficiency in designing and deploying physical network infrastructure and structured cabling systems.",
-          "image": "/certificate/cluster1.webp"
+        "id": 4,
+        "name": "Cluster Training 1",
+        "title": "Cable-Based Network Installation",
+        "description": "Demonstrated proficiency in designing and deploying physical network infrastructure and structured cabling systems.",
+        "image": "/certificate/cluster1.webp"
       },
       {
-          "id": 5,
-          "name": "Cluster Training 2",
-          "title": "Computer Network Device Configuration",
-          "description": "Proven ability to configure, troubleshoot, and optimize diverse computer network devices for reliable connectivity.",
-          "image": "/certificate/cluster2.webp"
+        "id": 5,
+        "name": "Cluster Training 2",
+        "title": "Computer Network Device Configuration",
+        "description": "Proven ability to configure, troubleshoot, and optimize diverse computer network devices for reliable connectivity.",
+        "image": "/certificate/cluster2.webp"
       },
       {
-          "id": 6,
-          "name": "Cluster Training 3",
-          "title": "Routing Configuration",
-          "description": "Specialized in advanced routing protocols and complex network device configurations for enterprise environments.",
-          "image": "/certificate/cluster3.webp"
+        "id": 6,
+        "name": "Cluster Training 3",
+        "title": "Routing Configuration",
+        "description": "Specialized in advanced routing protocols and complex network device configurations for enterprise environments.",
+        "image": "/certificate/cluster3.webp"
       },
       {
-          "id": 7,
-          "name": "OJM Finalist",
-          "title": "MikroTik Network Olympiad Finalist",
-          "description": "Recognized as a top competitor in a national-level network engineering olympiad, showcasing advanced problem-solving skills.",
-          "image": "/certificate/ojm.webp"
+        "id": 7,
+        "name": "OJM Finalist",
+        "title": "MikroTik Network Olympiad Finalist",
+        "description": "Recognized as a top competitor in a national-level network engineering olympiad, showcasing advanced problem-solving skills.",
+        "image": "/certificate/ojm.webp"
       }
     ]
   },
@@ -286,7 +286,7 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "made_with": "Made with",
-    "and": "and"
+    "description": "Crafting immersive digital experiences through code and design.",
+    "built_with": "Built with dedication and precision."
   }
 }

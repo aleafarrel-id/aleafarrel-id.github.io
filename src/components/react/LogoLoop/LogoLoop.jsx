@@ -270,6 +270,7 @@ export const LogoLoop = memo(
             aria-label={itemAriaLabel || 'logo link'}
             target="_blank"
             rel="noreferrer noopener"
+            tabIndex={-1}
           >
             {content}
           </a>

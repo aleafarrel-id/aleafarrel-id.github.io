@@ -80,20 +80,19 @@ const emailDomain = emailParts[1] || "";
               aria-label="Instagram"
               title="Instagram"
             >
-              <Icon name="bx:bxl-instagram" class="contact-icon" />
+              <Icon name="bx:bxl-instagram" class="contact-icon" aria-hidden="true" />
             </a>
           )
         }
 
-        <a
+        <button
           class="contact-social-btn email-btn"
           aria-label={email_label}
           title={email_label}
-          role="button"
           onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}
         >
-          <Icon name="bx:bxs-envelope" class="contact-icon" />
-        </a>
+          <Icon name="bx:bxs-envelope" class="contact-icon" aria-hidden="true" />
+        </button>
 
         {
           github && (
@@ -105,7 +104,7 @@ const emailDomain = emailParts[1] || "";
               aria-label="GitHub"
               title="GitHub"
             >
-              <Icon name="bx:bxl-github" class="contact-icon" />
+              <Icon name="bx:bxl-github" class="contact-icon" aria-hidden="true" />
             </a>
           )
         }
@@ -159,10 +158,10 @@ const emailDomain = emailParts[1] || "";
   }
 
   .contact-subheading {
-    font-family: var(--font-body);
-    font-size: var(--text-lg);
+    font-family: var(--font-ui);
+    font-size: clamp(1rem, 2vw, 1.125rem);
     color: var(--clr-text-secondary);
-    line-height: 1.7;
+    line-height: 1.6;
     max-width: 36rem;
     margin-bottom: var(--space-12);
   }

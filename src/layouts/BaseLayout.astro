@@ -6,6 +6,7 @@ import "@fontsource-variable/inter";
 import { Icon } from "astro-icon/components";
 import { getLocale, getLocaleData, getAlternateUrl } from "../i18n/utils";
 import { LoaderOne } from "../components/ui/loader";
+import siteConfig from "../siteConfig.json";
 
 interface Props {
   locale?: string;
@@ -21,6 +22,12 @@ const altLang = locale === "en" ? "id" : "en";
 
 // Nav anchors
 const base = `/${locale}`;
+
+const instagramUrl =
+  siteConfig.socials.find((s) => s.icon === "instagram")?.url || "#";
+const githubUrl =
+  siteConfig.socials.find((s) => s.icon === "github")?.url || "#";
+const emailUrl = `mailto:${siteConfig.email}`;
 ---
 
 <!doctype html>
@@ -30,7 +37,6 @@ const base = `/${locale}`;
       (function () {
         var vh = 0;
         var ticking = false;
-        var resizeTimer = null;
 
         function setVH() {
           var vp = window.visualViewport;
@@ -85,6 +91,7 @@ const base = `/${locale}`;
   </head>
 
   <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <LoaderOne client:load phrases={data.loading.phrases} />
 
     <div
@@ -99,7 +106,7 @@ const base = `/${locale}`;
         aria-label="Close menu"
         style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--clr-text-primary);"
       >
-        <Icon name="bx:bx-x" class="w-8 h-8" />
+        <Icon name="bx:bx-x" class="w-8 h-8" aria-hidden="true" />
       </button>
       <nav>
         <ul
@@ -180,13 +187,64 @@ const base = `/${locale}`;
 
     <footer id="footer">
       <div class="container">
-        <div class="footer-inner">
-          <p class="footer-text">
-            &copy; {new Date().getFullYear()} Alea Farrel. {data.footer.rights}
-          </p>
-          <div class="footer-logo">AF<span>.</span></div>
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a
+              href={`${base}/`}
+              class="footer-logo"
+              aria-label="Alea Farrel — Home">AF<span>.</span></a
+            >
+            <p class="footer-description">
+              {data.footer.description}
+            </p>
+          </div>
+
+          <div class="footer-nav">
+            <div class="footer-nav-col">
+              <span class="footer-nav-title">Menu</span>
+              <ul>
+                <li><a href={`${base}/#about`}>{data.nav.about}</a></li>
+                <li><a href={`${base}/#projects`}>{data.nav.projects}</a></li>
+                <li>
+                  <a href={`${base}/#experience`}>{data.nav.experience}</a>
+                </li>
+                <li><a href={`${base}/#gallery`}>{data.nav.gallery}</a></li>
+              </ul>
+            </div>
+            <div class="footer-nav-col">
+              <span class="footer-nav-title">Connect</span>
+              <ul>
+                <li>
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer">Instagram</a>
+                </li>
+                <li><a href={emailUrl}>Email</a></li>
+                <li>
+                  <a href={githubUrl} target="_blank" rel="noopener noreferrer"
+                    >GitHub</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-copyright">
+            <p>
+              &copy; {new Date().getFullYear()} Alea Farrel. {
+                data.footer.rights
+              }
+            </p>
+            <p class="footer-tech">{data.footer.built_with}</p>
+          </div>
         </div>
       </div>
+
+      <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <Icon name="bx:bx-up-arrow-alt" class="w-6 h-6" aria-hidden="true" />
+      </button>
     </footer>
 
     <script>
@@ -294,6 +352,23 @@ const base = `/${locale}`;
         if (e.key === "Escape") closeMenu();
       });
 
+      const backToTopBtn = document.getElementById("back-to-top");
+      backToTopBtn?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (window.scrollY > 300) {
+            backToTopBtn?.classList.add("visible");
+          } else {
+            backToTopBtn?.classList.remove("visible");
+          }
+        },
+        { passive: true },
+      );
+
       const revealObs = new IntersectionObserver(
         (entries) =>
           entries.forEach((entry) => {
@@ -377,13 +452,16 @@ const base = `/${locale}`;
     color: var(--clr-text-secondary);
     transition: color var(--duration-fast) ease;
     position: relative;
+    padding: var(--space-2) var(--space-3);
+    margin: calc(var(--space-2) * -1) calc(var(--space-3) * -1);
+    border-radius: var(--radius-sm);
   }
 
   .nav-links a::after {
     content: "";
     position: absolute;
-    bottom: -4px;
-    left: 0;
+    bottom: 4px;
+    left: var(--space-3);
     width: 0;
     height: 2px;
     background: var(--clr-accent-blue);
@@ -396,7 +474,7 @@ const base = `/${locale}`;
     }
 
     .nav-links a:hover::after {
-      width: 100%;
+      width: calc(100% - calc(var(--space-3) * 2));
     }
   }
 
@@ -435,39 +513,198 @@ const base = `/${locale}`;
     position: relative;
     z-index: var(--z-base);
     background: var(--clr-bg);
-    padding: var(--space-8) 0;
-    border-top: 1px solid
-      color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    padding: var(--space-16) 0 var(--space-12) 0;
   }
 
-  .footer-inner {
+  .footer-top {
     display: flex;
     flex-direction: column;
+    gap: var(--space-12);
+    margin-bottom: var(--space-16);
     align-items: center;
-    gap: var(--space-3);
     text-align: center;
   }
 
-  .footer-text {
+  @media (min-width: 768px) {
+    .footer-top {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 300px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .footer-brand {
+      align-items: flex-start;
+    }
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--clr-text-primary);
+    letter-spacing: -0.02em;
+    display: inline-block;
+  }
+
+  .footer-logo span {
+    color: var(--clr-accent-blue);
+  }
+
+  .footer-description {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--clr-text-secondary);
+    line-height: 1.6;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: var(--space-12);
+    width: 100%;
+    justify-content: center;
+  }
+
+  @media (min-width: 480px) {
+    .footer-nav {
+      gap: var(--space-24);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .footer-nav {
+      width: auto;
+      justify-content: flex-end;
+    }
+  }
+
+  .footer-nav-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .footer-nav-title {
+    font-family: var(--font-ui);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--clr-text-primary);
+  }
+
+  .footer-nav-col ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .footer-nav-col a {
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    color: var(--clr-text-secondary);
+    transition: color var(--duration-fast) ease;
+  }
+
+  @media (hover: hover) {
+    .footer-nav-col a:hover {
+      color: var(--clr-accent-blue);
+    }
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    align-items: center;
+    text-align: center;
+    border-top: 1px solid
+      color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    padding-top: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .footer-copyright {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .footer-copyright {
+      align-items: flex-start;
+    }
+  }
+
+  .footer-copyright p {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
     color: var(--clr-text-muted);
   }
 
-  .footer-heart {
-    color: var(--clr-accent-orange);
+  .footer-tech {
+    font-size: var(--text-xs) !important;
+    opacity: 0.7;
   }
 
-  .footer-logo {
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: 800;
-    color: var(--clr-text-primary);
-    letter-spacing: -0.02em;
+  .back-to-top {
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    z-index: var(--z-sticky);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--clr-bg-deep) 80%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid
+      color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    color: var(--clr-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--shadow-dark);
+    transition: all var(--duration-base) var(--ease-out-expo);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
   }
 
-  .footer-logo span {
-    color: var(--clr-accent-blue);
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  @media (hover: hover) {
+    .back-to-top:hover {
+      color: var(--clr-accent-blue);
+      border-color: var(--clr-accent-blue);
+      transform: translateY(-4px) scale(1.05);
+      background: var(--clr-bg-deep);
+    }
   }
 
   .nav-hamburger {

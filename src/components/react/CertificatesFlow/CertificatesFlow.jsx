@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Lens } from '../../ui/lens';
 import { Tooltip } from '../../ui/tooltip-card';
@@ -7,7 +7,6 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
-  Background,
   Controls,
   Handle,
   Position,
@@ -31,8 +30,16 @@ const CertificateNode = ({ data }) => {
   const tooltipContent = (
     <div 
       className="cert-tooltip-container" 
-      onClick={(e) => {
+      onClick={() => {
         if (data.onPreview) data.onPreview();
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (data.onPreview) data.onPreview();
+        }
       }}
       style={{ cursor: 'pointer' }}
     >
@@ -58,7 +65,14 @@ const CertificateNode = ({ data }) => {
       <div
         className="cert-node-container"
         role="button"
+        tabIndex={0}
         aria-label={`Preview certificate for ${data.title}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (data.onPreview) data.onPreview();
+          }
+        }}
       >
         <Handle type="target" position={Position.Left} className="cert-flow-handle-left-blue" />
 
@@ -150,7 +164,7 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
     return { initialNodes: nodes, initialEdges: edges };
   }, [items]);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
 
@@ -240,7 +254,7 @@ export default function CertificatesFlow({ items, strings }) {
     }
   }, []);
 
-  const onNodeClick = useCallback((event, node) => {
+  const onNodeClick = useCallback((_, node) => {
     const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (isTouch) return;
     openPreview(node);

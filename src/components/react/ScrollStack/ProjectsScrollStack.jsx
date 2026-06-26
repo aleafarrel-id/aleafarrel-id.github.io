@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
 import { FaGooglePlay } from 'react-icons/fa';
 import ScrollStack, { ScrollStackItem } from './ScrollStack';

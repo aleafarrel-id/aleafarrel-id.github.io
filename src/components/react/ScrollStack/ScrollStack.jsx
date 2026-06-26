@@ -88,7 +88,6 @@ const ScrollStack = ({
       const nextPinStart = nextCardTop - stackPx;
       const effectivePinEnd = Math.max(pinEnd, nextPinStart);
 
-      let ty = 0;
       let sc = 1;
 
       if (scrollTop >= pinStart && scrollTop <= effectivePinEnd) {
