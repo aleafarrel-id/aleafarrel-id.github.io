@@ -423,7 +423,7 @@ class Media {
       }
     }
     this.scale = this.screen.height / 1500;
-    const sizeFactor = this.screen.width < 768 ? 0.9 : 1;
+    const sizeFactor = this.screen.width < 768 ? 1.15 : 1;
     this.plane.scale.y = (this.viewport.height * (900 * this.scale * sizeFactor)) / this.screen.height;
     this.plane.scale.x = (this.viewport.width * (700 * this.scale * sizeFactor)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
@@ -432,10 +432,15 @@ class Media {
       this.title.resize(this.plane.scale.x, this.plane.scale.y);
     }
 
-    this.padding = 3.5;
+    const oldWidthTotal = this.widthTotal;
+    this.padding = this.screen.width < 768 ? 2.5 : 3.5;
     this.width = this.plane.scale.x + this.padding;
     this.widthTotal = this.width * this.length;
     this.x = this.width * this.index;
+
+    if (oldWidthTotal && oldWidthTotal !== this.widthTotal) {
+      this.extra = Math.round(this.extra / oldWidthTotal) * this.widthTotal;
+    }
   }
 }
 

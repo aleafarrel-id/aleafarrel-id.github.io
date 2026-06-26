@@ -70,34 +70,35 @@ const {
 
     if (!heroContent || !heroOverlay) return;
 
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (window.innerWidth <= 768) {
-          const scrollY = window.scrollY;
-          const opacity = Math.max(1 - scrollY / 250, 0);
+    function updateHeroFade() {
+      if (!heroContent || !heroOverlay) return;
+      if (window.innerWidth <= 1440) {
+        const scrollY = window.scrollY;
+        const opacity = Math.max(1 - scrollY / 250, 0);
 
-          heroContent.style.opacity = opacity.toString();
-          heroContent.style.pointerEvents = opacity === 0 ? "none" : "auto";
+        heroContent.style.opacity = opacity.toString();
+        heroContent.style.pointerEvents = opacity === 0 ? "none" : "auto";
 
-          heroOverlay.style.opacity = opacity.toString();
+        heroOverlay.style.opacity = opacity.toString();
 
-          if (scrollHint) {
-            if (scrollY > 10) {
-              scrollHint.style.opacity = opacity.toString();
-            } else {
-              scrollHint.style.opacity = "";
-            }
+        if (scrollHint) {
+          if (scrollY > 10) {
+            scrollHint.style.opacity = opacity.toString();
+          } else {
+            scrollHint.style.opacity = "";
           }
-        } else {
-          heroContent.style.opacity = "1";
-          heroContent.style.pointerEvents = "auto";
-          heroOverlay.style.opacity = "0";
-          if (scrollHint) scrollHint.style.opacity = "";
         }
-      },
-      { passive: true },
-    );
+      } else {
+        heroContent.style.opacity = "1";
+        heroContent.style.pointerEvents = "auto";
+        heroOverlay.style.opacity = "";
+        if (scrollHint) scrollHint.style.opacity = "";
+      }
+    }
+
+    window.addEventListener("scroll", updateHeroFade, { passive: true });
+    window.addEventListener("resize", updateHeroFade, { passive: true });
+    updateHeroFade();
   }
 
   initHeroScrollFade();
@@ -357,7 +358,7 @@ const {
     display: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 639px) {
     #hero {
       padding-left: 0;
       padding-bottom: 0;
@@ -390,14 +391,14 @@ const {
     }
     .hero-name {
       font-size: clamp(2rem, 10vw, 3rem);
-      margin-bottom: var(--space-2);
+      margin-bottom: var(--space-3);
       line-height: 1;
       text-shadow: 0 4px 16px
         color-mix(in srgb, var(--shadow-dark) 40%, transparent);
     }
     .hero-title {
       font-size: clamp(1rem, 5vw, 1.5rem);
-      margin-bottom: var(--space-3);
+      margin-bottom: var(--space-4);
       line-height: 1.3;
       word-spacing: 0.05em;
       text-shadow: 0 2px 8px
@@ -405,7 +406,7 @@ const {
     }
     .hero-subtitle {
       font-size: 0.85rem;
-      margin-bottom: var(--space-4);
+      margin-bottom: var(--space-6);
       line-height: 1.5;
       word-spacing: 0.05em;
       text-shadow: 0 2px 8px
@@ -446,6 +447,86 @@ const {
     }
     .scroll-arrow-long {
       display: none;
+    }
+  }
+
+  /* Tablet specific styles */
+  @media (min-width: 640px) and (max-width: 1024px) {
+    #hero {
+      padding-left: 0;
+      padding-bottom: 0;
+    }
+    .hero-fade-overlay {
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        rgba(0, 0, 0, 0) 100%
+      );
+      z-index: -1;
+    }
+    .hero-content {
+      max-width: 100%;
+      padding-left: var(--space-8);
+      padding-right: var(--space-8);
+      padding-bottom: 6rem;
+    }
+    .hero-greeting {
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-4);
+    }
+    .hero-name {
+      width: min-content;
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      margin-bottom: var(--space-3);
+      line-height: 1;
+      text-shadow: 0 4px 20px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+    }
+    .hero-title {
+      font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+      margin-bottom: var(--space-4);
+      max-width: 85%;
+      text-shadow: 0 2px 12px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+    }
+    .hero-subtitle {
+      font-size: 1.1rem;
+      max-width: 75%;
+      margin-bottom: var(--space-8);
+      line-height: 1.6;
+      text-shadow: 0 2px 12px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+    }
+    .hero-ctas {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-5);
+    }
+    .btn-primary, .btn-secondary {
+      flex: none;
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-sm);
+      min-height: 48px;
+    }
+    .hero-scroll-hint {
+      right: var(--space-6);
+    }
+  }
+
+  /* Small Desktop specific styles */
+  @media (min-width: 1025px) and (max-width: 1440px) {
+    .hero-fade-overlay {
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        rgba(0, 0, 0, 0) 100%
+      );
+      z-index: -1;
     }
   }
 </style>

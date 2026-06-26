@@ -521,16 +521,21 @@ const emailUrl = `mailto:${siteConfig.email}`;
     flex-direction: column;
     gap: var(--space-12);
     margin-bottom: var(--space-16);
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     .footer-top {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
-      text-align: left;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer-top {
+      grid-template-columns: 1.5fr 1fr;
     }
   }
 
@@ -538,13 +543,13 @@ const emailUrl = `mailto:${siteConfig.email}`;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    max-width: 300px;
-    align-items: center;
+    max-width: 100%;
+    align-items: flex-start;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .footer-brand {
-      align-items: flex-start;
+      max-width: 300px;
     }
   }
 
@@ -569,22 +574,23 @@ const emailUrl = `mailto:${siteConfig.email}`;
   }
 
   .footer-nav {
-    display: flex;
-    gap: var(--space-12);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
     width: 100%;
-    justify-content: center;
   }
 
   @media (min-width: 480px) {
     .footer-nav {
-      gap: var(--space-24);
+      gap: var(--space-16);
     }
   }
 
   @media (min-width: 768px) {
     .footer-nav {
-      width: auto;
+      display: flex;
       justify-content: flex-end;
+      gap: var(--space-24);
     }
   }
 
@@ -628,18 +634,18 @@ const emailUrl = `mailto:${siteConfig.email}`;
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     border-top: 1px solid
       color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
     padding-top: var(--space-8);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     .footer-bottom {
       flex-direction: row;
       justify-content: space-between;
-      text-align: left;
+      align-items: center;
     }
   }
 
@@ -647,13 +653,7 @@ const emailUrl = `mailto:${siteConfig.email}`;
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    align-items: center;
-  }
-
-  @media (min-width: 768px) {
-    .footer-copyright {
-      align-items: flex-start;
-    }
+    align-items: flex-start;
   }
 
   .footer-copyright p {

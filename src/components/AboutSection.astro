@@ -31,7 +31,7 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
       disableRotation={false}
     />
   </div>
-  <div class="container mx-auto px-6 max-w-4xl">
+  <div class="container mx-auto px-6 max-w-5xl">
     <div class="about-centered-container">
       <p class="section-label reveal about-label">
         {section_label}
@@ -85,7 +85,7 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
   }
 
   .about-centered-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     text-align: center;
     display: flex;
@@ -111,6 +111,7 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
     letter-spacing: -0.02em;
     color: var(--clr-text-primary);
     margin-bottom: var(--space-6);
+    text-wrap: balance;
   }
 
   .about-bio {

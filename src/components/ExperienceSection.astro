@@ -36,7 +36,7 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
   <div class="experience-glow experience-glow-1"></div>
   <div class="experience-glow experience-glow-2"></div>
 
-  <div class="container relative z-10">
+  <div class="container mx-auto px-6 relative z-10">
     <div class="experience-header-wrapper">
       <p class="section-label reveal inline-block">{section_label}</p>
       <h2
@@ -148,6 +148,7 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     max-width: 560px;
     line-height: 1.7;
     opacity: 0.9;
+    text-align: center;
   }
 
   .experience-flow-wrapper {
@@ -172,6 +173,9 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
   }
 
   .experience-header-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     margin-bottom: var(--space-16);
     position: relative;
@@ -201,9 +205,6 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
   }
 
   @media (min-width: 768px) {
-    .experience-header-wrapper {
-      text-align: left;
-    }
     .experience-flow-wrapper {
       margin-left: 0;
       width: 100%;
@@ -215,6 +216,16 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     .experience-interaction-hint svg {
       width: 16px;
       height: 16px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .experience-header-wrapper {
+      align-items: flex-start;
+      text-align: left;
+    }
+    .experience-subheading {
+      text-align: left;
     }
   }
 </style>

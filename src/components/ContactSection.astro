@@ -43,12 +43,12 @@ const emailDomain = emailParts[1] || "";
   <div class="antigravity-background">
     <Antigravity
       client:visible
-      count={300}
+      count={250}
       magnetRadius={6}
       ringRadius={7}
       waveSpeed={0.4}
       waveAmplitude={1}
-      particleSize={1.5}
+      particleSize={1}
       lerpSpeed={0.05}
       color="#00E5FF"
       autoAnimate={true}
@@ -80,7 +80,11 @@ const emailDomain = emailParts[1] || "";
               aria-label="Instagram"
               title="Instagram"
             >
-              <Icon name="bx:bxl-instagram" class="contact-icon" aria-hidden="true" />
+              <Icon
+                name="bx:bxl-instagram"
+                class="contact-icon"
+                aria-hidden="true"
+              />
             </a>
           )
         }
@@ -91,7 +95,11 @@ const emailDomain = emailParts[1] || "";
           title={email_label}
           onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}
         >
-          <Icon name="bx:bxs-envelope" class="contact-icon" aria-hidden="true" />
+          <Icon
+            name="bx:bxs-envelope"
+            class="contact-icon"
+            aria-hidden="true"
+          />
         </button>
 
         {
@@ -104,7 +112,11 @@ const emailDomain = emailParts[1] || "";
               aria-label="GitHub"
               title="GitHub"
             >
-              <Icon name="bx:bxl-github" class="contact-icon" aria-hidden="true" />
+              <Icon
+                name="bx:bxl-github"
+                class="contact-icon"
+                aria-hidden="true"
+              />
             </a>
           )
         }
@@ -129,10 +141,16 @@ const emailDomain = emailParts[1] || "";
     width: 100%;
     height: 100%;
     z-index: 1;
-    opacity: 0.25;
+    opacity: 0.2;
     contain: size layout style;
     isolation: isolate;
     pointer-events: none;
+    -webkit-mask-image: radial-gradient(
+      circle at center,
+      transparent 20%,
+      black 60%
+    );
+    mask-image: radial-gradient(circle at center, transparent 20%, black 60%);
   }
 
   .contact-section .container {

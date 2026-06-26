@@ -28,7 +28,7 @@ const galleryItems = items.map((item) => ({
   <div class="gallery-glow gallery-glow-1"></div>
   <div class="gallery-glow gallery-glow-2"></div>
 
-  <div class="container relative z-10">
+  <div class="container mx-auto px-6 relative z-10">
     <div class="gallery-header-wrapper">
       <p class="section-label reveal inline-block">{section_label}</p>
       <h2
@@ -157,6 +157,7 @@ const galleryItems = items.map((item) => ({
     max-width: 560px;
     line-height: 1.7;
     opacity: 0.9;
+    text-align: center;
   }
 
   .gallery-flow-wrapper {
@@ -191,6 +192,9 @@ const galleryItems = items.map((item) => ({
   }
 
   .gallery-header-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     margin-bottom: var(--space-8);
     position: relative;
@@ -220,9 +224,6 @@ const galleryItems = items.map((item) => ({
   }
 
   @media (min-width: 768px) {
-    .gallery-header-wrapper {
-      text-align: left;
-    }
     .gallery-flow-wrapper {
       margin-left: 0;
       width: 100%;
@@ -237,6 +238,16 @@ const galleryItems = items.map((item) => ({
     .gallery-interaction-hint svg {
       width: 16px;
       height: 16px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-header-wrapper {
+      align-items: flex-start;
+      text-align: left;
+    }
+    .gallery-subheading {
+      text-align: left;
     }
   }
 </style>
