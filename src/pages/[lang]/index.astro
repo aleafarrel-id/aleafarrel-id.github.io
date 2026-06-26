@@ -43,49 +43,51 @@ const contactAnchor = `/${locale}/#contact`;
     </div>
   </div>
 
-  <AboutSection
-    section_label={data.about.section_label}
-    heading={data.about.heading}
-    bio_1={data.about.bio_1}
-    bio_2={data.about.bio_2}
-    skills_label={data.about.skills_label}
-  />
+  <div style="background: var(--clr-bg); position: relative; z-index: 10;">
+    <AboutSection
+      section_label={data.about.section_label}
+      heading={data.about.heading}
+      bio_1={data.about.bio_1}
+      bio_2={data.about.bio_2}
+      skills_label={data.about.skills_label}
+    />
 
-  <ProjectsSection
-    section_label={data.projects.section_label}
-    heading={data.projects.heading}
-    subheading={data.projects.subheading}
-    view_project={data.projects.view_project}
-    items={data.projects.items}
-    github_cta={data.projects.github_cta}
-    github_button={data.projects.github_button}
-  />
+    <ProjectsSection
+      section_label={data.projects.section_label}
+      heading={data.projects.heading}
+      subheading={data.projects.subheading}
+      view_project={data.projects.view_project}
+      items={data.projects.items}
+      github_cta={data.projects.github_cta}
+      github_button={data.projects.github_button}
+    />
 
-  <ExperienceSection
-    section_label={data.experience.section_label}
-    heading={data.experience.heading}
-    subheading={data.experience.subheading}
-    interaction_hint={data.experience.interaction_hint}
-    center_label={data.experience.center_label}
-    center_subtitle={data.experience.center_subtitle}
-    preview_label={data.experience.preview_label}
-    items={data.experience.items}
-  />
+    <ExperienceSection
+      section_label={data.experience.section_label}
+      heading={data.experience.heading}
+      subheading={data.experience.subheading}
+      interaction_hint={data.experience.interaction_hint}
+      center_label={data.experience.center_label}
+      center_subtitle={data.experience.center_subtitle}
+      preview_label={data.experience.preview_label}
+      items={data.experience.items}
+    />
 
-  <GallerySection
-    section_label={data.gallery.section_label}
-    heading={data.gallery.heading}
-    subheading={data.gallery.subheading}
-    interaction_hint={data.gallery.interaction_hint}
-    items={data.gallery.images}
-  />
+    <GallerySection
+      section_label={data.gallery.section_label}
+      heading={data.gallery.heading}
+      subheading={data.gallery.subheading}
+      interaction_hint={data.gallery.interaction_hint}
+      items={data.gallery.images}
+    />
 
-  <ContactSection
-    section_label={data.contact.section_label}
-    heading={data.contact.heading}
-    subheading={data.contact.subheading}
-    email_label={data.contact.email_label}
-  />
+    <ContactSection
+      section_label={data.contact.section_label}
+      heading={data.contact.heading}
+      subheading={data.contact.subheading}
+      email_label={data.contact.email_label}
+    />
+  </div>
 </BaseLayout>
 
 <script>

@@ -27,7 +27,9 @@ const instagramUrl =
   siteConfig.socials.find((s) => s.icon === "instagram")?.url || "#";
 const githubUrl =
   siteConfig.socials.find((s) => s.icon === "github")?.url || "#";
-const emailUrl = `mailto:${siteConfig.email}`;
+const emailParts = siteConfig.email.split("@");
+const emailUser = emailParts[0];
+const emailDomain = emailParts[1] || "";
 ---
 
 <!doctype html>
@@ -113,27 +115,27 @@ const emailUrl = `mailto:${siteConfig.email}`;
           style="list-style:none;display:flex;flex-direction:column;align-items:center;gap:2.5rem;padding:0;"
         >
           <li>
-            <a href={`${base}/#about`} class="mobile-nav-link"
+            <a href={`${base}/#about`} class="mobile-nav-link" aria-label={data.nav.about}
               >{data.nav.about}</a
             >
           </li>
           <li>
-            <a href={`${base}/#projects`} class="mobile-nav-link"
+            <a href={`${base}/#projects`} class="mobile-nav-link" aria-label={data.nav.projects}
               >{data.nav.projects}</a
             >
           </li>
           <li>
-            <a href={`${base}/#experience`} class="mobile-nav-link"
+            <a href={`${base}/#experience`} class="mobile-nav-link" aria-label={data.nav.experience}
               >{data.nav.experience}</a
             >
           </li>
           <li>
-            <a href={`${base}/#gallery`} class="mobile-nav-link"
+            <a href={`${base}/#gallery`} class="mobile-nav-link" aria-label={data.nav.gallery}
               >{data.nav.gallery}</a
             >
           </li>
           <li>
-            <a href={`${base}/#contact`} class="mobile-nav-link"
+            <a href={`${base}/#contact`} class="mobile-nav-link" aria-label={data.nav.contact}
               >{data.nav.contact}</a
             >
           </li>
@@ -148,11 +150,11 @@ const emailUrl = `mailto:${siteConfig.email}`;
 
       <nav aria-label="Main navigation">
         <ul class="nav-links">
-          <li><a href={`${base}/#about`}> {data.nav.about}</a></li>
-          <li><a href={`${base}/#projects`}> {data.nav.projects}</a></li>
-          <li><a href={`${base}/#experience`}> {data.nav.experience}</a></li>
-          <li><a href={`${base}/#gallery`}> {data.nav.gallery}</a></li>
-          <li><a href={`${base}/#contact`}> {data.nav.contact}</a></li>
+          <li><a href={`${base}/#about`} aria-label={data.nav.about}> {data.nav.about}</a></li>
+          <li><a href={`${base}/#projects`} aria-label={data.nav.projects}> {data.nav.projects}</a></li>
+          <li><a href={`${base}/#experience`} aria-label={data.nav.experience}> {data.nav.experience}</a></li>
+          <li><a href={`${base}/#gallery`} aria-label={data.nav.gallery}> {data.nav.gallery}</a></li>
+          <li><a href={`${base}/#contact`} aria-label={data.nav.contact}> {data.nav.contact}</a></li>
         </ul>
       </nav>
 
@@ -181,7 +183,7 @@ const emailUrl = `mailto:${siteConfig.email}`;
 
     <canvas id="hero-canvas" aria-hidden="true"></canvas>
 
-    <main id="main-content" tabindex="-1">
+    <main id="main-content">
       <slot />
     </main>
 
@@ -192,8 +194,8 @@ const emailUrl = `mailto:${siteConfig.email}`;
             <a
               href={`${base}/`}
               class="footer-logo"
-              aria-label="Alea Farrel — Home">AF<span>.</span></a
-            >
+              aria-label="Alea Farrel — Home"
+            >AF<span>.</span></a>
             <p class="footer-description">
               {data.footer.description}
             </p>
@@ -220,7 +222,7 @@ const emailUrl = `mailto:${siteConfig.email}`;
                     target="_blank"
                     rel="noopener noreferrer">Instagram</a>
                 </li>
-                <li><a href={emailUrl}>Email</a></li>
+                <li><button onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}>Email</button></li>
                 <li>
                   <a href={githubUrl} target="_blank" rel="noopener noreferrer"
                     >GitHub</a>
@@ -352,9 +354,38 @@ const emailUrl = `mailto:${siteConfig.email}`;
         if (e.key === "Escape") closeMenu();
       });
 
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href*="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          const href = anchor.getAttribute('href');
+          if (!href) return;
+          
+          const url = new URL(href, window.location.href);
+          if (url.pathname === window.location.pathname) {
+            const targetId = url.hash;
+            if (targetId && targetId !== '#') {
+              const targetEl = document.querySelector(targetId);
+              if (targetEl) {
+                e.preventDefault();
+                if (lenis) {
+                  lenis.scrollTo(targetEl, { offset: -80, duration: 1.2 });
+                } else {
+                  const top = targetEl.getBoundingClientRect().top + window.scrollY - 80;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                }
+              }
+            }
+          }
+        });
+      });
+
       const backToTopBtn = document.getElementById("back-to-top");
       backToTopBtn?.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (lenis) {
+          lenis.scrollTo(0, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       });
 
       window.addEventListener(
@@ -617,15 +648,22 @@ const emailUrl = `mailto:${siteConfig.email}`;
     gap: var(--space-4);
   }
 
-  .footer-nav-col a {
+  .footer-nav-col a,
+  .footer-nav-col button {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
     color: var(--clr-text-secondary);
     transition: color var(--duration-fast) ease;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
   }
 
   @media (hover: hover) {
-    .footer-nav-col a:hover {
+    .footer-nav-col a:hover,
+    .footer-nav-col button:hover {
       color: var(--clr-accent-blue);
     }
   }

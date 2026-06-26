@@ -47,7 +47,9 @@ function drawFrame(img: HTMLImageElement | null): void {
 function resizeCanvas(): void {
   if (!canvas) return;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const maxDpr = isMobile ? 1.25 : 2;
+  const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
   const rect = canvas.getBoundingClientRect();
 
   canvas.width = rect.width * dpr;
@@ -59,6 +61,9 @@ function resizeCanvas(): void {
 }
 
 async function initCanvasScroll(): Promise<void> {
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const step = isMobile ? 3 : 1;
+
   canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
   ctx = canvas?.getContext('2d') ?? null;
 
@@ -90,13 +95,13 @@ async function initCanvasScroll(): Promise<void> {
 
   let currentPhraseIndex = 0;
 
-  function updateProgress(loaded: number): void {
-    const pct = Math.round((loaded / FRAME_COUNT) * 100);
+  function updateProgress(loaded: number, targetLoadCount: number): void {
+    const pct = Math.min(100, Math.round((loaded / targetLoadCount) * 100));
 
     let activePhrase = "";
     if (phrases.length > 0) {
       const phraseIndex = Math.min(
-        Math.floor((loaded / FRAME_COUNT) * phrases.length),
+        Math.floor((loaded / targetLoadCount) * phrases.length),
         phrases.length - 1
       );
       activePhrase = phrases[phraseIndex];
@@ -110,7 +115,7 @@ async function initCanvasScroll(): Promise<void> {
 
     if (phrases.length > 0 && phraseEl) {
       const phraseIndex = Math.min(
-        Math.floor((loaded / FRAME_COUNT) * phrases.length),
+        Math.floor((loaded / targetLoadCount) * phrases.length),
         phrases.length - 1
       );
 
@@ -126,18 +131,19 @@ async function initCanvasScroll(): Promise<void> {
   }
 
   let loadedCount = 0;
+  const targetLoadCount = Math.ceil(FRAME_COUNT / step);
 
-  for (let start = 0; start < FRAME_COUNT; start += BATCH_SIZE) {
-    const end = Math.min(start + BATCH_SIZE - 1, FRAME_COUNT - 1);
+  for (let start = 0; start < FRAME_COUNT; start += BATCH_SIZE * step) {
+    const end = Math.min(start + BATCH_SIZE * step - 1, FRAME_COUNT - 1);
     const batch: Promise<void>[] = [];
 
-    for (let i = start; i <= end; i++) {
+    for (let i = start; i <= end; i += step) {
       const idx = i;
       batch.push(
         loadImage(frameUrl(i)).then(img => {
           frames[idx] = img;
           loadedCount++;
-          updateProgress(loadedCount);
+          updateProgress(loadedCount, targetLoadCount);
 
           if (idx === 0) drawFrame(frames[0]);
         })
@@ -159,12 +165,17 @@ async function initCanvasScroll(): Promise<void> {
     trigger: driver,
     start: 'top top',
     end: 'bottom bottom',
-    scrub: 0.4,
+    scrub: isMobile ? 1 : 0.4,
     onUpdate(self) {
       const idx = Math.round(self.progress * (FRAME_COUNT - 1));
-      const clamped = Math.max(0, Math.min(idx, FRAME_COUNT - 1));
+      let clamped = Math.max(0, Math.min(idx, FRAME_COUNT - 1));
+      
+      // Snap to the nearest loaded frame if skipping
+      if (isMobile) {
+        clamped = Math.round(clamped / step) * step;
+      }
 
-      if (clamped !== currentIndex) {
+      if (clamped !== currentIndex && frames[clamped]) {
         currentIndex = clamped;
         requestAnimationFrame(() => drawFrame(frames[currentIndex]));
       }
