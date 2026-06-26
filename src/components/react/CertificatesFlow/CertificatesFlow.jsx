@@ -14,6 +14,7 @@ import {
   ReactFlowProvider
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { globalEvents, EVENTS } from '../../../lib/events';
 import './CertificatesFlow.css';
 
 const CenterNode = ({ data }) => (
@@ -250,7 +251,7 @@ export default function CertificatesFlow({ items, strings }) {
       setIsClosing(false);
       setPreviewImage(imagePath);
       document.body.style.overflow = "hidden";
-      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-stop"));
+      globalEvents.emit(EVENTS.LENIS_STOP);
     }
   }, []);
 
@@ -266,14 +267,14 @@ export default function CertificatesFlow({ items, strings }) {
     return () => {
       if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
       document.body.style.overflow = "";
-      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
+      globalEvents.emit(EVENTS.LENIS_START);
     };
   }, []);
 
   const handleClose = () => {
     setIsClosing(true);
     document.body.style.overflow = "";
-    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
+    globalEvents.emit(EVENTS.LENIS_START);
     closeTimeoutRef.current = setTimeout(() => {
       setPreviewImage(null);
       setIsClosing(false);

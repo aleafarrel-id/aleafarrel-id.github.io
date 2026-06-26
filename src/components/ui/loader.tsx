@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
+import { globalEvents, EVENTS } from "../../lib/events";
 
 export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
   const [progress, setProgress] = useState(0);
@@ -9,28 +10,28 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-stop"));
+    globalEvents.emit(EVENTS.LENIS_STOP);
 
-    const handleProgress = (e: any) => {
-      setProgress(e.detail.pct);
-      if (e.detail.phrase) {
-        setPhrase(e.detail.phrase);
+    const unsubProgress = globalEvents.on(EVENTS.LOADER_PROGRESS, (detail: any) => {
+      if (detail) {
+        setProgress(detail.pct);
+        if (detail.phrase) {
+          setPhrase(detail.phrase);
+        }
       }
-    };
-    const handleDone = () => {
+    });
+
+    const unsubDone = globalEvents.on(EVENTS.PRELOADER_DONE, () => {
       setVisible(false);
       document.body.style.overflow = "";
-      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
-    };
-
-    window.addEventListener("loader-progress", handleProgress);
-    document.addEventListener("preloader-done", handleDone);
+      globalEvents.emit(EVENTS.LENIS_START);
+    });
 
     return () => {
-      window.removeEventListener("loader-progress", handleProgress);
-      document.removeEventListener("preloader-done", handleDone);
+      unsubProgress();
+      unsubDone();
       document.body.style.overflow = "";
-      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
+      globalEvents.emit(EVENTS.LENIS_START);
     };
   }, []);
 

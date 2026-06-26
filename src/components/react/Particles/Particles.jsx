@@ -231,6 +231,12 @@ const Particles = ({
         window.removeEventListener('mousemove', handleMouseMove);
       }
       cancelAnimationFrame(animationFrameId);
+      
+      // Cleanup OGL memory
+      if (geometry) geometry.remove();
+      if (program) program.remove();
+      if (particles) particles.remove();
+
       if (container.contains(gl.canvas)) {
         container.removeChild(gl.canvas);
       }
