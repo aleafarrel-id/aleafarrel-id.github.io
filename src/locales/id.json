@@ -44,6 +44,8 @@
     "subheading": "Kumpulan proyek yang mencerminkan minat saya dalam menciptakan karya yang bermakna.",
     "view_project": "Lihat Proyek",
     "view_code": "Kode Sumber",
+    "github_cta": "Untuk melihat lebih banyak, kunjungi GitHub saya",
+    "github_button": "Lihat GitHub",
     "items": [
       {
         "id": "rapidtextergui",

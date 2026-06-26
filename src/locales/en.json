@@ -44,6 +44,8 @@
     "subheading": "A curated selection of projects that represent my passion for building things that matter.",
     "view_project": "View Project",
     "view_code": "Source Code",
+    "github_cta": "To see more of my work, visit my GitHub",
+    "github_button": "View GitHub",
     "items": [
       {
         "id": "rapidtextergui",

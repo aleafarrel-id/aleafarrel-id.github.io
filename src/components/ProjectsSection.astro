@@ -15,10 +15,20 @@ interface Props {
   heading: string;
   subheading: string;
   view_project: string;
+  github_cta?: string;
+  github_button?: string;
   items: ProjectItem[];
 }
 
-const { section_label, heading, subheading, view_project, items } = Astro.props;
+const {
+  section_label,
+  heading,
+  subheading,
+  view_project,
+  github_cta,
+  github_button,
+  items,
+} = Astro.props;
 
 import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
 ---
@@ -26,6 +36,9 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
 <section id="projects" class="section" aria-labelledby="projects-heading">
   <div class="projects-glow projects-glow-1"></div>
   <div class="projects-glow projects-glow-2"></div>
+  <div class="projects-glow projects-glow-3"></div>
+  <div class="projects-glow projects-glow-4"></div>
+  <div class="projects-glow projects-glow-cta"></div>
   <div class="projects-grid-bg"></div>
 
   <div class="container relative z-10">
@@ -43,6 +56,55 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
       items={items}
       view_project={view_project}
     />
+
+    {
+      github_cta && github_button && (
+        <div class="projects-github-cta-container reveal reveal-delay-3">
+          <div class="projects-github-cta">
+            <div class="cta-grid-bg" />
+
+            <div class="cta-content relative z-10">
+              <div class="cta-icon-wrapper">
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg>
+              </div>
+
+              <h3 class="github-cta-text font-display">{github_cta}</h3>
+
+              <a
+                href="https://github.com/aleafarrel-id"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="github-cta-btn"
+              >
+                <span>{github_button}</span>
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -71,17 +133,62 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
   }
 
   .projects-glow-2 {
-    bottom: 10%;
+    bottom: 40%;
     right: 5%;
     width: 500px;
     height: 500px;
     background: radial-gradient(circle, var(--clr-glow-2) 0%, transparent 70%);
   }
 
+  .projects-glow-3 {
+    bottom: 0%;
+    left: 10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--clr-accent-blue) 12%, transparent) 0%,
+      transparent 70%
+    );
+  }
+
+  .projects-glow-4 {
+    bottom: -10%;
+    right: 15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--clr-accent-orange) 10%, transparent) 0%,
+      transparent 70%
+    );
+  }
+
+  .projects-glow-cta {
+    bottom: 0%;
+    left: calc(50% - 500px);
+    width: 1000px;
+    height: 400px;
+    background: radial-gradient(
+      ellipse at center,
+      color-mix(in srgb, var(--clr-accent-blue) 40%, transparent) 0%,
+      color-mix(in srgb, var(--clr-accent-orange) 15%, transparent) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
   @keyframes float-projects {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(30px, -40px) scale(1.05); }
-    100% { transform: translate(-20px, 20px) scale(0.95); }
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(30px, -40px) scale(1.05);
+    }
+    100% {
+      transform: translate(-20px, 20px) scale(0.95);
+    }
   }
 
   .projects-grid-bg {
@@ -90,12 +197,24 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     z-index: 0;
     pointer-events: none;
     opacity: 0.15;
-    background-image: 
-      linear-gradient(to right, color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1px, transparent 1px);
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1px,
+        transparent 1px
+      );
     background-size: 60px 60px;
     mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(
+      circle at center,
+      black 20%,
+      transparent 80%
+    );
   }
 
   .projects-heading {
@@ -118,6 +237,143 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
   @media (min-width: 768px) {
     .projects-subheading {
       margin-bottom: var(--space-16);
+    }
+  }
+
+  .projects-github-cta-container {
+    position: relative;
+    /* Pull up negative margin on mobile to counter scroll stack padding */
+    margin-top: calc(-1 * var(--space-4));
+    z-index: var(--z-base, 10);
+    width: 900px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .projects-github-cta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-8) var(--space-6);
+    border-radius: var(--radius-xl);
+    width: 100%;
+
+    background: color-mix(in srgb, var(--clr-bg-deep) 85%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    backdrop-filter: blur(var(--blur-md, 16px));
+    -webkit-backdrop-filter: blur(var(--blur-md, 16px));
+
+    box-shadow: inset 0 1px 0
+      color-mix(in srgb, var(--clr-text-primary) 10%, transparent);
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .cta-grid-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.1;
+    background-image: radial-gradient(
+      var(--clr-text-primary) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .cta-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-14, 56px);
+    height: var(--space-14, 56px);
+    border-radius: var(--radius-full, 50%);
+    background: color-mix(in srgb, var(--clr-accent-blue) 15%, transparent);
+    color: var(--clr-accent-blue-light, var(--clr-accent-blue));
+    margin-bottom: var(--space-6);
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--clr-accent-blue) 30%, transparent);
+    flex-shrink: 0;
+  }
+
+  .cta-icon-wrapper svg {
+    width: var(--space-7, 28px);
+    height: var(--space-7, 28px);
+  }
+
+  .github-cta-text {
+    font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-8);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    max-width: 600px;
+    line-height: 1.3;
+  }
+
+  .github-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-8);
+    min-height: var(--space-12, 48px);
+    border-radius: var(--radius-full, 9999px);
+    font-weight: 600;
+    font-size: var(--text-base, 16px);
+    background: var(--clr-text-primary);
+    color: var(--clr-bg-deep);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    box-shadow: 0 4px 14px
+      color-mix(in srgb, var(--clr-text-primary) 30%, transparent);
+  }
+
+  .github-cta-btn svg {
+    width: var(--space-5, 20px);
+    height: var(--space-5, 20px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (hover: hover) {
+    .github-cta-btn:hover {
+      background: color-mix(in srgb, var(--clr-text-primary) 90%, transparent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px
+        color-mix(in srgb, var(--clr-text-primary) 40%, transparent);
+    }
+
+    .github-cta-btn:hover svg {
+      transform: translateX(4px);
+    }
+  }
+
+  .github-cta-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px
+      color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
+  }
+
+  @media (min-width: 768px) {
+    .projects-github-cta-container {
+      margin-top: var(--space-32); /* Restore large margin on desktop */
+    }
+    .projects-github-cta {
+      padding: var(--space-10) var(--space-12);
     }
   }
 </style>
