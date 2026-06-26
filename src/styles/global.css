@@ -331,6 +331,75 @@ a {
 .reveal-delay-3 { transition-delay: 300ms; }
 .reveal-delay-4 { transition-delay: 400ms; }
 
+/* Interactive Overlay Components */
+.interaction-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: color-mix(in srgb, var(--shadow-dark) 70%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  color: var(--clr-text-primary);
+  cursor: pointer;
+  transition: opacity var(--duration-base) var(--ease-out-expo);
+  border-radius: inherit;
+}
+
+.interaction-overlay-icon {
+  margin-bottom: var(--space-3);
+  animation: pulse 2s var(--ease-inout) infinite;
+  filter: drop-shadow(0 20px 13px color-mix(in srgb, var(--shadow-dark) 10%, transparent));
+  color: color-mix(in srgb, var(--clr-text-primary) 90%, transparent);
+}
+
+.interaction-overlay-text {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-base);
+  letter-spacing: 0.025em;
+  text-shadow: 0 4px 6px color-mix(in srgb, var(--shadow-dark) 50%, transparent);
+}
+
+.interaction-done-btn {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-overlay);
+  background-color: color-mix(in srgb, var(--shadow-dark) 90%, transparent);
+  color: var(--clr-text-primary);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-5);
+  min-width: 80px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--clr-text-primary) 15%, transparent);
+  box-shadow: 0 10px 25px -5px color-mix(in srgb, var(--shadow-dark) 50%, transparent);
+  transition: all var(--duration-fast) var(--ease-out-expo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.interaction-done-btn:hover {
+  background-color: var(--shadow-dark);
+  border-color: color-mix(in srgb, var(--clr-text-primary) 25%, transparent);
+  transform: translateY(-1px);
+}
+
+.interaction-done-btn:active {
+  transform: scale(0.96);
+  background-color: var(--shadow-dark);
+}
+
 /* Media Queries */
 @media (min-width: 768px) {
   .container {
@@ -338,6 +407,14 @@ a {
   }
   .section {
     padding: var(--space-32) 0;
+  }
+  .interaction-overlay-text {
+    font-size: var(--text-lg);
+  }
+  .interaction-done-btn {
+    font-size: var(--text-base);
+    padding: 10px 24px;
+    min-width: 100px;
   }
 }
 
@@ -366,3 +443,5 @@ a {
     transform: none;
   }
 }
+
+

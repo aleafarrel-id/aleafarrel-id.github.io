@@ -96,7 +96,6 @@
   height: calc(var(--vh, 1svh) * 60);
   margin-left: calc(-1 * var(--space-4));
   width: calc(100% + var(--space-8));
-  overscroll-behavior: contain;
   touch-action: pan-y;
 }
 

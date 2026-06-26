@@ -16,6 +16,10 @@ interface Props {
   center_subtitle?: string;
   preview_label?: string;
   items: ExperienceItem[];
+  interactionStrings?: {
+    tap_to_interact: string;
+    done: string;
+  };
 }
 
 const {
@@ -27,6 +31,7 @@ const {
   center_subtitle,
   preview_label,
   items,
+  interactionStrings,
 } = Astro.props;
 
 import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
@@ -53,12 +58,13 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     <div class="reveal reveal-delay-3">
       <div class="experience-flow-wrapper">
         <CertificatesFlow
-          client:idle
+          client:visible
           items={items}
           strings={{
             centerLabel: center_label,
             centerSubtitle: center_subtitle,
             previewLabel: preview_label,
+            ...interactionStrings,
           }}
         />
       </div>

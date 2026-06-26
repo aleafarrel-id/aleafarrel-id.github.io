@@ -13,9 +13,13 @@ interface Props {
   subheading: string;
   interaction_hint?: string;
   items: GalleryImage[];
+  interactionStrings?: {
+    tap_to_interact: string;
+    done: string;
+  };
 }
 
-const { section_label, heading, subheading, interaction_hint, items } =
+const { section_label, heading, subheading, interaction_hint, items, interactionStrings } =
   Astro.props;
 
 const galleryItems = items.map((item) => ({
@@ -45,13 +49,14 @@ const galleryItems = items.map((item) => ({
     <div class="reveal reveal-delay-3 mt-12">
       <div class="gallery-flow-wrapper">
         <CircularGallery
-          client:idle
+          client:visible
           items={galleryItems}
           bend={1.5}
           textColor="#ffffff"
           borderRadius={0.05}
           scrollEase={0.05}
           font="bold 14px 'Space Grotesk', sans-serif"
+          strings={interactionStrings}
         />
       </div>
       {

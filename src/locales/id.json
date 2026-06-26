@@ -16,7 +16,7 @@
   "loading": {
     "label": "Memuat Pengalaman",
     "phrases": [
-      "Memuat aset 3D...",
+      "Memuat Aset Portofolio...",
       "Menyiapkan tekstur...",
       "Membangun ruang...",
       "Hampir selesai..."
@@ -286,7 +286,11 @@
   },
   "footer": {
     "rights": "Semua hak dilindungi.",
-    "description": "Menciptakan pengalaman digital yang imersif melalui rancangan, kode, dan desain.",
-    "built_with": "Dibangun dengan penuh dedikasi dan ketelitian."
+    "description": "Menciptakan pengalaman digital yang imersif melalui rekayasa, kode, dan desain.",
+    "built_with": "Dibangun dengan dedikasi dan presisi."
+  },
+  "interaction": {
+    "tap_to_interact": "Ketuk untuk berinteraksi",
+    "done": "Selesai"
   }
 }

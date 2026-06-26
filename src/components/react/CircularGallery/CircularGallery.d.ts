@@ -14,6 +14,7 @@ export interface CircularGalleryProps {
   fontUrl?: string;
   scrollSpeed?: number;
   scrollEase?: number;
+  strings?: any;
 }
 
 export default function CircularGallery(props: CircularGalleryProps): JSX.Element;

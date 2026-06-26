@@ -724,6 +724,22 @@ class App {
   }
 }
 
+/**
+ * @typedef {Object} CircularGalleryProps
+ * @property {Array<any>} items
+ * @property {number} [bend]
+ * @property {string} [textColor]
+ * @property {number} [borderRadius]
+ * @property {string} [font]
+ * @property {string} [fontUrl]
+ * @property {number} [scrollSpeed]
+ * @property {number} [scrollEase]
+ * @property {{tap_to_interact?: string, done?: string}} [strings]
+ */
+
+/**
+ * @param {CircularGalleryProps} props
+ */
 export default function CircularGallery({
   items,
   bend = 3,
@@ -732,10 +748,22 @@ export default function CircularGallery({
   font = 'bold 30px Figtree',
   fontUrl,
   scrollSpeed = 2,
-  scrollEase = 0.05
+  scrollEase = 0.05,
+  strings
 }) {
   const containerRef = useRef(null);
   const [webGLFailed, setWebGLFailed] = useState(false);
+  const [isInteractive, setIsInteractive] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 768);
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -772,7 +800,7 @@ export default function CircularGallery({
       <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory px-4 md:px-12" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' }}>
         {items.map((item, i) => (
           <div key={i} className="flex-none w-[280px] h-[380px] md:w-[360px] md:h-[480px] snap-center rounded-2xl overflow-hidden relative" style={{ boxShadow: 'var(--neu-raised)', border: '1px solid var(--shadow-light)', background: 'var(--clr-bg-deep)' }}>
-            <img src={item.image || item.src} alt={item.text || item.title} className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <img src={item.image || item.src} alt={item.text || item.title} className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" width="800" height="1000" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
               <h3 className="text-white font-display font-bold text-2xl tracking-tight mb-2">{item.text || item.title}</h3>
@@ -784,11 +812,42 @@ export default function CircularGallery({
   }
 
   return (
-    <div
-      className="circular-gallery"
-      ref={containerRef}
-      role="region"
-      aria-label="Circular image gallery. Use left and right arrow keys to navigate."
-    />
+    <div className="relative w-full h-full">
+      {!isInteractive && isMobile && (
+        <div 
+          className="interaction-overlay"
+          onClick={() => setIsInteractive(true)}
+          role="button"
+          tabIndex={0}
+          aria-label={strings?.tap_to_interact || "Ketuk untuk berinteraksi"}
+        >
+          <div className="interaction-overlay-icon">
+            <svg viewBox="0 0 84.91 122.88" fill="currentColor" width="48" height="48">
+              <path d="M26.6,80.57c-0.11-0.06-0.25-0.14-0.37-0.23c-1.49-1.18-3.13-2.51-4.54-3.66c-2.06-1.69-4.43-3.64-6.09-5.02 c-1.13-0.93-2.42-1.58-3.63-1.83c-0.79-0.14-1.49-0.14-2.06,0.08c-0.45,0.2-0.85,0.56-1.1,1.13c-0.34,0.76-0.51,1.83-0.42,3.3 c0.08,1.3,0.54,2.71,1.13,4.09c0.87,2,2.09,3.86,2.99,5.04c0.06,0.08,0.11,0.14,0.14,0.23l17.84,25.48 c0.23,0.34,0.37,0.71,0.39,1.07c0.37,2.93,0.99,5.16,1.89,6.54c0.68,1.01,1.52,1.52,2.62,1.49h28.07c1.75-0.03,3.33-0.53,4.79-1.55 c1.61-1.1,3.04-2.82,4.37-5.13c0.03-0.03,0.06-0.08,0.08-0.11c0.51-0.87,1.18-2,1.83-3.07c2.85-4.68,5.33-8.77,5.61-14.57l-0.17-8 c-0.03-0.11-0.03-0.23-0.03-0.34s0-0.87,0.03-1.89c0.06-5.3,0.14-11.84-4.71-12.65h-3.13c-0.03,1.49-0.11,3.02-0.2,4.48 c-0.08,1.32-0.17,2.56-0.17,3.78c0,1.3-1.04,2.34-2.34,2.34c-1.3,0-2.34-1.04-2.34-2.34c0-1.21,0.08-2.62,0.17-4.09 c0.31-4.99,0.68-10.71-3.3-11.41h-3.1c-0.17,0-0.34-0.03-0.51-0.06c0.03,1.8-0.08,3.66-0.2,5.47C60.08,70.46,60,71.7,60,72.91 c0,1.3-1.04,2.34-2.34,2.34c-1.3,0-2.34-1.04-2.34-2.34c0-1.21,0.08-2.62,0.17-4.09c0.31-4.99,0.68-10.71-3.3-11.41h-3.1 c-0.23,0-0.42-0.03-0.62-0.08v9.1c0,1.3-1.04,2.34-2.34,2.34c-1.3,0-2.34-1.04-2.34-2.34V41.99c0-4.09-1.66-6.68-3.8-7.75 c-0.79-0.4-1.63-0.59-2.45-0.59c-0.82,0-1.66,0.2-2.45,0.59c-2.11,1.07-3.75,3.66-3.75,7.86v42.81c0,1.3-1.04,2.34-2.34,2.34 c-1.3,0-2.34-1.04-2.34-2.34v-4.34H26.6L26.6,80.57z M39.29,13.99c0,1.55-1.26,2.78-2.78,2.78c-1.55,0-2.78-1.26-2.78-2.78V2.78 c0-1.55,1.26-2.78,2.78-2.78c1.55,0,2.78,1.26,2.78,2.78V13.99L39.29,13.99L39.29,13.99z M13.99,36.95c1.55,0,2.78,1.26,2.78,2.78 c0,1.55-1.26,2.78-2.78,2.78H2.78C1.23,42.5,0,41.24,0,39.73c0-1.55,1.26-2.78,2.78-2.78H13.99L13.99,36.95z M21.92,20.33 c1.08,1.08,1.08,2.85,0,3.93c-1.08,1.08-2.85,1.08-3.93,0l-7.9-7.93c-1.08-1.08-1.08-2.85,0-3.93c1.08-1.08,2.85-1.08,3.93,0 L21.92,20.33L21.92,20.33z M58.47,42.5c-1.55,0-2.78-1.26-2.78-2.78c0-1.55,1.26-2.78,2.78-2.78h11.21c1.55,0,2.78,1.26,2.78,2.78 c0,1.55-1.26,2.78-2.78,2.78H58.47L58.47,42.5z M54.47,23.65c-1.08,1.08-2.85,1.08-3.93,0c-1.08-1.08-1.08-2.85,0-3.93l7.9-7.93 c1.08-1.08,2.85-1.08,3.93,0c1.08,1.08,1.08,2.85,0,3.93L54.47,23.65L54.47,23.65z M48.47,52.79c0.2-0.06,0.39-0.08,0.62-0.08h3.24 c0.17,0,0.37,0.03,0.53,0.06c4.31,0.68,6.26,3.19,7.05,6.45c0.31-0.14,0.65-0.23,0.99-0.23h3.24c0.17,0,0.37,0.03,0.53,0.06 c4.65,0.73,6.51,3.58,7.19,7.19c0.11-0.03,0.23-0.03,0.37-0.03h3.24c0.17,0,0.37,0.03,0.54,0.06c8.91,1.38,8.79,10.23,8.71,17.36 v1.86l0.2,8.23v0.25c-0.34,7.02-3.1,11.56-6.28,16.8c-0.54,0.87-1.07,1.77-1.8,3.02c-0.03,0.03-0.03,0.06-0.06,0.08 c-1.66,2.9-3.58,5.13-5.78,6.65c-2.23,1.55-4.71,2.34-7.41,2.37H35.53c-2.79,0.06-4.96-1.16-6.57-3.55c-1.3-1.92-2.14-4.62-2.59-8 L8.9,86.35l-0.09-0.08c-1.04-1.38-2.45-3.55-3.52-5.95c-0.79-1.8-1.38-3.75-1.52-5.67c-0.14-2.28,0.17-4.09,0.82-5.52 c0.79-1.78,2.09-2.93,3.64-3.55c1.44-0.59,3.07-0.68,4.71-0.34c1.97,0.4,4,1.38,5.72,2.82c1.41,1.18,3.78,3.1,6.09,4.99l1.92,1.58 V42.13c0-6.23,2.76-10.23,6.34-12.04c1.44-0.73,2.99-1.1,4.57-1.1c1.58,0,3.13,0.37,4.56,1.1c3.58,1.8,6.4,5.83,6.4,11.95v10.76 L48.47,52.79L48.47,52.79z" />
+            </svg>
+          </div>
+          <span className="interaction-overlay-text">{strings?.tap_to_interact || "Ketuk untuk berinteraksi"}</span>
+        </div>
+      )}
+      {isInteractive && isMobile && (
+        <button
+          className="interaction-done-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsInteractive(false);
+          }}
+          aria-label={strings?.done || "Selesai"}
+        >
+          <span>{strings?.done || "Selesai"}</span>
+        </button>
+      )}
+      <div
+        className="circular-gallery"
+        ref={containerRef}
+        role="region"
+        aria-label="3D Circular Gallery"
+        style={{ pointerEvents: (isMobile && !isInteractive) ? 'none' : 'auto' }}
+      ></div>
+    </div>
   );
 }

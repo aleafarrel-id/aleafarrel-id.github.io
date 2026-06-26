@@ -16,7 +16,7 @@
   "loading": {
     "label": "Loading Experience",
     "phrases": [
-      "Initiating 3D Environment...",
+      "Loading Portfolio Assets...",
       "Loading Textures...",
       "Preparing Experience...",
       "Almost there..."
@@ -288,5 +288,9 @@
     "rights": "All rights reserved.",
     "description": "Crafting immersive digital experiences through engineering, code, and design.",
     "built_with": "Built with dedication and precision."
+  },
+  "interaction": {
+    "tap_to_interact": "Tap to interact",
+    "done": "Done"
   }
 }

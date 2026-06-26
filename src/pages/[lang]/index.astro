@@ -23,7 +23,6 @@ const contactAnchor = `/${locale}/#contact`;
 <BaseLayout locale={locale}>
   <div
     id="scroll-canvas-driver"
-    aria-hidden="true"
     style="height: 600vh; position: relative;"
   >
     <div
@@ -71,6 +70,7 @@ const contactAnchor = `/${locale}/#contact`;
       center_subtitle={data.experience.center_subtitle}
       preview_label={data.experience.preview_label}
       items={data.experience.items}
+      interactionStrings={data.interaction}
     />
 
     <GallerySection
@@ -79,6 +79,7 @@ const contactAnchor = `/${locale}/#contact`;
       subheading={data.gallery.subheading}
       interaction_hint={data.gallery.interaction_hint}
       items={data.gallery.images}
+      interactionStrings={data.interaction}
     />
 
     <ContactSection

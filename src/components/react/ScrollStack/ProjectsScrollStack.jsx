@@ -15,7 +15,7 @@ const ProjectsScrollStack = ({ items, view_project }) => {
           <ScrollStackItem key={card.id || index} itemClassName="project-scroll-card">
             <div className="project-card-inner group">
               <div className="project-card-image-section">
-                <img src={card.image} alt={card.name} loading="lazy" />
+                <img src={card.image} alt={card.name} loading="lazy" decoding="async" width="800" height="600" style={{ objectFit: 'cover' }} />
                 <div className="project-overlay"></div>
               </div>
               

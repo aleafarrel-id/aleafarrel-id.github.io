@@ -35,24 +35,40 @@ const emailDomain = emailParts[1] || "";
 <!doctype html>
 <html lang={data.meta.lang}>
   <head>
-
     <meta charset="UTF-8" />
+    <title>{data.meta.title}</title>
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="description" content={data.meta.description} />
     <meta name="author" content="Alea Farrel" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="canonical" href={Astro.url.href} />
+    <link rel="alternate" hreflang={locale} href={Astro.url.href} />
+    <link rel="alternate" hreflang={altLang} href={new URL(altUrl, Astro.site || "https://aleafarrel-id.github.io").href} />
+    <link rel="alternate" hreflang="x-default" href={new URL("/en/", Astro.site || "https://aleafarrel-id.github.io").href} />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Alea Farrel - Portfolio" />
     <meta property="og:title" content={data.meta.title} />
     <meta property="og:description" content={data.meta.description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={new URL("/og-image.webp", Astro.site || "https://aleafarrel-id.github.io").href} />
+    <meta property="og:image:alt" content="Alea Farrel Portfolio Preview" />
+    <meta property="og:locale" content={locale === "id" ? "id_ID" : "en_US"} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@alea_farrel" />
+    <meta name="twitter:creator" content="@alea_farrel" />
+    <meta name="twitter:title" content={data.meta.title} />
+    <meta name="twitter:description" content={data.meta.description} />
+    <meta name="twitter:image" content={new URL("/og-image.webp", Astro.site || "https://aleafarrel-id.github.io").href} />
+
     <meta name="theme-color" content="#1A1A1A" />
-
-    <link rel="alternate" hreflang={locale} href={Astro.url.href} />
-    <link rel="alternate" hreflang={altLang} href={altUrl} />
-    <link rel="alternate" hreflang="x-default" href="/en/" />
-
-    <title>{data.meta.title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
 
@@ -108,7 +124,7 @@ const emailDomain = emailParts[1] || "";
     </div>
 
     <header id="main-nav" role="banner">
-      <a href={`${base}/`} class="nav-logo" aria-label="Alea Farrel — Home">
+      <a href={`${base}/`} class="nav-logo" aria-label="AF. - Alea Farrel Home">
         AF<span>.</span>
       </a>
 
@@ -126,7 +142,7 @@ const emailDomain = emailParts[1] || "";
         <a
           href={altUrl}
           class="nav-lang-btn"
-          aria-label={`Switch to ${altLang === "en" ? "English" : "Indonesian"}`}
+          aria-label={`${data.nav.language} - Switch to ${altLang === "en" ? "English" : "Indonesian"}`}
         >
           {data.nav.language}
         </a>
@@ -158,7 +174,7 @@ const emailDomain = emailParts[1] || "";
             <a
               href={`${base}/`}
               class="footer-logo"
-              aria-label="Alea Farrel — Home"
+              aria-label="AF. - Alea Farrel Home"
             >AF<span>.</span></a>
             <p class="footer-description">
               {data.footer.description}

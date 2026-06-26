@@ -113,6 +113,10 @@
   line-height: 1.6;
   margin: 0 0 12px 0;
   max-width: 600px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .project-card-tags {
@@ -227,6 +231,8 @@
 
   .project-card-description {
     margin: 0 0 16px 0;
+    -webkit-line-clamp: none;
+    overflow: visible;
   }
 
   .project-card-tags {
