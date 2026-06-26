@@ -1,9 +1,4 @@
 ---
-/**
- * HeroSection.astro
- * Full-screen hero with canvas scroll animation.
- * All text consumed from locale JSON.
- */
 import { Icon } from "astro-icon/components";
 interface Props {
   greeting: string;
@@ -49,14 +44,12 @@ const {
   </div>
 </section>
 
-<!-- Scroll hint -->
 <div class="hero-scroll-hint" id="hero-scroll-hint" aria-hidden="true">
   <span class="scroll-text-vertical">{scroll_hint}</span>
   <div class="scroll-arrow-long"></div>
 </div>
 
 <script>
-  // Hero entrance animation — runs after preloader hides
   import { gsap } from "gsap";
 
   function animateHeroIn() {
@@ -68,56 +61,54 @@ const {
       .to("#hero-ctas", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
   }
 
-  // Listen for preloader-done event dispatched by canvas script
   document.addEventListener("preloader-done", animateHeroIn, { once: true });
 
-  // Mobile Scroll Fade Interaction
   function initHeroScrollFade() {
-    const heroContent = document.getElementById('hero-content-wrapper');
-    const heroOverlay = document.getElementById('hero-fade-overlay');
-    const scrollHint = document.getElementById('hero-scroll-hint');
-    
+    const heroContent = document.getElementById("hero-content-wrapper");
+    const heroOverlay = document.getElementById("hero-fade-overlay");
+    const scrollHint = document.getElementById("hero-scroll-hint");
+
     if (!heroContent || !heroOverlay) return;
-    
-    window.addEventListener('scroll', () => {
-      if (window.innerWidth <= 768) {
-        const scrollY = window.scrollY;
-        // Fade out completely by 250px of scrolling
-        const opacity = Math.max(1 - (scrollY / 250), 0);
-        
-        heroContent.style.opacity = opacity.toString();
-        heroContent.style.pointerEvents = opacity === 0 ? 'none' : 'auto';
-        
-        heroOverlay.style.opacity = opacity.toString();
-        
-        if (scrollHint) {
-          if (scrollY > 10) {
-            scrollHint.style.opacity = opacity.toString();
-          } else {
-            scrollHint.style.opacity = '';
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (window.innerWidth <= 768) {
+          const scrollY = window.scrollY;
+          const opacity = Math.max(1 - scrollY / 250, 0);
+
+          heroContent.style.opacity = opacity.toString();
+          heroContent.style.pointerEvents = opacity === 0 ? "none" : "auto";
+
+          heroOverlay.style.opacity = opacity.toString();
+
+          if (scrollHint) {
+            if (scrollY > 10) {
+              scrollHint.style.opacity = opacity.toString();
+            } else {
+              scrollHint.style.opacity = "";
+            }
           }
+        } else {
+          heroContent.style.opacity = "1";
+          heroContent.style.pointerEvents = "auto";
+          heroOverlay.style.opacity = "0";
+          if (scrollHint) scrollHint.style.opacity = "";
         }
-      } else {
-        // Desktop - Ensure it's fully visible and overlay hidden
-        heroContent.style.opacity = '1';
-        heroContent.style.pointerEvents = 'auto';
-        heroOverlay.style.opacity = '0';
-        if (scrollHint) scrollHint.style.opacity = '';
-      }
-    }, { passive: true });
+      },
+      { passive: true },
+    );
   }
 
-  // Initialize the scroll fade on load
   initHeroScrollFade();
 </script>
 
 <style is:global>
-  /* ---------- Hero Section ---------- */
-
   #hero {
     position: relative;
     z-index: var(--z-base);
     height: 100dvh;
+    height: calc(var(--vh, 1dvh) * 100);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -133,7 +124,6 @@ const {
     padding: var(--space-6);
     max-width: min(700px, 60vw);
   }
-
 
   .hero-greeting {
     font-family: var(--font-ui);
@@ -168,7 +158,8 @@ const {
     color: var(--clr-text-primary);
     margin-bottom: var(--space-4);
     width: min-content;
-    text-shadow: 0 8px 40px color-mix(in srgb, var(--shadow-dark) 50%, transparent);
+    text-shadow: 0 8px 40px
+      color-mix(in srgb, var(--shadow-dark) 50%, transparent);
     opacity: 0;
     transform: translateY(30px);
   }
@@ -183,7 +174,8 @@ const {
     margin-bottom: var(--space-6);
     max-width: 600px;
     text-wrap: balance;
-    text-shadow: 0 4px 32px color-mix(in srgb, var(--shadow-dark) 60%, transparent);
+    text-shadow: 0 4px 32px
+      color-mix(in srgb, var(--shadow-dark) 60%, transparent);
     opacity: 0;
     transform: translateY(20px);
   }
@@ -195,7 +187,8 @@ const {
     margin: 0 0 var(--space-10) 0;
     line-height: 1.7;
     letter-spacing: 0.05em;
-    text-shadow: 0 4px 24px color-mix(in srgb, var(--shadow-dark) 60%, transparent);
+    text-shadow: 0 4px 24px
+      color-mix(in srgb, var(--shadow-dark) 60%, transparent);
     opacity: 0;
     transform: translateY(20px);
   }
@@ -269,8 +262,6 @@ const {
     touch-action: manipulation;
     box-shadow: 0 4px 20px -2px
       color-mix(in srgb, var(--shadow-dark) 50%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     transition-property: transform, background-color, border-color, box-shadow;
     transition-duration: var(--duration-base);
     transition-timing-function: var(--ease-out-expo);
@@ -366,10 +357,6 @@ const {
     display: none;
   }
 
-  /* ==========================================================
-     MEDIA QUERIES (CONSOLIDATED)
-     ========================================================== */
-
   @media (max-width: 768px) {
     #hero {
       padding-left: 0;
@@ -379,7 +366,12 @@ const {
       display: block;
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        rgba(0, 0, 0, 0) 100%
+      );
       z-index: -1;
     }
     .hero-content {
@@ -400,18 +392,24 @@ const {
       font-size: clamp(2rem, 10vw, 3rem);
       margin-bottom: var(--space-2);
       line-height: 1;
+      text-shadow: 0 4px 16px
+        color-mix(in srgb, var(--shadow-dark) 40%, transparent);
     }
     .hero-title {
       font-size: clamp(1rem, 5vw, 1.5rem);
       margin-bottom: var(--space-3);
       line-height: 1.3;
       word-spacing: 0.05em;
+      text-shadow: 0 2px 8px
+        color-mix(in srgb, var(--shadow-dark) 40%, transparent);
     }
     .hero-subtitle {
       font-size: 0.85rem;
       margin-bottom: var(--space-4);
       line-height: 1.5;
       word-spacing: 0.05em;
+      text-shadow: 0 2px 8px
+        color-mix(in srgb, var(--shadow-dark) 40%, transparent);
     }
     .hero-ctas {
       flex-direction: row;
@@ -420,7 +418,8 @@ const {
       width: 100%;
       padding-right: 0;
     }
-    .btn-primary, .btn-secondary {
+    .btn-primary,
+    .btn-secondary {
       padding: var(--space-2) var(--space-3);
       font-size: var(--text-xs);
       min-height: 40px;

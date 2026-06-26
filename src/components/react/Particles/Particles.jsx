@@ -136,7 +136,7 @@ const Particles = ({
     };
 
     if (moveParticlesOnHover) {
-      // Changed to listen on window so hover works even if content is over it
+
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
     }
 

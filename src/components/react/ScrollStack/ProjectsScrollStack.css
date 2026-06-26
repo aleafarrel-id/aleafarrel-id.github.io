@@ -8,7 +8,10 @@
 
 .project-scroll-card {
   width: 100%;
-  height: 80vh;
+  /* Mobile optimization: reduced height for better viewport fit */
+  height: 55dvh;
+  height: calc(var(--vh, 1dvh) * 55);
+  min-height: 400px;
   margin: 0;
   box-sizing: border-box;
 }
@@ -23,9 +26,10 @@
   width: 100%;
   height: 100%;
   background: var(--clr-bg-deep);
-  box-shadow: 0 30px 60px color-mix(in srgb, var(--shadow-dark) 50%, transparent), inset 0 1px 0 var(--shadow-light);
-  /* Use hardware acceleration for smooth transform */
-  transform: translateZ(0);
+  /* Optimized shadow for performance */
+  box-shadow: inset 0 1px 0 var(--shadow-light);
+  /* Prevent layer bleed */
+  isolation: isolate;
 }
 
 .project-card-image-section {
@@ -42,19 +46,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+
   transform: scale(1.02);
 }
 
 .project-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, color-mix(in srgb, var(--clr-bg-deep) 90%, transparent) 0%, color-mix(in srgb, var(--clr-bg-deep) 50%, transparent) 60%, transparent 100%), rgba(0, 0, 0, 0.2);
+  background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--clr-bg-deep) 98%, transparent) 0%,
+      color-mix(in srgb, var(--clr-bg-deep) 80%, transparent) 50%,
+      color-mix(in srgb, var(--clr-bg-deep) 30%, transparent) 100%
+    ),
+    rgba(0, 0, 0, 0.5);
   z-index: 1;
   pointer-events: none;
 }
 
 @media (hover: hover) {
+  .project-card-image-section img {
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
   .project-card-inner:hover .project-card-image-section img {
     transform: scale(1.08);
   }
@@ -185,21 +198,25 @@
   transform: scale(0.96);
 }
 
-/* ==========================================================
-   MEDIA QUERIES (CONSOLIDATED)
-   ========================================================== */
+
 
 @media (min-width: 768px) {
+  .project-scroll-card {
+    height: 80dvh;
+    height: calc(var(--vh, 1vh) * 80);
+    min-height: 600px;
+  }
+
   .project-card-inner {
     justify-content: flex-end;
   }
-  
+
   .project-card-content {
     padding: 60px;
     width: 75%;
     gap: 16px;
   }
-  
+
   .project-card-category {
     font-size: 12px;
     padding: 6px 16px;

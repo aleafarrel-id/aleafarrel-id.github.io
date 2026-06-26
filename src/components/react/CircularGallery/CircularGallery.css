@@ -3,6 +3,15 @@
   height: 100%;
   overflow: hidden;
   cursor: grab;
+  /* Allow vertical page scroll to pass through.
+     Horizontal drag is handled by JS gesture detection. */
+  touch-action: pan-y;
+}
+
+.circular-gallery canvas {
+  /* Canvas is the actual touch target — inherit pan-y explicitly */
+  touch-action: pan-y;
+  display: block;
 }
 
 .circular-gallery:active {

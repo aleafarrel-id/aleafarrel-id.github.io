@@ -1,9 +1,4 @@
 ---
-/**
- * AboutSection.astro
- * About section.
- * Data consumed from locale JSON props.
- */
 import SkillsLogoLoop from "./react/LogoLoop/SkillsLogoLoop.jsx";
 import Particles from "./react/Particles/Particles.jsx";
 
@@ -67,8 +62,6 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
 </section>
 
 <style is:global>
-  /* ---------- About Section ---------- */
-
   .about-section {
     overflow-x: hidden;
     position: relative;
@@ -85,7 +78,6 @@ const { section_label, heading, bio_1, bio_2, skills_label } = Astro.props;
     z-index: 1;
   }
 
-  /* ---------- Content Container ---------- */
   .container,
   .skills-wrapper {
     position: relative;

@@ -1,5 +1,5 @@
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import './CircularGallery.css';
 
@@ -25,8 +25,7 @@ function autoBind(instance) {
 }
 
 const DEFAULT_FONT = 'bold 30px Figtree';
-// Figtree is not guaranteed to be available on the host page, so the component
-// loads it on demand whenever the default font is used.
+/* Fallback mechanism for loading default font dynamically */
 const DEFAULT_FONT_URL = 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap';
 
 function deriveFontFamilyFromUrl(url) {
@@ -79,23 +78,18 @@ async function loadCustomFont(fontUrl) {
   return isStylesheet ? loadFontFromStylesheet(fontUrl) : loadFontFromFile(fontUrl);
 }
 
-// Loads `fontUrl` (a stylesheet such as a Google Fonts URL, or a direct font
-// file) and returns a canvas-ready font string that keeps the size/weight from
-// `font` but swaps in the freshly loaded family. Falls back to `font` on error.
+
 async function resolveFont(font, fontUrl) {
-  // Use the bundled Figtree stylesheet when the caller relies on the default
-  // font, otherwise honor the explicit `fontUrl`.
+
   const effectiveUrl = fontUrl || (font === DEFAULT_FONT ? DEFAULT_FONT_URL : null);
   if (!effectiveUrl) {
-    // A custom family was supplied without a URL – make sure it is ready (in
-    // case the host page declares it) before we draw it to the canvas,
-    // otherwise the first paint silently falls back to a system font.
+    /* Wait for font availability to avoid system font fallback */
     if (document.fonts && document.fonts.load) {
       try {
         await document.fonts.load(font);
         await document.fonts.ready;
       } catch {
-        // Ignore – fall back to whatever the browser provides.
+
       }
     }
     return font;
@@ -109,7 +103,7 @@ async function resolveFont(font, fontUrl) {
       try {
         await document.fonts.load(resolved);
       } catch {
-        // Ignore – we still attempt to render with the requested font.
+
       }
     }
     return resolved;
@@ -127,37 +121,37 @@ function getFontSize(font) {
 function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'black') {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  
-  // Set scale factor for high-DPI (Retina) rendering so text is never blurry
+
+
   const scaleFactor = 4;
-  
+
   context.font = font;
   const metrics = context.measureText(text);
   const textWidth = Math.ceil(metrics.width);
   const textHeight = Math.ceil(getFontSize(font) * 1.2);
-  
-  // Create high-resolution canvas
+
+
   canvas.width = (textWidth + 20) * scaleFactor;
   canvas.height = (textHeight + 20) * scaleFactor;
-  
-  // Scale the context to draw at the higher resolution
+
+
   context.scale(scaleFactor, scaleFactor);
-  
+
   context.font = font;
   context.fillStyle = color;
   context.textBaseline = 'middle';
   context.textAlign = 'center';
-  
+
   context.clearRect(0, 0, textWidth + 20, textHeight + 20);
   context.fillText(text, (textWidth + 20) / 2, (textHeight + 20) / 2);
-  
-  // Use linear filtering for smooth scaling
-  const texture = new Texture(gl, { 
+
+
+  const texture = new Texture(gl, {
     generateMipmaps: true,
     minFilter: gl.LINEAR_MIPMAP_LINEAR,
   });
   texture.image = canvas;
-  
+
   return { texture, width: canvas.width, height: canvas.height };
 }
 
@@ -257,26 +251,25 @@ class Media {
   }
   createShader() {
     let textureInfo;
-    
+
     if (this.textureCache && this.textureCache[this.image]) {
       textureInfo = this.textureCache[this.image];
     } else {
       const texture = new Texture(this.gl, {
         generateMipmaps: false
       });
-      textureInfo = { texture, loaded: false, sizes: [0, 0], callbacks: [] };
+      textureInfo = { texture, loaded: false, sizes: [1, 1], callbacks: [] };
       if (this.textureCache) this.textureCache[this.image] = textureInfo;
-      
+
       const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.decoding = 'async'; // MASSIVE PERFORMANCE BOOST
+      img.decoding = 'async';
       img.src = this.image;
       img.onload = () => {
         texture.image = img;
         textureInfo.sizes = [img.naturalWidth, img.naturalHeight];
         textureInfo.loaded = true;
         textureInfo.callbacks.forEach(cb => cb());
-        textureInfo.callbacks = []; // Clear callbacks
+        textureInfo.callbacks = [];
       };
     }
 
@@ -323,12 +316,12 @@ class Media {
           );
           vec4 color = texture2D(tMap, uv);
           
-          // Convert to grayscale for that cinematic/React Bits look efficiently
+          /* Grayscale filter */
           float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
           
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
           
-          // Smooth antialiasing for edges
+          /* Antialiasing */
           float edgeSmooth = 0.002;
           float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
           
@@ -337,7 +330,7 @@ class Media {
       `,
       uniforms: {
         tMap: { value: textureInfo.texture },
-        uPlaneSizes: { value: [0, 0] },
+        uPlaneSizes: { value: [1, 1] },
         uImageSizes: { value: textureInfo.sizes },
         uSpeed: { value: 0 },
         uTime: { value: 100 * Math.random() },
@@ -377,7 +370,7 @@ class Media {
       if (this.plane.scale && this.plane.scale.x > 0) {
         this.title.resize(this.plane.scale.x, this.plane.scale.y);
       }
-    }, this.index * 50); // Stagger by 50ms each
+    }, this.index * 50);
   }
   update(scroll, direction) {
     this.plane.position.x = this.x - scroll.current - this.extra;
@@ -385,16 +378,17 @@ class Media {
     const x = this.plane.position.x;
     const H = this.viewport.width / 2;
 
-    if (this.bend === 0) {
+    const effectiveBend = this.screen.width < 768 ? this.bend * 0.3 : this.bend;
+    if (effectiveBend === 0) {
       this.plane.position.y = 0;
       this.plane.rotation.z = 0;
     } else {
-      const B_abs = Math.abs(this.bend);
+      const B_abs = Math.abs(effectiveBend);
       const R = (H * H + B_abs * B_abs) / (2 * B_abs);
       const effectiveX = Math.min(Math.abs(x), H);
 
       const arc = R - Math.sqrt(R * R - effectiveX * effectiveX);
-      if (this.bend > 0) {
+      if (effectiveBend > 0) {
         this.plane.position.y = -arc;
         this.plane.rotation.z = -Math.sign(x) * Math.asin(effectiveX / R);
       } else {
@@ -429,15 +423,15 @@ class Media {
       }
     }
     this.scale = this.screen.height / 1500;
-    const sizeFactor = this.screen.width < 768 ? 0.6 : 1;
+    const sizeFactor = this.screen.width < 768 ? 0.9 : 1;
     this.plane.scale.y = (this.viewport.height * (900 * this.scale * sizeFactor)) / this.screen.height;
     this.plane.scale.x = (this.viewport.width * (700 * this.scale * sizeFactor)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
-    
+
     if (this.title) {
       this.title.resize(this.plane.scale.x, this.plane.scale.y);
     }
-    
+
     this.padding = 3.5;
     this.width = this.plane.scale.x + this.padding;
     this.widthTotal = this.width * this.length;
@@ -464,6 +458,7 @@ class App {
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
     this.onCheckDebounce = debounce(this.onCheck, 200);
     this.createRenderer();
+    if (!this.gl) return;
     this.createCamera();
     this.createScene();
     this.onResize();
@@ -483,14 +478,20 @@ class App {
     this.observer.observe(this.container);
   }
   createRenderer() {
-    this.renderer = new Renderer({
-      alpha: true,
-      antialias: true,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
-    });
-    this.gl = this.renderer.gl;
-    this.gl.clearColor(0, 0, 0, 0);
-    this.container.appendChild(this.gl.canvas);
+    try {
+      this.renderer = new Renderer({
+        alpha: true,
+        antialias: true,
+        dpr: Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2)
+      });
+      this.gl = this.renderer.gl;
+      if (!this.gl) throw new Error("WebGL not supported");
+      this.gl.clearColor(0, 0, 0, 0);
+      this.container.appendChild(this.gl.canvas);
+    } catch (e) {
+      console.warn("CircularGallery WebGL initialization failed:", e);
+      this.gl = null;
+    }
   }
   createCamera() {
     this.camera = new Camera(this.gl);
@@ -525,13 +526,13 @@ class App {
     this.mediasImages = galleryItems.concat(galleryItems);
     this.medias = [];
     this.textureCache = {};
-    
+
     let index = 0;
     const processNext = () => {
       // Check if component was destroyed before this fires
-      if (!this.gl || !this.scene) return; 
+      if (!this.gl || !this.scene) return;
       if (index >= this.mediasImages.length) return;
-      
+
       const data = this.mediasImages[index];
       this.medias.push(new Media({
         geometry: this.planeGeometry,
@@ -551,7 +552,7 @@ class App {
         textureCache: this.textureCache
       }));
       index++;
-      
+
       if (window.requestIdleCallback) {
         window.requestIdleCallback(processNext);
       } else {
@@ -564,11 +565,30 @@ class App {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
     this.start = e.touches ? e.touches[0].clientX : e.clientX;
+    this.startY = e.touches ? e.touches[0].clientY : e.clientY;
+    this.isHorizontalScroll = null;
   }
   onTouchMove(e) {
     if (!this.isDown || !this.isVisible) return;
     const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const distance = (this.start - x) * (this.scrollSpeed * 0.025);
+    const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+    /* Detect primary scroll direction */
+    if (this.isHorizontalScroll === null && e.touches) {
+      const dx = Math.abs(x - this.start);
+      const dy = Math.abs(y - this.startY);
+      if (dx < 10 && dy < 10) return;
+      this.isHorizontalScroll = dx > dy;
+    }
+
+
+    if (this.isHorizontalScroll === false) return;
+
+
+    if (e.cancelable) e.preventDefault();
+
+    const speedMultiplier = this.screen ? (this.screen.width < 768 ? 0.08 : 0.04) : 0.04;
+    const distance = (this.start - x) * (this.scrollSpeed * speedMultiplier);
     this.scroll.target = this.scroll.position + distance;
   }
   onTouchUp() {
@@ -578,7 +598,7 @@ class App {
   onWheel(e) {
     if (!this.isVisible) return;
     const delta = e.deltaY || e.wheelDelta || e.detail;
-    this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
+    this.scroll.target += delta * 0.02 * this.scrollSpeed;
     this.onCheckDebounce();
   }
   onKeyDown(e) {
@@ -644,7 +664,7 @@ class App {
     this.raf = window.requestAnimationFrame(this.update.bind(this));
   }
   addEventListeners() {
-    this.boundOnResize = this.onResize.bind(this);
+    this.boundOnResize = debounce(this.onResize.bind(this), 150);
     this.boundOnWheel = this.onWheel.bind(this);
     this.boundOnTouchDown = this.onTouchDown.bind(this);
     this.boundOnTouchMove = this.onTouchMove.bind(this);
@@ -652,38 +672,50 @@ class App {
     this.boundOnKeyDown = this.onKeyDown.bind(this);
 
     window.addEventListener('resize', this.boundOnResize);
-    window.addEventListener('mousewheel', this.boundOnWheel, { passive: true });
-    window.addEventListener('wheel', this.boundOnWheel, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', this.boundOnResize, { passive: true });
+    }
+
+
     window.addEventListener('mousedown', this.boundOnTouchDown);
     window.addEventListener('mousemove', this.boundOnTouchMove);
     window.addEventListener('mouseup', this.boundOnTouchUp);
-    window.addEventListener('touchstart', this.boundOnTouchDown, { passive: true });
-    window.addEventListener('touchmove', this.boundOnTouchMove, { passive: true });
-    window.addEventListener('touchend', this.boundOnTouchUp);
 
-    this.container?.addEventListener('keydown', this.boundOnKeyDown);
+
+    window.addEventListener('mousewheel', this.boundOnWheel, { passive: true });
+    window.addEventListener('wheel', this.boundOnWheel, { passive: true });
+
+    /* Bind touch events locally to avoid blocking global scroll */
+    this.container.addEventListener('touchstart', this.boundOnTouchDown, { passive: true });
+    this.container.addEventListener('touchmove', this.boundOnTouchMove, { passive: false });
+    this.container.addEventListener('touchend', this.boundOnTouchUp);
+
+    window.addEventListener('keydown', this.boundOnKeyDown);
   }
   destroy() {
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.boundOnResize);
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', this.boundOnResize);
+    }
     window.removeEventListener('mousewheel', this.boundOnWheel);
     window.removeEventListener('wheel', this.boundOnWheel);
     window.removeEventListener('mousedown', this.boundOnTouchDown);
     window.removeEventListener('mousemove', this.boundOnTouchMove);
     window.removeEventListener('mouseup', this.boundOnTouchUp);
-    window.removeEventListener('touchstart', this.boundOnTouchDown);
-    window.removeEventListener('touchmove', this.boundOnTouchMove);
-    window.removeEventListener('touchend', this.boundOnTouchUp);
-    if (this.renderer && this.renderer.gl && this.renderer.gl.canvas.parentNode) {
-      this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas);
-    }
+
 
     if (this.container) {
-      this.container.removeEventListener('keydown', this.boundOnKeyDown);
+      this.container.removeEventListener('touchstart', this.boundOnTouchDown);
+      this.container.removeEventListener('touchmove', this.boundOnTouchMove);
+      this.container.removeEventListener('touchend', this.boundOnTouchUp);
     }
-    if (this.observer) {
-      this.observer.disconnect();
+
+    if (this.renderer?.gl?.canvas?.parentNode) {
+      this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas);
     }
+    window.removeEventListener('keydown', this.boundOnKeyDown);
+    if (this.observer) this.observer.disconnect();
   }
 }
 
@@ -698,33 +730,58 @@ export default function CircularGallery({
   scrollEase = 0.05
 }) {
   const containerRef = useRef(null);
+  const [webGLFailed, setWebGLFailed] = useState(false);
+
   useEffect(() => {
     if (!containerRef.current) return;
     let app;
     let isMounted = true;
     resolveFont(font, fontUrl).then(resolvedFont => {
       if (!isMounted || !containerRef.current) return;
-      app = new App(containerRef.current, {
-        items,
-        bend,
-        textColor,
-        borderRadius,
-        font: resolvedFont,
-        scrollSpeed,
-        scrollEase
-      });
+      try {
+        app = new App(containerRef.current, {
+          items,
+          bend,
+          textColor,
+          borderRadius,
+          font: resolvedFont,
+          scrollSpeed,
+          scrollEase
+        });
+        if (!app.gl) {
+          setWebGLFailed(true);
+        }
+      } catch (e) {
+        setWebGLFailed(true);
+      }
     });
 
     return () => {
       isMounted = false;
-      if (app) app.destroy();
+      if (app && app.destroy) app.destroy();
     };
   }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase]);
+
+  if (webGLFailed) {
+    return (
+      <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory px-4 md:px-12" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' }}>
+        {items.map((item, i) => (
+          <div key={i} className="flex-none w-[280px] h-[380px] md:w-[360px] md:h-[480px] snap-center rounded-2xl overflow-hidden relative" style={{ boxShadow: 'var(--neu-raised)', border: '1px solid var(--shadow-light)', background: 'var(--clr-bg-deep)' }}>
+            <img src={item.image || item.src} alt={item.text || item.title} className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+              <h3 className="text-white font-display font-bold text-2xl tracking-tight mb-2">{item.text || item.title}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div
       className="circular-gallery"
       ref={containerRef}
-      tabIndex={0}
       role="region"
       aria-label="Circular image gallery. Use left and right arrow keys to navigate."
     />

@@ -1,9 +1,4 @@
 ---
-/**
- * ProjectsSection.astro
- * 3D Neumorphic project cards with tilt effect.
- * Data consumed from locale JSON props.
- */
 interface ProjectItem {
   id: string | number;
   name: string;
@@ -29,7 +24,6 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
 ---
 
 <section id="projects" class="section" aria-labelledby="projects-heading">
-  <!-- ---------- Decorative Background Elements ---------- -->
   <div class="projects-glow projects-glow-1"></div>
   <div class="projects-glow projects-glow-2"></div>
   <div class="projects-grid-bg"></div>
@@ -45,7 +39,7 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     <p class="projects-subheading reveal reveal-delay-2">{subheading}</p>
 
     <ProjectsScrollStack
-      client:visible
+      client:idle
       items={items}
       view_project={view_project}
     />
@@ -53,20 +47,16 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
 </section>
 
 <style is:global>
-  /* ---------- Projects Section ---------- */
-
   #projects {
     position: relative;
     z-index: var(--z-base);
     background: var(--clr-bg);
-    overflow: hidden;
+    overflow: clip;
   }
 
-  /* ---------- Decorative Glows ---------- */
   .projects-glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
     opacity: 0.12;
     pointer-events: none;
     z-index: 0;
@@ -77,8 +67,7 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     left: 20%;
     width: 600px;
     height: 600px;
-    background: var(--clr-glow-1);
-    animation: float-projects 14s ease-in-out infinite alternate;
+    background: radial-gradient(circle, var(--clr-glow-1) 0%, transparent 70%);
   }
 
   .projects-glow-2 {
@@ -86,8 +75,7 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     right: 5%;
     width: 500px;
     height: 500px;
-    background: var(--clr-glow-2);
-    animation: float-projects 18s ease-in-out infinite alternate-reverse;
+    background: radial-gradient(circle, var(--clr-glow-2) 0%, transparent 70%);
   }
 
   @keyframes float-projects {
@@ -96,7 +84,6 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
     100% { transform: translate(-20px, 20px) scale(0.95); }
   }
 
-  /* ---------- Grid Texture Background ---------- */
   .projects-grid-bg {
     position: absolute;
     inset: 0;

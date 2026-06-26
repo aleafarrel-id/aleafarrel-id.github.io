@@ -1,9 +1,4 @@
-/* ==========================================================
-   CERTIFICATES FLOW STYLES
-   Extracted to enforce Zero Assumption and Design Tokens
-   ========================================================== */
-
-/* ---------- Center Node ---------- */
+/* Certificates Flow Styles */
 .cert-flow-center-node {
   padding: var(--space-12) var(--space-16);
   border-radius: var(--radius-xl);
@@ -12,6 +7,7 @@
   border: 1px solid var(--shadow-light);
   text-align: center;
   position: relative;
+  will-change: transform;
 }
 
 .cert-flow-center-title {
@@ -56,7 +52,7 @@
   left: -6px !important;
 }
 
-/* ---------- Certificate Node ---------- */
+/* Certificate Node */
 .cert-node-container {
   padding: var(--space-4) var(--space-5);
   border-radius: var(--radius-lg);
@@ -72,6 +68,7 @@
   transition-duration: var(--duration-fast);
   transition-timing-function: var(--ease-out-expo);
   cursor: pointer;
+  will-change: transform;
 }
 
 .cert-node-container:focus-visible {
@@ -122,7 +119,7 @@
   opacity: 0.8;
 }
 
-/* ---------- Tooltip Content ---------- */
+/* Tooltip Content */
 .cert-tooltip-container {
   width: 320px;
   padding: 0;
@@ -160,10 +157,7 @@
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
-  background: color-mix(in srgb, var(--shadow-dark) 50%, transparent);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  padding: var(--space-1) var(--space-2);
+  background: color-mix(in srgb, var(--shadow-dark) 85%, transparent);
   border-radius: var(--radius-full);
   border: 1px solid var(--shadow-light);
   display: flex;
@@ -209,18 +203,30 @@
   line-height: 1.6;
 }
 
-/* ---------- React Flow Container ---------- */
+/* React Flow Container */
 .cert-flow-wrapper {
   width: 100%;
-  height: 480px;
+  height: 55svh;
+  height: calc(var(--vh, 1svh) * 55);
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--shadow-light);
-  box-shadow: var(--neu-inset);
   position: relative;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
+  background-size: 64px 64px;
 }
 
-/* ---------- Modal ---------- */
+/* Allow page scroll on mobile */
+@media (max-width: 767px) {
+  .cert-flow-wrapper .react-flow__pane {
+    pointer-events: none;
+  }
+  .cert-flow-wrapper .react-flow__node {
+    pointer-events: all;
+  }
+}
+
+/* Modal Overlay */
 .cert-modal-overlay {
   position: fixed;
   top: 0;
@@ -228,9 +234,7 @@
   right: 0;
   bottom: 0;
   z-index: var(--z-modal);
-  background: color-mix(in srgb, var(--clr-bg-deep) 90%, transparent);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: color-mix(in srgb, var(--clr-bg-deep) 98%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,7 +285,7 @@
 
 .cert-modal-content-wrapper {
   max-width: 90%;
-  max-height: 90vh;
+  max-height: 90svh;
 }
 
 .cert-modal-content-wrapper.entering {
@@ -294,32 +298,22 @@
 
 .cert-modal-image {
   max-width: 100%;
-  max-height: 90vh;
+  max-height: 90svh;
   object-fit: contain;
   border-radius: 0;
   box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 80%, transparent), 0 0 0 1px var(--shadow-light);
   cursor: crosshair;
 }
 
-/* ---------- Animations ---------- */
+/* Animations */
 @keyframes certFadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes certFadeOut {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 @keyframes certScaleIn {
@@ -327,7 +321,6 @@
     transform: scale(0.95) translateY(20px);
     opacity: 0;
   }
-
   to {
     transform: scale(1) translateY(0);
     opacity: 1;
@@ -339,17 +332,13 @@
     transform: scale(1) translateY(0);
     opacity: 1;
   }
-
   to {
     transform: scale(0.95) translateY(20px);
     opacity: 0;
   }
 }
 
-/* ==========================================================
-   MEDIA QUERIES
-   ========================================================== */
-
+/* Media Queries */
 @media (max-width: 767px) {
   .cert-tooltip-container {
     width: 260px;

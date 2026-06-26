@@ -1,8 +1,4 @@
 ---
-/**
- * BaseLayout.astro — Root HTML shell
- * Consumed by [lang]/index.astro — locale passed as prop.
- */
 import "../styles/global.css";
 import "@fontsource-variable/space-grotesk";
 import "@fontsource-variable/syne";
@@ -30,8 +26,49 @@ const base = `/${locale}`;
 <!doctype html>
 <html lang={data.meta.lang}>
   <head>
+    <script is:inline>
+      (function () {
+        var vh = 0;
+        var ticking = false;
+        var resizeTimer = null;
+
+        function setVH() {
+          var vp = window.visualViewport;
+
+          var newVH = (vp ? vp.height : window.innerHeight) * 0.01;
+          if (Math.abs(newVH - vh) > 0.1) {
+            vh = newVH;
+            document.documentElement.style.setProperty("--vh", newVH + "px");
+            window.dispatchEvent(new CustomEvent("vh-updated"));
+          }
+          ticking = false;
+        }
+
+        function scheduleVH() {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(setVH);
+          }
+        }
+
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener("resize", scheduleVH, {
+            passive: true,
+          });
+          window.visualViewport.addEventListener("scroll", scheduleVH, {
+            passive: true,
+          });
+        }
+        window.addEventListener("resize", scheduleVH, { passive: true });
+
+        setVH();
+      })();
+    </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
     <meta name="description" content={data.meta.description} />
     <meta name="author" content="Alea Farrel" />
     <meta property="og:title" content={data.meta.title} />
@@ -39,22 +76,17 @@ const base = `/${locale}`;
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#1A1A1A" />
 
-    <!-- i18n alternate links -->
     <link rel="alternate" hreflang={locale} href={Astro.url.href} />
     <link rel="alternate" hreflang={altLang} href={altUrl} />
     <link rel="alternate" hreflang="x-default" href="/en/" />
-
-    <!-- Offline Fonts via Fontsource -->
 
     <title>{data.meta.title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
 
   <body>
-    <!-- ══ PRELOADER ══════════════════════════════════════════ -->
     <LoaderOne client:load phrases={data.loading.phrases} />
 
-    <!-- ══ MOBILE MENU ════════════════════════════════════════ -->
     <div
       class="mobile-menu"
       id="mobile-menu"
@@ -75,29 +107,33 @@ const base = `/${locale}`;
         >
           <li>
             <a href={`${base}/#about`} class="mobile-nav-link"
-              >{data.nav.about}</a>
+              >{data.nav.about}</a
+            >
           </li>
           <li>
             <a href={`${base}/#projects`} class="mobile-nav-link"
-              >{data.nav.projects}</a>
+              >{data.nav.projects}</a
+            >
           </li>
           <li>
             <a href={`${base}/#experience`} class="mobile-nav-link"
-              >{data.nav.experience}</a>
+              >{data.nav.experience}</a
+            >
           </li>
           <li>
             <a href={`${base}/#gallery`} class="mobile-nav-link"
-              >{data.nav.gallery}</a>
+              >{data.nav.gallery}</a
+            >
           </li>
           <li>
             <a href={`${base}/#contact`} class="mobile-nav-link"
-              >{data.nav.contact}</a>
+              >{data.nav.contact}</a
+            >
           </li>
         </ul>
       </nav>
     </div>
 
-    <!-- ══ NAVIGATION ════════════════════════════════════════ -->
     <header id="main-nav" role="banner">
       <a href={`${base}/`} class="nav-logo" aria-label="Alea Farrel — Home">
         AF<span>.</span>
@@ -114,7 +150,6 @@ const base = `/${locale}`;
       </nav>
 
       <div style="display:flex;align-items:center;gap:0.75rem;">
-        <!-- Language toggle -->
         <a
           href={altUrl}
           class="nav-lang-btn"
@@ -123,7 +158,6 @@ const base = `/${locale}`;
           {data.nav.language}
         </a>
 
-        <!-- Hamburger -->
         <button
           class="nav-hamburger"
           id="hamburger-btn"
@@ -138,15 +172,12 @@ const base = `/${locale}`;
       </div>
     </header>
 
-    <!-- ══ CANVAS (fixed, full-screen background) ════════════ -->
     <canvas id="hero-canvas" aria-hidden="true"></canvas>
 
-    <!-- ══ PAGE CONTENT ══════════════════════════════════════ -->
     <main id="main-content" tabindex="-1">
       <slot />
     </main>
 
-    <!-- ══ FOOTER ════════════════════════════════════════════ -->
     <footer id="footer">
       <div class="container">
         <div class="footer-inner">
@@ -158,7 +189,6 @@ const base = `/${locale}`;
       </div>
     </footer>
 
-    <!-- ══ INLINE SCRIPTS ════════════════════════════════════ -->
     <script>
       import Lenis from "lenis";
       import { gsap } from "gsap";
@@ -166,22 +196,66 @@ const base = `/${locale}`;
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // ── Respect Reduced Motion ──────────────────────────────
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-      // ── Smooth Scroll (Lenis + GSAP) ───────────────────────
-      const lenis = new Lenis();
-      
+      let lenis: any = null;
+
+      const raf = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
+
       if (!prefersReducedMotion) {
-        lenis.on("scroll", ScrollTrigger.update);
-
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
-        });
+        gsap.ticker.add(raf);
         gsap.ticker.lagSmoothing(0);
       }
 
-      // ── Scroll nav ────────────────────────────────────────
+      function initLenis() {
+        if (lenis) return;
+
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          direction: "vertical",
+          gestureDirection: "vertical",
+          smooth: true,
+          smoothTouch: false,
+          touchMultiplier: 2,
+          infinite: false,
+          autoResize: true,
+        } as any);
+
+        // @ts-ignore
+        window.lenis = lenis;
+
+        if (!prefersReducedMotion) {
+          lenis.on("scroll", ScrollTrigger.update);
+        }
+      }
+
+      function destroyLenis() {
+        if (!lenis) return;
+        lenis.destroy();
+        lenis = null;
+        // @ts-ignore
+        window.lenis = null;
+      }
+
+      function checkScreenWidthAndInitialize() {
+        if (window.matchMedia("(min-width: 768px)").matches) {
+          initLenis();
+        } else {
+          destroyLenis();
+        }
+      }
+
+      checkScreenWidthAndInitialize();
+      window.addEventListener("resize", checkScreenWidthAndInitialize);
+
+      window.addEventListener("lenis-stop", () => lenis?.stop());
+      window.addEventListener("lenis-start", () => lenis?.start());
+
       const nav = document.getElementById("main-nav");
       window.addEventListener(
         "scroll",
@@ -191,7 +265,6 @@ const base = `/${locale}`;
         { passive: true },
       );
 
-      // ── Mobile menu ───────────────────────────────────────
       const hamburger = document.getElementById("hamburger-btn");
       const mobileMenu = document.getElementById("mobile-menu");
       const closeBtn = document.getElementById("mobile-menu-close");
@@ -213,17 +286,14 @@ const base = `/${locale}`;
       hamburger?.addEventListener("click", openMenu);
       closeBtn?.addEventListener("click", closeMenu);
 
-      // Close when clicking a nav link
       document
         .querySelectorAll(".mobile-nav-link")
         .forEach((link) => link.addEventListener("click", closeMenu));
 
-      // Close on Escape
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeMenu();
       });
 
-      // ── Scroll reveal ─────────────────────────────────────
       const revealObs = new IntersectionObserver(
         (entries) =>
           entries.forEach((entry) => {
@@ -242,20 +312,16 @@ const base = `/${locale}`;
 </html>
 
 <style is:global>
-  /* ---------- Canvas Background ---------- */
-
   #hero-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: calc(var(--vh, 1dvh) * 100);
     z-index: var(--z-canvas);
     pointer-events: none;
     object-fit: cover;
   }
-
-  /* ---------- Navigation ---------- */
 
   #main-nav {
     position: fixed;
@@ -304,7 +370,6 @@ const base = `/${locale}`;
     list-style: none;
   }
 
-
   .nav-links a {
     font-family: var(--font-ui);
     font-size: var(--text-sm);
@@ -337,13 +402,17 @@ const base = `/${locale}`;
 
   .nav-lang-btn {
     font-family: var(--font-ui);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     font-weight: 600;
-    padding: var(--space-2) var(--space-4);
-    min-height: 44px;
-    display: inline-flex;
+    padding: 2px 0 0 2px; /* Optical adjustment */
+    height: 40px;
+    width: 40px;
+    display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    line-height: 1;
+    text-decoration: none;
     background: var(--clr-bg);
     box-shadow: var(--neu-raised-sm);
     border-radius: var(--radius-full);
@@ -362,10 +431,6 @@ const base = `/${locale}`;
     }
   }
 
-  /* ==========================================================
-   FOOTER
-   ========================================================== */
-
   #footer {
     position: relative;
     z-index: var(--z-base);
@@ -382,7 +447,6 @@ const base = `/${locale}`;
     gap: var(--space-3);
     text-align: center;
   }
-
 
   .footer-text {
     font-family: var(--font-ui);
@@ -406,10 +470,6 @@ const base = `/${locale}`;
     color: var(--clr-accent-blue);
   }
 
-  /* ==========================================================
-   MOBILE MENU
-   ========================================================== */
-
   .nav-hamburger {
     display: flex;
     flex-direction: column;
@@ -424,7 +484,6 @@ const base = `/${locale}`;
     align-items: center;
     touch-action: manipulation;
   }
-
 
   .nav-hamburger span {
     display: block;
@@ -441,8 +500,7 @@ const base = `/${locale}`;
     position: fixed;
     inset: 0;
     z-index: calc(var(--z-sticky) + 1);
-    background: color-mix(in srgb, var(--clr-bg) 98%, transparent);
-    backdrop-filter: blur(20px);
+    background: var(--clr-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -476,10 +534,6 @@ const base = `/${locale}`;
     }
   }
 
-  /* ==========================================================
-     MEDIA QUERIES (CONSOLIDATED)
-     ========================================================== */
-
   @media (max-width: 767px) {
     #main-nav {
       top: var(--space-2);
@@ -491,9 +545,10 @@ const base = `/${locale}`;
       font-size: var(--text-lg);
     }
     .nav-lang-btn {
-      min-height: 36px;
-      padding: 0 var(--space-3);
-      font-size: var(--text-xs);
+      height: 36px;
+      width: 36px;
+      padding: 2px 0 0 2px;
+      font-size: var(--text-sm);
     }
     .nav-hamburger {
       min-width: 36px;

@@ -1,150 +1,102 @@
-
 @import "tailwindcss";
 
-/* ==========================================================
-   DESIGN TOKENS — 3D Neumorphism Light Mode
-   Alea Farrel Portfolio
-   ========================================================== */
-
+/* Design Tokens - 3D Neumorphism Light Mode */
 :root {
-  /* ---------- Core Palette ---------- */
+  /* Core Palette */
   --clr-bg: #1A1A1A;
-  /* Base neumorphic surface */
   --clr-bg-deep: #121212;
-  /* Slightly deeper surface for contrast */
   --clr-bg-raised: #222222;
-  /* Raised element surface */
 
-  /* Neumorphic shadows — the magic duo */
+  /* Neumorphic Shadows */
   --shadow-dark: #0a0a0a;
-  /* Dark directional shadow */
   --shadow-light: rgba(255, 255, 255, 0.05);
-  /* Light directional shadow */
 
-  /* ---------- Typography ---------- */
+  /* Typography */
   --clr-text-primary: #FFFFFF;
-  /* Pure white */
   --clr-text-secondary: #E5E7EB;
-  /* Soft Silver */
   --clr-text-muted: #9CA3AF;
-  /* Subtle labels */
   --clr-text-accent: #0066FF;
-  /* Neon blue accent */
   --clr-text-warm: #FF6B35;
-  /* Warm orange highlight */
 
-
-  /* ---------- Brand Accents ---------- */
+  /* Brand Accents */
   --clr-accent-blue: #00E5FF;
   --clr-accent-blue-light: #80F2FF;
   --clr-accent-blue-glow: rgba(0, 229, 255, 0.3);
   --clr-accent-orange: #FF6B35;
   --clr-accent-orange-glow: rgba(255, 107, 53, 0.15);
 
-  /* ---------- Glow & Decorative Colors ---------- */
+  /* Glow & Decorative */
   --clr-glow-1: #10B981;
   --clr-glow-2: #6366F1;
 
-  /* ---------- Semantic Colors ---------- */
+  /* Semantic Colors */
   --clr-success: #10B981;
   --clr-error: #EF4444;
   --clr-warning: #F59E0B;
 
-  /* ---------- Typography Scale ---------- */
+  /* Font Families */
   --font-display: 'Syne Variable', 'Syne', sans-serif;
-  /* Bold 3D headings */
   --font-body: 'Space Grotesk Variable', 'Space Grotesk', sans-serif;
-  /* Clean body */
   --font-ui: 'Inter Variable', 'Inter', sans-serif;
-  /* UI labels & data */
 
+  /* Font Sizes */
   --text-xs: 0.75rem;
-  /* 12px */
   --text-sm: 0.875rem;
-  /* 14px */
   --text-base: 1rem;
-  /* 16px */
   --text-lg: 1.125rem;
-  /* 18px */
   --text-xl: 1.25rem;
-  /* 20px */
   --text-2xl: 1.5rem;
-  /* 24px */
   --text-3xl: 1.875rem;
-  /* 30px */
   --text-4xl: 2.25rem;
-  /* 36px */
   --text-5xl: 3rem;
-  /* 48px */
   --text-6xl: 3.75rem;
-  /* 60px */
   --text-7xl: 4.5rem;
-  /* 72px */
   --text-8xl: 6rem;
-  /* 96px */
 
-  /* ---------- Spacing Scale (8pt grid) ---------- */
+  /* Spacing Scale */
   --space-1: 0.25rem;
-  /* 4px */
   --space-2: 0.5rem;
-  /* 8px */
   --space-3: 0.75rem;
-  /* 12px */
   --space-4: 1rem;
-  /* 16px */
   --space-5: 1.25rem;
-  /* 20px */
   --space-6: 1.5rem;
-  /* 24px */
   --space-8: 2rem;
-  /* 32px */
   --space-10: 2.5rem;
-  /* 40px */
   --space-12: 3rem;
-  /* 48px */
   --space-16: 4rem;
-  /* 64px */
   --space-20: 5rem;
-  /* 80px */
   --space-24: 6rem;
-  /* 96px */
   --space-32: 8rem;
-  /* 128px */
 
-  /* ---------- Border Radius ---------- */
+  /* Border Radius */
   --radius-sm: 0.5rem;
   --radius-md: 1rem;
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
   --radius-full: 9999px;
 
-  /* ---------- Neumorphic Shadow Presets ---------- */
-  /* Extruded (raised, presses outward) */
+  /* Neumorphic Presets */
   --neu-raised:
     8px 8px 16px var(--shadow-dark),
     -8px -8px 16px var(--shadow-light);
 
-  /* Inset (pressed in, concave) */
   --neu-inset:
     inset 4px 4px 8px var(--shadow-dark),
     inset -4px -4px 8px var(--shadow-light);
 
-  /* Large raised — for major cards */
   --neu-raised-lg:
     12px 12px 24px var(--shadow-dark),
     -12px -12px 24px var(--shadow-light);
 
-  /* Subtle — for smaller elements */
   --neu-raised-sm:
     4px 4px 8px var(--shadow-dark),
     -4px -4px 8px var(--shadow-light);
 
-  /* Flat (no depth) */
   --neu-flat:
     0px 0px 0px var(--shadow-dark),
     0px 0px 0px var(--shadow-light);
 
-  /* ---------- Z-Index Scale ---------- */
+  /* Z-Index */
   --z-canvas: 0;
   --z-base: 10;
   --z-card: 20;
@@ -153,7 +105,7 @@
   --z-modal: 200;
   --z-loader: 1000;
 
-  /* ---------- Animation Tokens ---------- */
+  /* Animation */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
@@ -165,10 +117,7 @@
   --duration-xslow: 800ms;
 }
 
-/* ==========================================================
-   RESET & BASE
-   ========================================================== */
-
+/* Base Styles */
 *,
 *::before,
 *::after {
@@ -191,11 +140,11 @@ body {
   background-color: var(--clr-bg);
   color: var(--clr-text-primary);
   line-height: 1.6;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow-x: hidden;
 }
 
-/* Hide scrollbar but keep functionality */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -209,32 +158,29 @@ body {
   border-radius: var(--radius-full);
 }
 
-/* Focus rings for accessibility */
+/* Accessibility */
 :focus-visible {
   outline: 2px solid var(--clr-accent-blue);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
 
-/* Selection */
 ::selection {
   background: var(--clr-accent-blue-glow);
   color: var(--clr-accent-blue);
 }
 
-/* Images */
+/* Media Elements */
 img,
 video {
   max-width: 100%;
   display: block;
 }
 
-/* Neutral Image Outlines */
 img {
   outline: 1px solid color-mix(in srgb, var(--shadow-dark) 10%, transparent);
   outline-offset: -1px;
 }
-
 
 /* Typography Polish */
 h1, h2, h3, h4, h5, h6 {
@@ -245,33 +191,20 @@ p, caption, li {
   text-wrap: pretty;
 }
 
-/* Counters, tables, prices */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Links */
 a {
   color: inherit;
   text-decoration: none;
   cursor: pointer;
 }
 
-/* ==========================================================
-   TYPOGRAPHY UTILITIES
-   ========================================================== */
-
-.font-display {
-  font-family: var(--font-display);
-}
-
-.font-body {
-  font-family: var(--font-body);
-}
-
-.font-ui {
-  font-family: var(--font-ui);
-}
+/* Typography Utilities */
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+.font-ui { font-family: var(--font-ui); }
 
 .text-gradient-blue {
   background: linear-gradient(135deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
@@ -287,10 +220,7 @@ a {
   background-clip: text;
 }
 
-/* ==========================================================
-   NEUMORPHIC COMPONENT CLASSES
-   ========================================================== */
-
+/* Component Classes */
 .neu-raised {
   background: var(--clr-bg);
   box-shadow: var(--neu-raised);
@@ -338,10 +268,7 @@ a {
   transform: translateY(0) scale(0.96);
 }
 
-/* ==========================================================
-   LAYOUT UTILITIES
-   ========================================================== */
-
+/* Layout */
 .container {
   width: 100%;
   max-width: 1280px;
@@ -349,13 +276,9 @@ a {
   padding: 0 var(--space-6);
 }
 
-
-
-/* Section spacing */
 .section {
   padding: var(--space-16) 0;
 }
-
 
 .section-label {
   font-family: var(--font-ui);
@@ -367,10 +290,7 @@ a {
   margin-bottom: var(--space-4);
 }
 
-/* ==========================================================
-   SCROLL REVEAL ANIMATION
-   ========================================================== */
-
+/* Animations */
 .reveal {
   opacity: 0;
   transform: translateY(40px);
@@ -379,35 +299,21 @@ a {
     transform var(--duration-slow) var(--ease-out-expo);
 }
 
+.reveal:not(.visible) {
+  will-change: transform, opacity;
+}
+
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.reveal-delay-1 {
-  transition-delay: 100ms;
-}
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 300ms; }
+.reveal-delay-4 { transition-delay: 400ms; }
 
-.reveal-delay-2 {
-  transition-delay: 200ms;
-}
-
-.reveal-delay-3 {
-  transition-delay: 300ms;
-}
-
-.reveal-delay-4 {
-  transition-delay: 400ms;
-}
-
-/* ==========================================================
-   REDUCED MOTION SUPPORT
-   ========================================================== */
-
-/* ==========================================================
-   MEDIA QUERIES (CONSOLIDATED)
-   ========================================================== */
-
+/* Media Queries */
 @media (min-width: 768px) {
   .container {
     padding: 0 var(--space-8);

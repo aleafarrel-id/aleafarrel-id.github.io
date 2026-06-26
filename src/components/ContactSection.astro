@@ -1,9 +1,4 @@
 ---
-/**
- * ContactSection.astro
- * Contact section with neumorphic social links.
- * Data consumed from locale JSON props.
- */
 import { Icon } from "astro-icon/components";
 import Antigravity from "./react/Antigravity/Antigravity.jsx";
 import siteConfig from "../siteConfig.json";
@@ -28,7 +23,6 @@ const { email, socials } = siteConfig as {
   socials: SocialLink[];
 };
 
-// Filter socials to grab only Github and Instagram to pair with Mail
 const targetSocials = socials.filter((s) =>
   ["github", "instagram"].includes(s.icon),
 );
@@ -96,7 +90,6 @@ const emailDomain = emailParts[1] || "";
           aria-label={email_label}
           title={email_label}
           role="button"
-          tabindex="0"
           onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}
         >
           <Icon name="bx:bxs-envelope" class="contact-icon" />
@@ -122,8 +115,6 @@ const emailDomain = emailParts[1] || "";
 </section>
 
 <style is:global>
-  /* ---------- Contact Section ---------- */
-
   #contact {
     position: relative;
     z-index: var(--z-base);
@@ -140,6 +131,9 @@ const emailDomain = emailParts[1] || "";
     height: 100%;
     z-index: 1;
     opacity: 0.25;
+    contain: size layout style;
+    isolation: isolate;
+    pointer-events: none;
   }
 
   .contact-section .container {
@@ -185,8 +179,6 @@ const emailDomain = emailParts[1] || "";
     width: clamp(1.5rem, 5vw, 2rem);
     height: clamp(1.5rem, 5vw, 2rem);
   }
-
-  /* ---------- Contact Social Buttons ---------- */
 
   .contact-social-btn {
     width: clamp(3.5rem, 12vw, 4.5rem);

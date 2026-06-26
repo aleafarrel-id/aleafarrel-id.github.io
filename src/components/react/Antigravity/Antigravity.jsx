@@ -81,7 +81,7 @@ const AntigravityInner = ({
       }
       if (!sectionCache) return;
       const rect = sectionCache.getBoundingClientRect();
-      // Only track if mouse is within the section bounds roughly
+
       if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
         const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -174,7 +174,7 @@ const AntigravityInner = ({
 
       scaleFactor = Math.max(0, Math.min(1, scaleFactor));
 
-      // Smoothly fade in over the first 2.5 seconds to prevent sudden pop/explosion on mount
+      /* Smooth fade-in on mount */
       const globalFade = Math.min(1, totalTimeRef.current * 0.4);
 
       const finalScale = scaleFactor * (0.8 + Math.sin(t * pulseSpeed) * 0.2 * particleVariance) * particleSize * globalFade;

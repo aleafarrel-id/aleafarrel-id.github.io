@@ -1,8 +1,29 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/utils";
+
+const tooltipStyles = `
+  @keyframes tooltip-in {
+    from { opacity: 0; transform: scale(0.95) translateY(6px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0); }
+  }
+  @keyframes tooltip-out {
+    from { opacity: 1; transform: scale(1)    translateY(0); }
+    to   { opacity: 0; transform: scale(0.95) translateY(6px); }
+  }
+  .tooltip-enter { animation: tooltip-in  120ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .tooltip-exit  { animation: tooltip-out  80ms ease-in both; }
+`;
+
+let styleInjected = false;
+function injectStyles() {
+  if (styleInjected || typeof document === "undefined") return;
+  styleInjected = true;
+  const el = document.createElement("style");
+  el.textContent = tooltipStyles;
+  document.head.appendChild(el);
+}
 
 export const Tooltip = ({
   content,
@@ -14,154 +35,182 @@ export const Tooltip = ({
   containerClassName?: string;
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [height, setHeight] = useState<number | "auto">("auto");
+  const [isExiting, setIsExiting] = useState(false);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
-  
+
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isTouchDevice = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches,
+    []
+  );
 
   useEffect(() => {
+    injectStyles();
     setMounted(true);
   }, []);
 
-  const isTouchDevice = typeof window !== "undefined" && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
+    };
+  }, []);
 
-  const calculatePosition = (mouseX: number, mouseY: number) => {
-    if (!contentRef.current) return { x: mouseX + 16, y: mouseY + 16 };
+  const calculatePosition = useCallback(
+    (tapX: number, tapY: number) => {
+      const vp = window.visualViewport;
+      const vw = vp ? vp.width  : window.innerWidth;
+      const vh = vp ? vp.height : window.innerHeight;
+      const vpLeft = vp ? vp.offsetLeft : 0;
+      const vpTop  = vp ? vp.offsetTop  : 0;
 
-    const tooltip = contentRef.current;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+      const EDGE = isTouchDevice ? 20 : 12;
 
-    const tooltipWidth = tooltip.offsetWidth || 340;
-    const tooltipHeight = tooltip.scrollHeight || 300;
+      const TOUCH_MAX_W = Math.min(260, vw - EDGE * 2);
+      const TOUCH_MAX_H = 340;
+      const DESK_MAX_W  = 380;
+      const DESK_MAX_H  = 400;
 
-    let finalX = mouseX + 16;
-    let finalY = mouseY + 16;
+      const el = contentRef.current;
+      const tw = (el && el.offsetWidth  > 0) ? el.offsetWidth  : (isTouchDevice ? TOUCH_MAX_W : DESK_MAX_W);
+      const th = (el && el.scrollHeight > 0) ? el.scrollHeight : (isTouchDevice ? TOUCH_MAX_H : DESK_MAX_H);
 
-    // Check right edge
-    if (finalX + tooltipWidth > viewportWidth - 16) {
-      finalX = mouseX - tooltipWidth - 16;
-    }
-    // Prevent left edge cutoff
-    if (finalX < 16) {
-      finalX = 16;
-    }
+      let x = tapX + EDGE;
+      let y = tapY + EDGE;
 
-    // Check bottom edge
-    if (finalY + tooltipHeight > viewportHeight - 16) {
-      finalY = mouseY - tooltipHeight - 16;
-    }
-    // Prevent top edge cutoff
-    if (finalY < 16) {
-      finalY = 16;
-    }
-
-    return { x: finalX, y: finalY };
-  };
-
-  const updatePosition = (clientX: number, clientY: number) => {
-    setMouse({ x: clientX, y: clientY });
-    setPosition(calculatePosition(clientX, clientY));
-  };
-
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isTouchDevice) return;
-    setIsVisible(true);
-    updatePosition(e.clientX, e.clientY);
-  };
-
-  const handleMouseLeave = () => {
-    if (isTouchDevice) return;
-    setIsVisible(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isTouchDevice) return;
-    if (!isVisible) return;
-    updatePosition(e.clientX, e.clientY);
-  };
-
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isTouchDevice) {
-      if (!isVisible) {
-        updatePosition(e.clientX, e.clientY);
-        setIsVisible(true);
-        setTimeout(() => {
-          setIsVisible(false);
-        }, 6000);
-      } else {
-        setIsVisible(false);
+      if (x + tw > vpLeft + vw - EDGE) {
+        x = tapX - tw - EDGE;
       }
-    }
-  };
+      if (y + th > vpTop + vh - EDGE) {
+        y = tapY - th - EDGE;
+      }
+
+      x = Math.max(vpLeft + EDGE, Math.min(x, vpLeft + vw - tw - EDGE));
+      y = Math.max(vpTop  + EDGE, Math.min(y, vpTop  + vh - th - EDGE));
+
+      return { x, y };
+    },
+    [isTouchDevice]
+  );
+
+  const showTooltip = useCallback(
+    (x: number, y: number) => {
+      if (exitTimerRef.current) {
+        clearTimeout(exitTimerRef.current);
+        exitTimerRef.current = null;
+      }
+      const pos = calculatePosition(x, y);
+      setPosition(pos);
+      setIsExiting(false);
+      setIsVisible(true);
+    },
+    [calculatePosition]
+  );
+
+  const hideTooltip = useCallback(() => {
+    setIsExiting(true);
+    exitTimerRef.current = setTimeout(() => {
+      setIsVisible(false);
+      setIsExiting(false);
+    }, 80);
+  }, []);
+
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (isTouchDevice) return;
+      showTooltip(e.clientX, e.clientY);
+    },
+    [isTouchDevice, showTooltip]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    if (isTouchDevice) return;
+    hideTooltip();
+  }, [isTouchDevice, hideTooltip]);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (isTouchDevice || !isVisible || isExiting) return;
+      setPosition(calculatePosition(e.clientX, e.clientY));
+    },
+    [isTouchDevice, isVisible, isExiting, calculatePosition]
+  );
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!isTouchDevice) return;
+      e.stopPropagation();
+
+      if (autoCloseTimerRef.current) {
+        clearTimeout(autoCloseTimerRef.current);
+        autoCloseTimerRef.current = null;
+      }
+
+      if (isVisible && !isExiting) {
+        hideTooltip();
+      } else {
+        showTooltip(e.clientX, e.clientY);
+        autoCloseTimerRef.current = setTimeout(hideTooltip, 5000);
+      }
+    },
+    [isTouchDevice, isVisible, isExiting, showTooltip, hideTooltip]
+  );
 
   useEffect(() => {
     if (!isVisible || !isTouchDevice) return;
 
-    const handleGlobalClick = (e: MouseEvent | TouchEvent) => {
+    const onPointerDown = (e: PointerEvent) => {
       if (
         contentRef.current?.contains(e.target as Node) ||
         containerRef.current?.contains(e.target as Node)
-      ) {
-        return;
-      }
-      setIsVisible(false);
+      ) return;
+      hideTooltip();
     };
 
-    const timeout = setTimeout(() => {
-      document.addEventListener("click", handleGlobalClick);
-      document.addEventListener("touchstart", handleGlobalClick);
-    }, 10);
+    document.addEventListener("pointerdown", onPointerDown, { capture: true });
+    return () => document.removeEventListener("pointerdown", onPointerDown, { capture: true });
+  }, [isVisible, isTouchDevice, hideTooltip]);
 
-    return () => {
-      clearTimeout(timeout);
-      document.removeEventListener("click", handleGlobalClick);
-      document.removeEventListener("touchstart", handleGlobalClick);
-    };
-  }, [isVisible, isTouchDevice]);
+  const tooltipElWidth = isTouchDevice
+    ? `${Math.min(260, typeof window !== "undefined" ? window.innerWidth - 40 : 260)}px`
+    : undefined;
 
-  useEffect(() => {
-    if (isVisible && contentRef.current) {
-      setPosition(calculatePosition(mouse.x, mouse.y));
-    }
-  }, [isVisible, mouse.x, mouse.y]);
-
-  const tooltipPortal = mounted && createPortal(
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className={cn(
-            "fixed z-[999999] overflow-hidden rounded-xl",
-            isTouchDevice ? "pointer-events-auto" : "pointer-events-none"
-          )}
-          role="tooltip"
-          aria-hidden={!isVisible}
-          style={{
-            top: position.y,
-            left: position.x,
-            background: 'var(--clr-bg-raised)',
-            boxShadow: 'var(--neu-raised-lg), 0 10px 40px var(--clr-accent-blue-glow)',
-            border: '1px solid var(--shadow-light)',
-            width: 'max-content',
-            minWidth: isTouchDevice ? '200px' : '280px',
-            maxWidth: isTouchDevice ? '260px' : '380px'
-          }}
-        >
-          <div ref={contentRef} onClick={() => { if (isTouchDevice) setIsVisible(false); }}>
-            {content}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
-    document.body
-  );
+  const tooltipPortal =
+    mounted &&
+    isVisible &&
+    createPortal(
+      <div
+        ref={contentRef}
+        className={cn(
+          "fixed z-[999999] overflow-hidden rounded-xl",
+          isExiting ? "tooltip-exit" : "tooltip-enter",
+          isTouchDevice ? "pointer-events-auto" : "pointer-events-none"
+        )}
+        role="tooltip"
+        aria-hidden={!isVisible}
+        style={{
+          top:  position.y,
+          left: position.x,
+          background: "var(--clr-bg-raised)",
+          border: "1px solid var(--shadow-light)",
+          width:    tooltipElWidth ?? "max-content",
+          minWidth: isTouchDevice ? "180px" : "280px",
+          maxWidth: isTouchDevice ? "260px" : "380px",
+          willChange: "transform, opacity",
+        }}
+        onClick={() => { if (isTouchDevice) hideTooltip(); }}
+      >
+        {content}
+      </div>,
+      document.body
+    );
 
   return (
     <div

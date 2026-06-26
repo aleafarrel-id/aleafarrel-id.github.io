@@ -1,9 +1,4 @@
 ---
-/**
- * ExperienceSection.astro
- * Timeline-style experience section.
- * Data consumed from locale JSON props.
- */
 interface ExperienceItem {
   id: number | string;
   name: string;
@@ -23,17 +18,21 @@ interface Props {
   items: ExperienceItem[];
 }
 
-const { section_label, heading, subheading, interaction_hint, center_label, center_subtitle, preview_label, items } = Astro.props;
+const {
+  section_label,
+  heading,
+  subheading,
+  interaction_hint,
+  center_label,
+  center_subtitle,
+  preview_label,
+  items,
+} = Astro.props;
 
 import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
 ---
 
-<section
-  id="experience"
-  class="section"
-  aria-labelledby="experience-heading"
->
-  <!-- ---------- Decorative Background Elements ---------- -->
+<section id="experience" class="section" aria-labelledby="experience-heading">
   <div class="experience-glow experience-glow-1"></div>
   <div class="experience-glow experience-glow-2"></div>
 
@@ -46,30 +45,52 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
       >
         {heading}
       </h2>
-      <p class="experience-subheading reveal reveal-delay-2 mx-auto md:mx-0">{subheading}</p>
+      <p class="experience-subheading reveal reveal-delay-2 mx-auto md:mx-0">
+        {subheading}
+      </p>
     </div>
 
     <div class="reveal reveal-delay-3">
       <div class="experience-flow-wrapper">
-        <CertificatesFlow client:visible={{ rootMargin: "500px" }} items={items} strings={{
-          centerLabel: center_label,
-          centerSubtitle: center_subtitle,
-          previewLabel: preview_label
-        }} />
+        <CertificatesFlow
+          client:idle
+          items={items}
+          strings={{
+            centerLabel: center_label,
+            centerSubtitle: center_subtitle,
+            previewLabel: preview_label,
+          }}
+        />
       </div>
-      {interaction_hint && (
-        <p class="experience-interaction-hint">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9c0-1.7 1.3-3 3-3h8c1.7 0 3 1.3 3 3v6c0 1.7-1.3 3-3 3H8c-1.7 0-3-1.3-3-3V9z"/><path d="M9 15h.01"/><path d="M12 15h.01"/><path d="M15 15h.01"/></svg>
-          {interaction_hint}
-        </p>
-      )}
+      {
+        interaction_hint && (
+          <p class="experience-interaction-hint">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <>
+                <path d="M5 9c0-1.7 1.3-3 3-3h8c1.7 0 3 1.3 3 3v6c0 1.7-1.3 3-3 3H8c-1.7 0-3-1.3-3-3V9z" />
+                <path d="M9 15h.01" />
+                <path d="M12 15h.01" />
+                <path d="M15 15h.01" />
+              </>
+            </svg>
+            {interaction_hint}
+          </p>
+        )
+      }
     </div>
   </div>
 </section>
 
 <style is:global>
-  /* ---------- Experience Section ---------- */
-
   #experience {
     position: relative;
     z-index: var(--z-base);
@@ -77,11 +98,9 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     overflow: hidden;
   }
 
-  /* ---------- Decorative Glows ---------- */
   .experience-glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
     opacity: 0.15;
     pointer-events: none;
     z-index: 0;
@@ -89,25 +108,27 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
 
   .experience-glow-1 {
     top: 10%;
-    right: -10%;
+    left: -10%;
     width: 600px;
     height: 600px;
-    background: var(--clr-accent-blue);
-    animation: float 10s ease-in-out infinite alternate;
+    background: radial-gradient(circle, var(--clr-accent-blue) 0%, transparent 70%);
   }
 
   .experience-glow-2 {
     bottom: -10%;
-    left: -10%;
+    right: -10%;
     width: 500px;
     height: 500px;
-    background: var(--clr-accent-orange);
-    animation: float 12s ease-in-out infinite alternate-reverse;
+    background: radial-gradient(circle, var(--clr-accent-orange) 0%, transparent 70%);
   }
 
-  @keyframes float {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-40px) scale(1.05); }
+  @keyframes experience-float {
+    0% {
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      transform: translateY(-40px) scale(1.05);
+    }
   }
 
   .experience-heading {
@@ -117,7 +138,8 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     letter-spacing: -0.03em;
     color: var(--clr-text-primary);
     margin-bottom: var(--space-4);
-    text-shadow: 0 4px 24px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+    text-shadow: 0 4px 24px
+      color-mix(in srgb, var(--shadow-dark) 40%, transparent);
   }
 
   .experience-subheading {
@@ -132,10 +154,21 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: var(--clr-bg-deep);
-    border: 1px solid color-mix(in srgb, var(--clr-text-primary) 5%, transparent);
-    box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--clr-text-primary) 5%, transparent);
+    box-shadow: 0 24px 64px
+      color-mix(in srgb, var(--shadow-dark) 40%, transparent);
     margin-left: calc(-1 * var(--space-4));
     width: calc(100% + var(--space-8));
+  }
+
+  @media (max-width: 767px) {
+    .experience-flow-wrapper .react-flow__pane {
+      pointer-events: none;
+    }
+    .experience-flow-wrapper .react-flow__node {
+      pointer-events: all;
+    }
   }
 
   .experience-header-wrapper {
@@ -144,7 +177,6 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     position: relative;
     z-index: 10;
   }
-
 
   .experience-interaction-hint {
     text-align: center;
@@ -167,10 +199,6 @@ import CertificatesFlow from "./react/CertificatesFlow/CertificatesFlow.jsx";
     height: 20px;
     flex-shrink: 0;
   }
-
-  /* ==========================================================
-     MEDIA QUERIES (CONSOLIDATED)
-     ========================================================== */
 
   @media (min-width: 768px) {
     .experience-header-wrapper {

@@ -1,14 +1,11 @@
 .scroll-stack-scroller {
   position: relative;
   width: 100%;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  will-change: scroll-position;
 }
 
 .scroll-stack-inner {
-  padding: 5vh 0 20vh;
-  min-height: 100vh;
+  padding: 5svh 0 20svh;
+  min-height: 100svh;
 }
 
 .scroll-stack-card-wrapper {
@@ -17,15 +14,17 @@
 
 .scroll-stack-card {
   transform-origin: top center;
-  will-change: transform, filter;
+  /* Only promote transform — avoids GPU layer explosion from preserve-3d + filter */
+  will-change: transform;
+  /* Standard 2D backface — no 3D context overhead */
   backface-visibility: hidden;
-  transform-style: preserve-3d;
   width: 100%;
   margin: 0;
   box-sizing: border-box;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  position: relative;
+  
+  /* NATIVE STICKY POSITIONING! This entirely eliminates JS scroll jitter */
+  position: sticky;
+  top: var(--stack-pos, 20svh);
   z-index: 10;
 }
 

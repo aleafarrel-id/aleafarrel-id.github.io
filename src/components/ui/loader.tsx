@@ -8,6 +8,9 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
+    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-stop"));
+
     const handleProgress = (e: any) => {
       setProgress(e.detail.pct);
       if (e.detail.phrase) {
@@ -16,6 +19,8 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
     };
     const handleDone = () => {
       setVisible(false);
+      document.body.style.overflow = "";
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
     };
 
     window.addEventListener("loader-progress", handleProgress);
@@ -24,6 +29,8 @@ export const LoaderOne = ({ phrases = [] }: { phrases?: string[] }) => {
     return () => {
       window.removeEventListener("loader-progress", handleProgress);
       document.removeEventListener("preloader-done", handleDone);
+      document.body.style.overflow = "";
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
     };
   }, []);
 

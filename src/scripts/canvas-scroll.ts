@@ -1,31 +1,19 @@
-/**
- * canvas-scroll.ts
- * ─────────────────────────────────────────────────────────────
- * Preloads all hero WebP frames into memory, then maps the
- * user's scroll position to the correct frame — rendered on a
- * full-screen <canvas> using requestAnimationFrame for 60fps.
- *
- * Fix: frames[] and currentIndex declared at module scope
- * so resizeCanvas() can safely access them on first call.
- */
-
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── CONFIG ────────────────────────────────────────────────────
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const FRAME_COUNT = 229;
 const FRAME_PATH = '/frame/';
 const BATCH_SIZE = 20;
 
-// ─── MODULE-SCOPE STATE (declared before any function uses them) ─
 let frames: (HTMLImageElement | null)[] = new Array(FRAME_COUNT).fill(null);
 let currentIndex = 0;
 let canvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
 
-// ─── HELPERS ───────────────────────────────────────────────────
 function frameUrl(n: number): string {
   const padded = String(n).padStart(3, '0');
   return `${FRAME_PATH}hero-${padded}.webp`;
@@ -35,12 +23,11 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.onerror = () => resolve(img); // Don't break loading on missing frames
+    img.onerror = () => resolve(img);
     img.src = src;
   });
 }
 
-// ─── DRAW (safe: checks frames[i] before drawing) ──────────────
 function drawFrame(img: HTMLImageElement | null): void {
   if (!img || !img.naturalWidth || !canvas || !ctx) return;
 
@@ -49,28 +36,28 @@ function drawFrame(img: HTMLImageElement | null): void {
   const iw = img.naturalWidth;
   const ih = img.naturalHeight;
 
-  // "cover" scaling — fills canvas, horizontally centered
   const scale = Math.max(cw / iw, ch / ih);
   const sx = (cw - iw * scale) / 2;
-  // Geser sedikit ke atas (15% dari sisa ruang) agar tidak terlalu ke bawah, tapi kepala tetap utuh
   const sy = (ch - ih * scale) * 0.15;
 
   ctx.clearRect(0, 0, cw, ch);
   ctx.drawImage(img, sx, sy, iw * scale, ih * scale);
 }
 
-// ─── RESIZE (safe: frames[] already exists at module scope) ────
 function resizeCanvas(): void {
   if (!canvas) return;
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  // Redraw current frame if available
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+
   if (frames[currentIndex]) {
     drawFrame(frames[currentIndex]);
   }
 }
 
-// ─── MAIN ──────────────────────────────────────────────────────
 async function initCanvasScroll(): Promise<void> {
   canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
   ctx = canvas?.getContext('2d') ?? null;
@@ -86,11 +73,14 @@ async function initCanvasScroll(): Promise<void> {
     return;
   }
 
-  // ── Attach resize listener AFTER canvas is assigned ──────────
-  window.addEventListener('resize', resizeCanvas, { passive: true });
+  if (canvas) {
+    const resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(resizeCanvas);
+    });
+    resizeObserver.observe(canvas);
+  }
   resizeCanvas();
 
-  // ── Setup phrases ──────────────────────────────────────────
   const phraseEl = document.getElementById('loader-phrase');
   let phrases: string[] = [];
   try {
@@ -100,7 +90,6 @@ async function initCanvasScroll(): Promise<void> {
 
   let currentPhraseIndex = 0;
 
-  // ── Progress update ────────────────────────────────────────
   function updateProgress(loaded: number): void {
     const pct = Math.round((loaded / FRAME_COUNT) * 100);
 
@@ -112,8 +101,7 @@ async function initCanvasScroll(): Promise<void> {
       );
       activePhrase = phrases[phraseIndex];
     }
-    
-    // Dispatch event for React loader component
+
     window.dispatchEvent(new CustomEvent('loader-progress', { detail: { pct, phrase: activePhrase } }));
 
     if (loaderBar) loaderBar.style.width = `${pct}%`;
@@ -137,7 +125,6 @@ async function initCanvasScroll(): Promise<void> {
     }
   }
 
-  // ── Preload all frames in parallel batches ─────────────────
   let loadedCount = 0;
 
   for (let start = 0; start < FRAME_COUNT; start += BATCH_SIZE) {
@@ -145,14 +132,13 @@ async function initCanvasScroll(): Promise<void> {
     const batch: Promise<void>[] = [];
 
     for (let i = start; i <= end; i++) {
-      const idx = i; // 0-based index into frames[] matches file numbers (0 to 228)
+      const idx = i;
       batch.push(
         loadImage(frameUrl(i)).then(img => {
           frames[idx] = img;
           loadedCount++;
           updateProgress(loadedCount);
 
-          // Draw very first frame as soon as it arrives
           if (idx === 0) drawFrame(frames[0]);
         })
       );
@@ -161,14 +147,11 @@ async function initCanvasScroll(): Promise<void> {
     await Promise.all(batch);
   }
 
-  // ── Draw first frame ───────────────────────────────────────
   if (frames[0]) drawFrame(frames[0]);
 
-  // ── Brief pause so 100% is visible, then hide preloader ───
   await new Promise<void>(r => setTimeout(r, 600));
   document.dispatchEvent(new CustomEvent('preloader-done'));
 
-  // ── GSAP ScrollTrigger ─────────────────────────────────────
   const driver = document.getElementById('scroll-canvas-driver');
   if (!driver) return;
 
@@ -189,7 +172,6 @@ async function initCanvasScroll(): Promise<void> {
   });
 }
 
-// ─── INIT ──────────────────────────────────────────────────────
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initCanvasScroll);
 } else {

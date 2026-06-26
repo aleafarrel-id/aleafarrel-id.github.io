@@ -57,15 +57,8 @@ const CertificateNode = ({ data }) => {
     <Tooltip content={tooltipContent}>
       <div
         className="cert-node-container"
-        tabIndex={0}
         role="button"
         aria-label={`Preview certificate for ${data.title}`}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            e.currentTarget.click();
-          }
-        }}
       >
         <Handle type="target" position={Position.Left} className="cert-flow-handle-left-blue" />
 
@@ -114,7 +107,7 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
         const col = Math.floor(i / 3);
         let row = i % 3;
 
-        // Center the last item if it's the only one in its column
+        /* Center alignment for single remaining item */
         if (i === items.length - 1 && row === 0) {
           row = 1;
         }
@@ -139,12 +132,14 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
           source: prevId,
           target: currentId,
           type: 'smoothstep',
-          animated: true,
+          animated: typeof window !== 'undefined' && window.innerWidth >= 768,
           style: {
             stroke: isBlue ? 'var(--clr-accent-blue)' : 'var(--clr-accent-orange)',
             strokeWidth: 4,
             opacity: 0.8,
-            filter: `drop-shadow(0 0 6px ${isBlue ? 'var(--clr-accent-blue-glow)' : 'var(--clr-accent-orange-glow)'})`
+            ...(typeof window !== 'undefined' && window.innerWidth >= 768 ? {
+              filter: `drop-shadow(0 0 6px ${isBlue ? 'var(--clr-accent-blue-glow)' : 'var(--clr-accent-orange-glow)'})`
+            } : {})
           }
         });
 
@@ -164,13 +159,11 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
     [setEdges],
   );
 
-  // Focus the view with a more reasonable padding
   useEffect(() => {
     const timer = setTimeout(() => {
       if (typeof window !== 'undefined' && window.innerWidth < 768) {
-        // Focus only on the start node and first few items on mobile to prevent tiny zoom
         const subset = nodes.slice(0, 3).map(n => ({ id: n.id }));
-        fitView({ nodes: subset, padding: 0.1, duration: 1000, maxZoom: 0.8 });
+        fitView({ nodes: subset, padding: 0.1, duration: 0, maxZoom: 0.8 });
       } else {
         fitView({ padding: 0.15, duration: 1000 });
       }
@@ -193,8 +186,13 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
       preventScrolling={false}
       zoomOnScroll={false}
       panOnScroll={false}
+      panOnDrag={true}
+      nodesDraggable={true}
+      nodesConnectable={false}
+      nodesFocusable={false}
+      edgesFocusable={false}
+      elementsSelectable={false}
     >
-      <Background variant="dots" gap={32} size={2} color="rgba(255, 255, 255, 0.15)" />
       <Controls showInteractive={false} style={{ button: { backgroundColor: 'var(--clr-bg-raised)', border: '1px solid var(--shadow-light)', color: 'var(--clr-text-primary)' } }} />
     </ReactFlow>
   );
@@ -211,7 +209,6 @@ export default function CertificatesFlow({ items, strings }) {
     setIsClient(true);
   }, []);
 
-  // Trap focus and close on Escape
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && previewImage) {
@@ -222,9 +219,8 @@ export default function CertificatesFlow({ items, strings }) {
     let focusTimer;
     if (previewImage) {
       document.addEventListener('keydown', handleKeyDown);
-      // Ensure focus on close button for accessibility
       focusTimer = setTimeout(() => {
-        closeButtonRef.current?.focus();
+        closeButtonRef.current?.focus({ preventScroll: true });
       }, 100);
     }
     
@@ -239,12 +235,14 @@ export default function CertificatesFlow({ items, strings }) {
       const imagePath = node.data.image.startsWith('/') ? node.data.image : `/certificate/${node.data.image.split('/').pop()}`;
       setIsClosing(false);
       setPreviewImage(imagePath);
+      document.body.style.overflow = "hidden";
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-stop"));
     }
   }, []);
 
   const onNodeClick = useCallback((event, node) => {
     const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-    if (isTouch) return; // Let touch events show the tooltip, and clicking tooltip opens preview
+    if (isTouch) return;
     openPreview(node);
   }, [openPreview]);
 
@@ -253,16 +251,20 @@ export default function CertificatesFlow({ items, strings }) {
   useEffect(() => {
     return () => {
       if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      document.body.style.overflow = "";
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
     };
   }, []);
 
   const handleClose = () => {
     setIsClosing(true);
+    document.body.style.overflow = "";
+    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("lenis-start"));
     closeTimeoutRef.current = setTimeout(() => {
       setPreviewImage(null);
       setIsClosing(false);
-      setHovering(false); // Reset hovering state so lens doesn't persist on next open
-    }, 300); // Matches the animation duration
+      setHovering(false);
+    }, 300);
   };
 
   const modalContent = previewImage && (
