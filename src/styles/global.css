@@ -201,11 +201,18 @@ img {
 }
 
 /* Typography Polish */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
 }
 
-p, caption, li {
+p,
+caption,
+li {
   text-wrap: pretty;
 }
 
@@ -220,9 +227,17 @@ a {
 }
 
 /* Typography Utilities */
-.font-display { font-family: var(--font-display); }
-.font-body { font-family: var(--font-body); }
-.font-ui { font-family: var(--font-ui); }
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
 
 .text-gradient-blue {
   background: linear-gradient(135deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
@@ -326,10 +341,21 @@ a {
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 100ms; }
-.reveal-delay-2 { transition-delay: 200ms; }
-.reveal-delay-3 { transition-delay: 300ms; }
-.reveal-delay-4 { transition-delay: 400ms; }
+.reveal-delay-1 {
+  transition-delay: 100ms;
+}
+
+.reveal-delay-2 {
+  transition-delay: 200ms;
+}
+
+.reveal-delay-3 {
+  transition-delay: 300ms;
+}
+
+.reveal-delay-4 {
+  transition-delay: 400ms;
+}
 
 /* Interactive Overlay Components */
 .interaction-overlay {
@@ -396,11 +422,18 @@ a {
 }
 
 /* Typography Polish */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
 }
 
-p, caption, li {
+p,
+caption,
+li {
   text-wrap: pretty;
 }
 
@@ -415,9 +448,17 @@ a {
 }
 
 /* Typography Utilities */
-.font-display { font-family: var(--font-display); }
-.font-body { font-family: var(--font-body); }
-.font-ui { font-family: var(--font-ui); }
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
 
 .text-gradient-blue {
   background: linear-gradient(135deg, var(--clr-accent-blue), var(--clr-accent-blue-light));
@@ -521,10 +562,21 @@ a {
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 100ms; }
-.reveal-delay-2 { transition-delay: 200ms; }
-.reveal-delay-3 { transition-delay: 300ms; }
-.reveal-delay-4 { transition-delay: 400ms; }
+.reveal-delay-1 {
+  transition-delay: 100ms;
+}
+
+.reveal-delay-2 {
+  transition-delay: 200ms;
+}
+
+.reveal-delay-3 {
+  transition-delay: 300ms;
+}
+
+.reveal-delay-4 {
+  transition-delay: 400ms;
+}
 
 /* Interactive Overlay Components */
 .interaction-overlay {
@@ -597,10 +649,6 @@ a {
 
 /* Pinch to Zoom Hint */
 .pinch-zoom-hint {
-  position: absolute;
-  bottom: var(--space-8);
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -645,12 +693,15 @@ a {
   .container {
     padding: 0 var(--space-8);
   }
+
   .section {
     padding: var(--space-32) 0;
   }
+
   .interaction-overlay-text {
     font-size: var(--text-lg);
   }
+
   .interaction-done-btn {
     font-size: var(--text-base);
     padding: 10px 24px;
@@ -671,6 +722,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -678,6 +730,7 @@ a {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
   .reveal {
     opacity: 1;
     transform: none;

@@ -120,7 +120,7 @@ function closeMenu() {
 hamburger?.addEventListener("click", openMenu);
 closeBtn?.addEventListener("click", closeMenu);
 
-document.querySelectorAll(".mobile-nav-link").forEach((link) => 
+document.querySelectorAll(".mobile-nav-link").forEach((link) =>
   link.addEventListener("click", closeMenu)
 );
 
@@ -133,7 +133,7 @@ document.querySelectorAll('a[href*="#"]').forEach((anchor) => {
   anchor.addEventListener('click', (e) => {
     const href = anchor.getAttribute('href');
     if (!href) return;
-    
+
     const url = new URL(href, window.location.href);
     if (url.pathname === window.location.pathname) {
       const targetId = url.hash;

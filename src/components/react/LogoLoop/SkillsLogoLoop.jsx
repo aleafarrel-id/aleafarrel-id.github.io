@@ -1,6 +1,6 @@
 import LogoLoop from './LogoLoop';
 import { FaHtml5, FaCss3Alt } from 'react-icons/fa6';
-import { SiJavascript, SiTailwindcss, SiPhp, SiGit, SiMysql, SiCplusplus, SiReact, SiPython, SiNodedotjs, SiAstro, SiGnubash } from 'react-icons/si';
+import { SiJavascript, SiTailwindcss, SiPhp, SiGit, SiMysql, SiCplusplus, SiReact, SiPython, SiNodedotjs, SiAstro, SiGnubash, SiCapacitor } from 'react-icons/si';
 
 const techLogos = [
   { node: <FaHtml5 />, title: "HTML5", href: "https://developer.mozilla.org/en-US/docs/Glossary/HTML5" },
@@ -16,6 +16,7 @@ const techLogos = [
   { node: <SiMysql />, title: "MySQL", href: "https://www.mysql.com" },
   { node: <SiGnubash />, title: "Bash", href: "https://www.gnu.org/software/bash/" },
   { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
+  { node: <SiCapacitor />, title: "Capacitor", href: "https://capacitorjs.com" },
 ];
 
 export default function SkillsLogoLoop() {

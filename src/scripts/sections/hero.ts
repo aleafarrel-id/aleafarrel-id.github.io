@@ -9,9 +9,12 @@ function animateHeroIn() {
     .to("#hero-ctas", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
 }
 
-// We still listen on window natively to intercept loader events if loader uses window/document
 window.addEventListener("preloader-done", animateHeroIn, { once: true });
-document.addEventListener("preloader-done", animateHeroIn, { once: true }); // Fallback since loader.tsx might use document
+document.addEventListener("preloader-done", animateHeroIn, { once: true });
+
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function initHeroScrollFade() {
   const heroContent = document.getElementById("hero-content-wrapper");
@@ -20,35 +23,34 @@ function initHeroScrollFade() {
 
   if (!heroContent || !heroOverlay) return;
 
-  function updateHeroFade() {
-    if (!heroContent || !heroOverlay) return;
-    if (window.innerWidth <= 1440) {
-      const scrollY = window.scrollY;
-      const opacity = Math.max(1 - scrollY / 250, 0);
+  const mm = gsap.matchMedia();
 
-      heroContent.style.opacity = opacity.toString();
-      heroContent.style.pointerEvents = opacity === 0 ? "none" : "auto";
+  mm.add("(max-width: 1440px)", () => {
+    gsap.to([heroContent, heroOverlay], {
+      autoAlpha: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: 250,
+        scrub: 0.5,
+      },
+    });
 
-      heroOverlay.style.opacity = opacity.toString();
-
-      if (scrollHint) {
-        if (scrollY > 10) {
-          scrollHint.style.opacity = opacity.toString();
-        } else {
-          scrollHint.style.opacity = "";
-        }
-      }
-    } else {
-      heroContent.style.opacity = "1";
-      heroContent.style.pointerEvents = "auto";
-      heroOverlay.style.opacity = "";
-      if (scrollHint) scrollHint.style.opacity = "";
+    // Fade out scroll hint
+    if (scrollHint) {
+      gsap.to(scrollHint, {
+        autoAlpha: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: document.body,
+          start: "10px top",
+          end: 250,
+          scrub: 0.5,
+        },
+      });
     }
-  }
-
-  window.addEventListener("scroll", updateHeroFade, { passive: true });
-  window.addEventListener("resize", updateHeroFade, { passive: true });
-  updateHeroFade();
+  });
 }
 
 initHeroScrollFade();

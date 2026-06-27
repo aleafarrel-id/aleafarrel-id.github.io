@@ -4,7 +4,7 @@ import { Lens } from '../../ui/lens';
 import { Tooltip } from '../../ui/tooltip-card';
 import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
 import { PinchZoomImage } from '../../ui/PinchZoomImage';
-import { FiLoader } from 'react-icons/fi';
+
 import {
   ReactFlow,
   useNodesState,
@@ -53,13 +53,15 @@ const CertificateNode = memo(({ data }) => {
         <div className="cert-tooltip-gradient-overlay">
           <p className="cert-tooltip-provider">{data.name}</p>
         </div>
-        <div className="cert-tooltip-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
-          <span className="cert-tooltip-badge-text">{data.previewLabel}</span>
-        </div>
       </div>
       <div className="cert-tooltip-body">
-        <h3 className="cert-tooltip-title">{data.title}</h3>
+        <div className="cert-tooltip-title-row">
+          <h3 className="cert-tooltip-title">{data.title}</h3>
+          <div className="cert-tooltip-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+            <span className="cert-tooltip-badge-text">{data.previewLabel}</span>
+          </div>
+        </div>
         <p className="cert-tooltip-description">{data.description}</p>
       </div>
     </div>
@@ -207,8 +209,11 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
   return (
     <div className="relative w-full h-full">
       {!isFlowReady && (
-        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[var(--clr-bg-deep)] rounded-xl">
-          <FiLoader className="animate-spin text-3xl text-[var(--clr-accent-blue)] mb-3" />
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-[var(--clr-bg-deep)] rounded-xl">
+          <svg className="animate-spin h-10 w-10 text-[var(--clr-accent-blue)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
           <span className="text-xs font-ui text-[var(--clr-text-secondary)] animate-pulse tracking-widest uppercase">
             {strings?.loading_flow || "Loading"}
           </span>
