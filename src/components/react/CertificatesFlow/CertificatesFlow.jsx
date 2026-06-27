@@ -206,7 +206,16 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
       {!isInteractive && isMobile && (
         <div 
           className="interaction-overlay"
-          onClick={() => setIsInteractive(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsInteractive(true);
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
           role="button"
           tabIndex={0}
           aria-label={strings?.tap_to_interact || "Ketuk untuk berinteraksi"}

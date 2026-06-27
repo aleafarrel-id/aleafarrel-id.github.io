@@ -698,10 +698,17 @@ class App {
           const maxY = centerY + itemHeight / 2;
           
           if (clickX >= minX && clickX <= maxX && clickY >= minY && clickY <= maxY) {
-            const width = this.medias[0].width;
-            const itemIndex = Math.round(Math.abs(this.scroll.target) / width);
+            let clickedMediaIndex = 0;
+            let minDistance = Infinity;
+            this.medias.forEach((media) => {
+              const dist = Math.abs(media.plane.position.x);
+              if (dist < minDistance) {
+                minDistance = dist;
+                clickedMediaIndex = media.index;
+              }
+            });
             const originalLength = this.mediasImages.length / 2;
-            const actualIndex = itemIndex % originalLength;
+            const actualIndex = clickedMediaIndex % originalLength;
             this.onClickItem(actualIndex);
           }
         }
@@ -990,7 +997,16 @@ export default function CircularGallery({
       {!isInteractive && isMobile && (
         <div 
           className="interaction-overlay"
-          onClick={() => setIsInteractive(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsInteractive(true);
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
           role="button"
           tabIndex={0}
           aria-label={strings?.tap_to_interact || "Ketuk untuk berinteraksi"}
