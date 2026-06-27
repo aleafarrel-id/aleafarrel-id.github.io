@@ -78,15 +78,6 @@
   outline: none;
 }
 
-@media (hover: hover) {
-  .cert-node-container:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--neu-raised), 0 8px 24px var(--clr-accent-blue-glow);
-    border-color: var(--clr-accent-blue);
-    outline: none;
-  }
-}
-
 .cert-node-header {
   display: flex;
   align-items: center;
@@ -220,16 +211,6 @@
   background-size: 64px 64px;
 }
 
-/* Allow page scroll on mobile */
-@media (max-width: 767px) {
-  .cert-flow-wrapper .react-flow__pane {
-    pointer-events: none;
-  }
-  .cert-flow-wrapper .react-flow__node {
-    pointer-events: all;
-  }
-}
-
 /* Modal Overlay */
 .cert-modal-overlay {
   position: fixed;
@@ -277,14 +258,6 @@
   transform: scale(1.1);
   background: var(--clr-error);
   outline: none;
-}
-
-@media (hover: hover) {
-  .cert-modal-close-btn:hover {
-    transform: scale(1.1);
-    background: var(--clr-error);
-    outline: none;
-  }
 }
 
 .cert-modal-content-wrapper {
@@ -347,40 +320,54 @@
 }
 
 /* Media Queries */
+@media (hover: hover) {
+  .cert-node-container:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--neu-raised), 0 8px 24px var(--clr-accent-blue-glow);
+    border-color: var(--clr-accent-blue);
+    outline: none;
+  }
+  .cert-modal-close-btn:hover {
+    transform: scale(1.1);
+    background: var(--clr-error);
+    outline: none;
+  }
+}
+
 @media (max-width: 767px) {
+  /* Allow page scroll on mobile */
+  .cert-flow-wrapper .react-flow__pane {
+    pointer-events: none;
+  }
+  .cert-flow-wrapper .react-flow__node {
+    pointer-events: all;
+  }
+
   .cert-tooltip-container {
     width: 260px;
   }
-
   .cert-tooltip-image-wrapper {
     height: 120px;
   }
-
   .cert-tooltip-body {
     padding: var(--space-3) var(--space-4);
   }
-
   .cert-tooltip-title {
     font-size: var(--text-base);
   }
-
   .cert-tooltip-description {
     font-size: 10px;
     line-height: 1.4;
   }
-
   .cert-tooltip-badge {
     padding: var(--space-1) var(--space-2);
   }
-
   .cert-tooltip-badge-text {
     font-size: 8px;
   }
-
   .cert-tooltip-provider {
     font-size: 10px;
   }
-
   .cert-modal-close-btn {
     width: 40px;
     height: 40px;

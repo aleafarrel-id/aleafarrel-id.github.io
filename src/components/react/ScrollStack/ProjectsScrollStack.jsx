@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { FiExternalLink, FiGithub } from 'react-icons/fi';
 import { FaGooglePlay } from 'react-icons/fa';
@@ -8,69 +8,31 @@ import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
 import { globalEvents, EVENTS } from '../../../lib/events';
 import './ProjectsScrollStack.css';
 
-const ProjectsScrollStack = ({ items, view_project }) => {
-  const [previewImage, setPreviewImage] = useState(null);
-  const [isClosing, setIsClosing] = useState(false);
+const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
   const [hovering, setHovering] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const closeButtonRef = useRef(null);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && previewImage) {
+      if (e.key === 'Escape') {
         handleClose();
       }
     };
     
-    let focusTimer;
-    if (previewImage) {
-      document.addEventListener('keydown', handleKeyDown);
-      focusTimer = setTimeout(() => {
-        closeButtonRef.current?.focus({ preventScroll: true });
-      }, 100);
-    }
+    document.addEventListener('keydown', handleKeyDown);
+    const focusTimer = setTimeout(() => {
+      closeButtonRef.current?.focus({ preventScroll: true });
+    }, 100);
     
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      if (focusTimer) clearTimeout(focusTimer);
+      clearTimeout(focusTimer);
     };
-  }, [previewImage]);
+  }, [handleClose]);
 
-  const openPreview = useCallback((imagePath) => {
-    if (imagePath) {
-      setIsClosing(false);
-      setPreviewImage(imagePath);
-      document.body.style.overflow = "hidden";
-      globalEvents.emit(EVENTS.LENIS_STOP);
-    }
-  }, []);
+  if (!previewImage) return null;
 
-  const closeTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    return () => {
-      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-      document.body.style.overflow = "";
-      globalEvents.emit(EVENTS.LENIS_START);
-    };
-  }, []);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    document.body.style.overflow = "";
-    globalEvents.emit(EVENTS.LENIS_START);
-    closeTimeoutRef.current = setTimeout(() => {
-      setPreviewImage(null);
-      setIsClosing(false);
-      setHovering(false);
-    }, 300);
-  };
-
-  const modalContent = previewImage && (
+  return (
     <div
       className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
       onClick={handleClose}
@@ -91,17 +53,124 @@ const ProjectsScrollStack = ({ items, view_project }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <img
+          <ImageWithSkeleton
             src={previewImage}
             alt="Project detailed preview"
             className="project-modal-image"
             width="1200"
             height="900"
+            loading="lazy"
+            decoding="async"
           />
         </Lens>
       </div>
     </div>
   );
+});
+
+ProjectModal.displayName = 'ProjectModal';
+
+const ProjectCard = memo(({ card, view_project, openPreview }) => {
+  const handleOpen = useCallback(() => {
+    openPreview(card.image);
+  }, [openPreview, card.image]);
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openPreview(card.image);
+    }
+  }, [openPreview, card.image]);
+
+  const stopPropagation = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
+  return (
+    <ScrollStackItem itemClassName="project-scroll-card">
+      <div 
+        className="project-card-inner group"
+        onClick={handleOpen}
+        role="button"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        aria-label={`Preview ${card.name} project`}
+      >
+        <div className="project-card-image-section">
+          <img src={card.image} alt={card.name} loading="lazy" decoding="async" width="800" height="600" style={{ objectFit: 'cover' }} />
+          <div className="project-overlay"></div>
+        </div>
+        
+        <div className="project-card-content">
+          <div className="project-card-category">{card.category}</div>
+          <h3 className="project-card-title">{card.name}</h3>
+          <p className="project-card-description">{card.description}</p>
+          
+          <div className="project-card-tags">
+            {card.tags.map((tag, idx) => (
+              <span key={idx} className="project-card-tag">{tag}</span>
+            ))}
+          </div>
+          
+          <div className="project-card-links">
+            {card.link && (
+              <a href={card.link} target="_blank" rel="noopener noreferrer" className="project-link-btn primary" aria-label={view_project} onClick={stopPropagation}>
+                {card.link.includes('github.com') ? <FiGithub size={18} /> : <FiExternalLink size={18} />} 
+                <span>{view_project}</span>
+              </a>
+            )}
+            {card.playStoreUrl && (
+              <a href={card.playStoreUrl} target="_blank" rel="noopener noreferrer" className="project-link-btn secondary" aria-label="Play Store" onClick={stopPropagation}>
+                <FaGooglePlay size={18} /> 
+                <span>Play Store</span>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </ScrollStackItem>
+  );
+});
+
+ProjectCard.displayName = 'ProjectCard';
+
+const ProjectsScrollStack = ({ items, view_project }) => {
+  const [previewImage, setPreviewImage] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const openPreview = useCallback((imagePath) => {
+    if (imagePath) {
+      setIsClosing(false);
+      setPreviewImage(imagePath);
+      document.body.style.overflow = "hidden";
+      globalEvents.emit(EVENTS.LENIS_STOP);
+    }
+  }, []);
+
+  const closeTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      document.body.style.overflow = "";
+      globalEvents.emit(EVENTS.LENIS_START);
+    };
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    document.body.style.overflow = "";
+    globalEvents.emit(EVENTS.LENIS_START);
+    closeTimeoutRef.current = setTimeout(() => {
+      setPreviewImage(null);
+      setIsClosing(false);
+    }, 300);
+  }, []);
 
   return (
     <div className="projects-scroll-wrapper">
@@ -111,58 +180,24 @@ const ProjectsScrollStack = ({ items, view_project }) => {
         stackPosition="10%"
       >
         {(items || []).map((card, index) => (
-          <ScrollStackItem key={card.id || index} itemClassName="project-scroll-card">
-            <div 
-              className="project-card-inner group"
-              onClick={() => openPreview(card.image)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  openPreview(card.image);
-                }
-              }}
-              aria-label={`Preview ${card.name} project`}
-            >
-              <div className="project-card-image-section">
-                <img src={card.image} alt={card.name} loading="lazy" decoding="async" width="800" height="600" style={{ objectFit: 'cover' }} />
-                <div className="project-overlay"></div>
-              </div>
-              
-              <div className="project-card-content">
-                <div className="project-card-category">{card.category}</div>
-                <h3 className="project-card-title">{card.name}</h3>
-                <p className="project-card-description">{card.description}</p>
-                
-                <div className="project-card-tags">
-                  {card.tags.map((tag, idx) => (
-                    <span key={idx} className="project-card-tag">{tag}</span>
-                  ))}
-                </div>
-                
-                <div className="project-card-links">
-                  {card.link && (
-                    <a href={card.link} target="_blank" rel="noopener noreferrer" className="project-link-btn primary" aria-label={view_project} onClick={(e) => e.stopPropagation()}>
-                      {card.link.includes('github.com') ? <FiGithub size={18} /> : <FiExternalLink size={18} />} 
-                      <span>{view_project}</span>
-                    </a>
-                  )}
-                  {card.playStoreUrl && (
-                    <a href={card.playStoreUrl} target="_blank" rel="noopener noreferrer" className="project-link-btn secondary" aria-label="Play Store" onClick={(e) => e.stopPropagation()}>
-                      <FaGooglePlay size={18} /> 
-                      <span>Play Store</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </ScrollStackItem>
+          <ProjectCard 
+            key={card.id || index} 
+            card={card} 
+            view_project={view_project} 
+            openPreview={openPreview} 
+          />
         ))}
       </ScrollStack>
-      {isClient && previewImage && createPortal(modalContent, document.body)}
+      {isClient && previewImage && createPortal(
+        <ProjectModal 
+          previewImage={previewImage} 
+          isClosing={isClosing} 
+          handleClose={handleClose} 
+        />, 
+        document.body
+      )}
     </div>
   );
 };
 
-export default ProjectsScrollStack;
+export default memo(ProjectsScrollStack);

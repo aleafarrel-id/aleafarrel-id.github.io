@@ -82,6 +82,7 @@
   transition-property: color, box-shadow, transform;
   transition-duration: var(--duration-slow);
   transition-timing-function: var(--ease-out-expo);
+  cursor: pointer;
 }
 
 @media (hover: hover) {

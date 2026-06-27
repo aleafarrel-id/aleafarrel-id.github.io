@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { Lens } from '../../ui/lens';
 import { Tooltip } from '../../ui/tooltip-card';
@@ -18,15 +18,16 @@ import '@xyflow/react/dist/style.css';
 import { globalEvents, EVENTS } from '../../../lib/events';
 import './CertificatesFlow.css';
 
-const CenterNode = ({ data }) => (
+const CenterNode = memo(({ data }) => (
   <div className="cert-flow-center-node">
     <h2 className="cert-flow-center-title">{data.label}</h2>
     <p className="cert-flow-center-subtitle">{data.subtitle} &rarr;</p>
     <Handle type="source" position={Position.Right} className="cert-flow-handle-right" />
   </div>
-);
+));
+CenterNode.displayName = 'CenterNode';
 
-const CertificateNode = ({ data }) => {
+const CertificateNode = memo(({ data }) => {
   const imagePath = data.image.startsWith('/') ? data.image : `/certificate/${data.image.split('/').pop()}`;
 
   const tooltipContent = (
@@ -94,7 +95,8 @@ const CertificateNode = ({ data }) => {
       </div>
     </Tooltip>
   );
-};
+});
+CertificateNode.displayName = 'CertificateNode';
 
 const nodeTypes = {
   center: CenterNode,
@@ -109,7 +111,7 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
     if (typeof window !== 'undefined') {
       setIsMobile(window.innerWidth < 768);
       const handleResize = () => setIsMobile(window.innerWidth < 768);
-      window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize, { passive: true });
       return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
@@ -176,7 +178,7 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
     }
 
     return { initialNodes: nodes, initialEdges: edges };
-  }, [items]);
+  }, [items, strings, openPreview]);
 
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -256,6 +258,67 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
   );
 }
 
+const CertModal = memo(({ previewImage, isClosing, handleClose }) => {
+  const [hovering, setHovering] = useState(false);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    const focusTimer = setTimeout(() => {
+      closeButtonRef.current?.focus({ preventScroll: true });
+    }, 100);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(focusTimer);
+    };
+  }, [handleClose]);
+
+  if (!previewImage) return null;
+
+  return (
+    <div
+      className={`cert-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
+      onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Certificate preview"
+    >
+      <button
+        ref={closeButtonRef}
+        className="cert-modal-close-btn"
+        onClick={handleClose}
+        aria-label="Close certificate preview"
+      >
+        &times;
+      </button>
+      <div
+        className={`cert-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
+          <ImageWithSkeleton
+            src={previewImage}
+            alt="Certificate detailed preview"
+            className="cert-modal-image"
+            width="1200"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </Lens>
+      </div>
+    </div>
+  );
+});
+CertModal.displayName = 'CertModal';
+
 /**
  * @typedef {Object} CertificatesFlowProps
  * @property {Array<any>} items
@@ -268,34 +331,11 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
 export default function CertificatesFlow({ items, strings }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
-  const [hovering, setHovering] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const closeButtonRef = useRef(null);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && previewImage) {
-        handleClose();
-      }
-    };
-    
-    let focusTimer;
-    if (previewImage) {
-      document.addEventListener('keydown', handleKeyDown);
-      focusTimer = setTimeout(() => {
-        closeButtonRef.current?.focus({ preventScroll: true });
-      }, 100);
-    }
-    
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (focusTimer) clearTimeout(focusTimer);
-    };
-  }, [previewImage]);
 
   const openPreview = useCallback((node) => {
     if (node.type === 'certificate' && node.data && node.data.image) {
@@ -323,49 +363,15 @@ export default function CertificatesFlow({ items, strings }) {
     };
   }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsClosing(true);
     document.body.style.overflow = "";
     globalEvents.emit(EVENTS.LENIS_START);
     closeTimeoutRef.current = setTimeout(() => {
       setPreviewImage(null);
       setIsClosing(false);
-      setHovering(false);
     }, 300);
-  };
-
-  const modalContent = previewImage && (
-    <div
-      className={`cert-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
-      onClick={handleClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Certificate preview"
-    >
-      <button
-        ref={closeButtonRef}
-        className="cert-modal-close-btn"
-        onClick={handleClose}
-        aria-label="Close certificate preview"
-      >
-        &times;
-      </button>
-      <div
-        className={`cert-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <img
-            src={previewImage}
-            alt="Certificate detailed preview"
-            className="cert-modal-image"
-            width="1200"
-            height="900"
-          />
-        </Lens>
-      </div>
-    </div>
-  );
+  }, []);
 
   return (
     <>
@@ -375,7 +381,14 @@ export default function CertificatesFlow({ items, strings }) {
         </ReactFlowProvider>
       </div>
 
-      {isClient && previewImage && createPortal(modalContent, document.body)}
+      {isClient && previewImage && createPortal(
+        <CertModal 
+          previewImage={previewImage} 
+          isClosing={isClosing} 
+          handleClose={handleClose} 
+        />, 
+        document.body
+      )}
     </>
   );
 }

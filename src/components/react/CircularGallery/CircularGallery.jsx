@@ -1,5 +1,5 @@
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { Lens } from '../../ui/lens';
 import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
@@ -126,7 +126,6 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
 
-
   const scaleFactor = 4;
 
   context.font = font;
@@ -134,10 +133,8 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
   const textWidth = Math.ceil(metrics.width);
   const textHeight = Math.ceil(getFontSize(font) * 1.2);
 
-
   canvas.width = (textWidth + 20) * scaleFactor;
   canvas.height = (textHeight + 20) * scaleFactor;
-
 
   context.scale(scaleFactor, scaleFactor);
 
@@ -149,7 +146,6 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
   context.clearRect(0, 0, textWidth + 20, textHeight + 20);
   context.fillText(text, (textWidth + 20) / 2, (textHeight + 20) / 2);
 
-
   const texture = new Texture(gl, {
     generateMipmaps: true,
     minFilter: gl.LINEAR_MIPMAP_LINEAR,
@@ -158,6 +154,68 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
 
   return { texture, width: canvas.width, height: canvas.height };
 }
+
+const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => {
+  const [hovering, setHovering] = useState(false);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    const focusTimer = setTimeout(() => {
+      closeButtonRef.current?.focus({ preventScroll: true });
+    }, 100);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      clearTimeout(focusTimer);
+    };
+  }, [handleClose]);
+
+  if (!previewImage) return null;
+
+  return (
+    <div
+      className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
+      onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Gallery image preview"
+      style={{ zIndex: 9999 }}
+    >
+      <button
+        ref={closeButtonRef}
+        className="project-modal-close-btn"
+        onClick={handleClose}
+        aria-label="Close gallery preview"
+      >
+        &times;
+      </button>
+      <div
+        className={`project-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
+          <ImageWithSkeleton
+            src={previewImage}
+            alt="Gallery detailed preview"
+            className="project-modal-image"
+            width="1200"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </Lens>
+      </div>
+    </div>
+  );
+});
+CircularGalleryModal.displayName = 'CircularGalleryModal';
 
 class Title {
   constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }) {
@@ -822,35 +880,18 @@ export default function CircularGallery({
 
   const [previewImage, setPreviewImage] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
-  const [hovering, setHovering] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const closeButtonRef = useRef(null);
   const closeTimeoutRef = useRef(null);
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && previewImage) {
-        handleClose();
-      }
-    };
-    
-    let focusTimer;
-    if (previewImage) {
-      document.addEventListener('keydown', handleKeyDown);
-      focusTimer = setTimeout(() => {
-        closeButtonRef.current?.focus({ preventScroll: true });
-      }, 100);
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 768);
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      window.addEventListener('resize', handleResize, { passive: true });
+      return () => window.removeEventListener('resize', handleResize);
     }
-    
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (focusTimer) clearTimeout(focusTimer);
-    };
-  }, [previewImage]);
+  }, []);
 
   const openPreview = useCallback((index) => {
     if (items && items[index]) {
@@ -878,7 +919,6 @@ export default function CircularGallery({
     closeTimeoutRef.current = setTimeout(() => {
       setPreviewImage(null);
       setIsClosing(false);
-      setHovering(false);
     }, 300);
   }, []);
 
@@ -911,41 +951,7 @@ export default function CircularGallery({
       isMounted = false;
       if (app && app.destroy) app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase]);
-
-  const modalContent = previewImage && (
-    <div
-      className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
-      onClick={handleClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Gallery image preview"
-      style={{ zIndex: 9999 }}
-    >
-      <button
-        ref={closeButtonRef}
-        className="project-modal-close-btn"
-        onClick={handleClose}
-        aria-label="Close gallery preview"
-      >
-        &times;
-      </button>
-      <div
-        className={`project-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <img
-            src={previewImage}
-            alt="Gallery detailed preview"
-            className="project-modal-image"
-            width="1200"
-            height="900"
-          />
-        </Lens>
-      </div>
-    </div>
-  );
+  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase, openPreview]);
 
   if (webGLFailed) {
     return (
@@ -966,7 +972,14 @@ export default function CircularGallery({
             </div>
           ))}
         </div>
-        {isClient && createPortal(modalContent, document.body)}
+        {isClient && createPortal(
+          <CircularGalleryModal 
+            previewImage={previewImage} 
+            isClosing={isClosing} 
+            handleClose={handleClose} 
+          />, 
+          document.body
+        )}
       </>
     );
   }
@@ -1010,7 +1023,14 @@ export default function CircularGallery({
         style={{ pointerEvents: (isMobile && !isInteractive) ? 'none' : 'auto' }}
       ></div>
     </div>
-    {isClient && createPortal(modalContent, document.body)}
+    {isClient && createPortal(
+      <CircularGalleryModal 
+        previewImage={previewImage} 
+        isClosing={isClosing} 
+        handleClose={handleClose} 
+      />, 
+      document.body
+    )}
     </>
   );
 }
