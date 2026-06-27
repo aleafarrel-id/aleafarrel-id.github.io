@@ -158,8 +158,10 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
 const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => {
   const [hovering, setHovering] = useState(false);
   const closeButtonRef = useRef(null);
+  const mountTimeRef = useRef(Date.now());
 
   useEffect(() => {
+    mountTimeRef.current = Date.now();
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         handleClose();
@@ -177,12 +179,18 @@ const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => 
     };
   }, [handleClose]);
 
+  const safeHandleClose = useCallback(() => {
+    if (Date.now() - mountTimeRef.current > 300) {
+      handleClose();
+    }
+  }, [handleClose]);
+
   if (!previewImage) return null;
 
   return (
     <div
       className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
-      onClick={handleClose}
+      onClick={safeHandleClose}
       role="dialog"
       aria-modal="true"
       aria-label="Gallery image preview"
@@ -979,7 +987,7 @@ export default function CircularGallery({
             </div>
           ))}
         </div>
-        {isClient && createPortal(
+        {isClient && previewImage && createPortal(
           <CircularGalleryModal 
             previewImage={previewImage} 
             isClosing={isClosing} 
@@ -1039,7 +1047,7 @@ export default function CircularGallery({
         style={{ pointerEvents: (isMobile && !isInteractive) ? 'none' : 'auto' }}
       ></div>
     </div>
-    {isClient && createPortal(
+    {isClient && previewImage && createPortal(
       <CircularGalleryModal 
         previewImage={previewImage} 
         isClosing={isClosing} 

@@ -292,6 +292,7 @@
   },
   "interaction": {
     "tap_to_interact": "Ketuk untuk berinteraksi",
-    "done": "Selesai"
+    "done": "Selesai",
+    "loading_flow": "Memuat"
   }
 }

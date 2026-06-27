@@ -178,9 +178,7 @@ export const Tooltip = ({
     return () => document.removeEventListener("pointerdown", onPointerDown, { capture: true });
   }, [isVisible, isTouchDevice, hideTooltip]);
 
-  const tooltipElWidth = isTouchDevice
-    ? `${Math.min(260, typeof window !== "undefined" ? window.innerWidth - 40 : 260)}px`
-    : undefined;
+
 
   const tooltipPortal =
     mounted &&
@@ -200,9 +198,8 @@ export const Tooltip = ({
           left: position.x,
           background: "var(--clr-bg-raised)",
           border: "1px solid var(--shadow-light)",
-          width:    tooltipElWidth ?? "max-content",
-          minWidth: isTouchDevice ? "180px" : "280px",
-          maxWidth: isTouchDevice ? "260px" : "380px",
+          width: "max-content",
+          maxWidth: "calc(100vw - 24px)",
           willChange: "transform, opacity",
         }}
         onClick={() => { if (isTouchDevice) hideTooltip(); }}

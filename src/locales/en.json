@@ -292,6 +292,7 @@
   },
   "interaction": {
     "tap_to_interact": "Tap to interact",
-    "done": "Done"
+    "done": "Done",
+    "loading_flow": "Loading"
   }
 }

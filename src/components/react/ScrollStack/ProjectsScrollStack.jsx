@@ -11,8 +11,10 @@ import './ProjectsScrollStack.css';
 const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
   const [hovering, setHovering] = useState(false);
   const closeButtonRef = useRef(null);
+  const mountTimeRef = useRef(Date.now());
 
   useEffect(() => {
+    mountTimeRef.current = Date.now();
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         handleClose();
@@ -30,12 +32,18 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
     };
   }, [handleClose]);
 
+  const safeHandleClose = useCallback(() => {
+    if (Date.now() - mountTimeRef.current > 300) {
+      handleClose();
+    }
+  }, [handleClose]);
+
   if (!previewImage) return null;
 
   return (
     <div
       className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
-      onClick={handleClose}
+      onClick={safeHandleClose}
       role="dialog"
       aria-modal="true"
       aria-label="Project image preview"

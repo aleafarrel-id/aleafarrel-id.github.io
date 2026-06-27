@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Lens } from '../../ui/lens';
 import { Tooltip } from '../../ui/tooltip-card';
 import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
+import { FiLoader } from 'react-icons/fi';
 import {
   ReactFlow,
   useNodesState,
@@ -106,6 +107,7 @@ const nodeTypes = {
 function FlowContent({ items, strings, onNodeClick, openPreview }) {
   const [isInteractive, setIsInteractive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isFlowReady, setIsFlowReady] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -203,6 +205,14 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
 
   return (
     <div className="relative w-full h-full">
+      {!isFlowReady && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[var(--clr-bg-deep)] rounded-xl">
+          <FiLoader className="animate-spin text-3xl text-[var(--clr-accent-blue)] mb-3" />
+          <span className="text-xs font-ui text-[var(--clr-text-secondary)] animate-pulse tracking-widest uppercase">
+            {strings?.loading_flow || "Loading"}
+          </span>
+        </div>
+      )}
       {!isInteractive && isMobile && (
         <div 
           className="interaction-overlay"
@@ -241,6 +251,8 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
         </button>
       )}
       <ReactFlow
+        proOptions={{ hideAttribution: true }}
+        onInit={() => setIsFlowReady(true)}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -270,8 +282,10 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
 const CertModal = memo(({ previewImage, isClosing, handleClose }) => {
   const [hovering, setHovering] = useState(false);
   const closeButtonRef = useRef(null);
+  const mountTimeRef = useRef(Date.now());
 
   useEffect(() => {
+    mountTimeRef.current = Date.now();
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         handleClose();
@@ -289,12 +303,18 @@ const CertModal = memo(({ previewImage, isClosing, handleClose }) => {
     };
   }, [handleClose]);
 
+  const safeHandleClose = useCallback(() => {
+    if (Date.now() - mountTimeRef.current > 300) {
+      handleClose();
+    }
+  }, [handleClose]);
+
   if (!previewImage) return null;
 
   return (
     <div
       className={`cert-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
-      onClick={handleClose}
+      onClick={safeHandleClose}
       role="dialog"
       aria-modal="true"
       aria-label="Certificate preview"
