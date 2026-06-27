@@ -192,6 +192,12 @@ const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => 
     <div
       className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
       onClick={safeHandleClose}
+      onTouchEnd={(e) => {
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          safeHandleClose();
+        }
+      }}
       role="dialog"
       aria-modal="true"
       aria-label="Gallery image preview"
@@ -201,6 +207,10 @@ const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => 
         ref={closeButtonRef}
         className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-6 focus-visible:right-6 focus-visible:w-14 focus-visible:h-14 focus-visible:bg-red-500 focus-visible:text-white focus-visible:rounded-full focus-visible:flex focus-visible:items-center focus-visible:justify-center focus-visible:z-50 focus-visible:text-2xl"
         onClick={handleClose}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          handleClose();
+        }}
         aria-label="Close gallery preview"
       >
         &times;
@@ -895,6 +905,7 @@ export default function CircularGallery({
   const [webGLFailed, setWebGLFailed] = useState(false);
   const [isInteractive, setIsInteractive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const touchStartY = useRef(0);
 
   const [previewImage, setPreviewImage] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
@@ -913,6 +924,10 @@ export default function CircularGallery({
 
   const openPreview = useCallback((index) => {
     if (items && items[index]) {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
       setIsClosing(false);
       setPreviewImage(items[index].image || items[index].src);
       document.body.style.overflow = "hidden";
@@ -930,7 +945,8 @@ export default function CircularGallery({
     };
   }, [previewImage]);
 
-  const handleClose = useCallback(() => {
+  const handleClose = useCallback((e) => {
+    if (e) e.preventDefault();
     setIsClosing(true);
     document.body.style.overflow = "";
     globalEvents.emit(EVENTS.LENIS_START);
@@ -1014,8 +1030,18 @@ export default function CircularGallery({
           }}
           onPointerDown={(e) => e.stopPropagation()}
           onPointerUp={(e) => e.stopPropagation()}
-          onTouchStart={(e) => e.stopPropagation()}
-          onTouchEnd={(e) => e.stopPropagation()}
+          onTouchStart={(e) => {
+            touchStartY.current = e.touches[0].clientY;
+            e.stopPropagation();
+          }}
+          onTouchEnd={(e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            if (Math.abs(touchEndY - touchStartY.current) < 10) {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsInteractive(true);
+            }
+          }}
           onMouseDown={(e) => e.stopPropagation()}
           onMouseUp={(e) => e.stopPropagation()}
           role="button"

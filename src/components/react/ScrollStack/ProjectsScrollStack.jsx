@@ -45,6 +45,12 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
     <div
       className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
       onClick={safeHandleClose}
+      onTouchEnd={(e) => {
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          safeHandleClose();
+        }
+      }}
       role="dialog"
       aria-modal="true"
       aria-label="Project image preview"
@@ -53,6 +59,10 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
         ref={closeButtonRef}
         className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-6 focus-visible:right-6 focus-visible:w-14 focus-visible:h-14 focus-visible:bg-red-500 focus-visible:text-white focus-visible:rounded-full focus-visible:flex focus-visible:items-center focus-visible:justify-center focus-visible:z-50 focus-visible:text-2xl"
         onClick={handleClose}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          handleClose();
+        }}
         aria-label="Close project preview"
       >
         &times;
@@ -60,6 +70,7 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
       <div
         className={`project-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
         onClick={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
       >
         <PinchZoomImage>
           <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
@@ -81,17 +92,17 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
 
 ProjectModal.displayName = 'ProjectModal';
 
-const ProjectCard = memo(({ card, view_project, openPreview }) => {
+const ProjectCard = memo(({ card, index, view_project, openPreview }) => {
   const handleOpen = useCallback(() => {
-    openPreview(card.image);
-  }, [openPreview, card.image]);
+    openPreview(index);
+  }, [openPreview, index]);
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      openPreview(card.image);
+      openPreview(index);
     }
-  }, [openPreview, card.image]);
+  }, [openPreview, index]);
 
   const stopPropagation = useCallback((e) => {
     e.stopPropagation();
@@ -154,14 +165,18 @@ const ProjectsScrollStack = ({ items, view_project }) => {
     setIsClient(true);
   }, []);
 
-  const openPreview = useCallback((imagePath) => {
-    if (imagePath) {
+  const openPreview = useCallback((index) => {
+    if (items && items[index]) {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
       setIsClosing(false);
-      setPreviewImage(imagePath);
+      setPreviewImage(items[index].image || items[index].src);
       document.body.style.overflow = "hidden";
       globalEvents.emit(EVENTS.LENIS_STOP);
     }
-  }, []);
+  }, [items]);
 
   const closeTimeoutRef = useRef(null);
 
@@ -173,7 +188,8 @@ const ProjectsScrollStack = ({ items, view_project }) => {
     };
   }, []);
 
-  const handleClose = useCallback(() => {
+  const handleClose = useCallback((e) => {
+    if (e) e.preventDefault();
     setIsClosing(true);
     document.body.style.overflow = "";
     globalEvents.emit(EVENTS.LENIS_START);
@@ -193,6 +209,7 @@ const ProjectsScrollStack = ({ items, view_project }) => {
         {(items || []).map((card, index) => (
           <ProjectCard 
             key={card.id || index} 
+            index={index}
             card={card} 
             view_project={view_project} 
             openPreview={openPreview} 

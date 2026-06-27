@@ -187,7 +187,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: zoom-out;
 }
 
 .project-modal-overlay.entering {
@@ -197,8 +196,6 @@
 .project-modal-overlay.closing {
   animation: projectFadeOut var(--duration-base, 0.3s) var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
 }
-
-
 
 .project-modal-content-wrapper {
   max-width: 90%;
@@ -227,13 +224,23 @@
 }
 
 @keyframes projectFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes projectFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes projectScaleIn {
@@ -241,6 +248,7 @@
     transform: scale(0.95) translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: scale(1) translateY(0);
     opacity: 1;
@@ -252,6 +260,7 @@
     transform: scale(1) translateY(0);
     opacity: 1;
   }
+
   to {
     transform: scale(0.95) translateY(20px);
     opacity: 0;
@@ -264,21 +273,20 @@
   .project-card-image-section img {
     transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
   .project-card-inner:hover .project-card-image-section img {
     transform: scale(1.08);
   }
+
   .project-link-btn.primary:hover {
     background: color-mix(in srgb, var(--clr-text-primary) 90%, transparent);
     transform: scale(0.98);
   }
+
   .project-link-btn.secondary:hover {
     background: color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
     transform: scale(0.98);
   }
-
-}
-
-@media (max-width: 767px) {
 
 }
 
@@ -288,41 +296,50 @@
     height: calc(var(--vh, 1vh) * 55);
     min-height: 500px;
   }
+
   .project-card-inner {
     justify-content: center;
   }
+
   .project-card-content {
     padding: 60px;
     width: 75%;
     gap: 16px;
   }
+
   .project-card-category {
     font-size: 12px;
     padding: 6px 16px;
     margin-bottom: 8px;
   }
+
   .project-card-title {
     font-size: clamp(2rem, 5vw, 4rem);
   }
+
   .project-card-description {
     margin: 0 0 16px 0;
     -webkit-line-clamp: none;
     overflow: visible;
   }
+
   .project-card-tags {
     gap: 8px;
     margin-bottom: 24px;
   }
+
   .project-card-tag {
     font-size: 13px;
     padding: 6px 14px;
   }
+
   .project-card-links {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 16px;
     margin-top: 8px;
   }
+
   .project-link-btn {
     padding: 12px 24px;
     min-height: 44px;
@@ -332,6 +349,7 @@
     flex: none;
     justify-content: flex-start;
   }
+
   .project-link-btn svg {
     width: 18px !important;
     height: 18px !important;
@@ -344,6 +362,7 @@
     height: calc(var(--vh, 1vh) * 80);
     min-height: 600px;
   }
+
   .project-card-content {
     width: 60%;
   }

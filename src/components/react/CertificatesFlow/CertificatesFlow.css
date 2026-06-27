@@ -146,23 +146,25 @@
 }
 
 .cert-tooltip-badge {
-  background: color-mix(in srgb, var(--clr-accent-blue) 12%, transparent);
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  background: color-mix(in srgb, var(--shadow-dark) 85%, transparent);
   border-radius: var(--radius-full);
-  border: 1px solid color-mix(in srgb, var(--clr-accent-blue) 20%, transparent);
+  border: 1px solid var(--shadow-light);
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  flex-shrink: 0;
-  color: var(--clr-accent-blue);
+  padding: 6px 12px;
+  z-index: 20;
 }
 
 .cert-tooltip-badge-text {
-  font-size: 10px;
-  color: inherit;
-  font-weight: 700;
+  font-size: var(--text-xs);
+  color: var(--clr-text-primary);
+  font-weight: 600;
   letter-spacing: 0.05em;
-  line-height: 1;
+  text-transform: uppercase;
 }
 
 .cert-tooltip-provider {
@@ -178,14 +180,6 @@
 
 .cert-tooltip-body {
   padding: var(--space-4) var(--space-5);
-}
-
-.cert-tooltip-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-3);
-  margin-bottom: var(--space-2);
 }
 
 .cert-tooltip-title {
@@ -229,7 +223,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: zoom-out;
 }
 
 .cert-modal-overlay.entering {
@@ -239,8 +232,6 @@
 .cert-modal-overlay.closing {
   animation: certFadeOut var(--duration-base) var(--ease-out-expo) forwards;
 }
-
-
 
 .cert-modal-content-wrapper {
   max-width: 90%;
@@ -270,13 +261,23 @@
 
 /* Animations */
 @keyframes certFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes certFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes certScaleIn {
@@ -284,6 +285,7 @@
     transform: scale(0.95) translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: scale(1) translateY(0);
     opacity: 1;
@@ -295,6 +297,7 @@
     transform: scale(1) translateY(0);
     opacity: 1;
   }
+
   to {
     transform: scale(0.95) translateY(20px);
     opacity: 0;
@@ -313,10 +316,12 @@
 }
 
 @media (max-width: 767px) {
+
   /* Allow page scroll on mobile */
   .cert-flow-wrapper .react-flow__pane {
     pointer-events: none;
   }
+
   .cert-flow-wrapper .react-flow__node {
     pointer-events: all;
   }
@@ -324,25 +329,32 @@
   .cert-tooltip-container {
     width: 260px;
   }
+
   .cert-tooltip-image-wrapper {
     height: 120px;
   }
+
   .cert-tooltip-body {
     padding: var(--space-3) var(--space-4);
   }
+
   .cert-tooltip-title {
     font-size: var(--text-base);
   }
+
   .cert-tooltip-description {
     font-size: 10px;
     line-height: 1.4;
   }
+
   .cert-tooltip-badge {
     padding: var(--space-1) var(--space-2);
   }
+
   .cert-tooltip-badge-text {
     font-size: 8px;
   }
+
   .cert-tooltip-provider {
     font-size: 10px;
   }

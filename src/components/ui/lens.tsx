@@ -35,11 +35,17 @@ export const Lens: React.FC<LensProps> = ({
 
   const [mousePosition, setMousePosition] = useState({ x: 100, y: 100 });
 
+  const [lastPos, setLastPos] = useState({ x: 0, y: 0 });
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Prevent synthetic mouse events (e.g. element animating under a stationary cursor)
-    if (e.movementX === 0 && e.movementY === 0) {
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
       return;
     }
+
+    if (e.clientX === lastPos.x && e.clientY === lastPos.y) {
+      return;
+    }
+    setLastPos({ x: e.clientX, y: e.clientY });
 
     if (!isHovering) {
       setIsHovering(true);
@@ -72,12 +78,10 @@ export const Lens: React.FC<LensProps> = ({
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="absolute inset-0 overflow-hidden"
             style={{
-              maskImage: `radial-gradient(circle ${lensSize / 2}px at ${
-                position.x
-              }px ${position.y}px, black 100%, transparent 100%)`,
-              WebkitMaskImage: `radial-gradient(circle ${lensSize / 2}px at ${
-                position.x
-              }px ${position.y}px, black 100%, transparent 100%)`,
+              maskImage: `radial-gradient(circle ${lensSize / 2}px at ${position.x
+                }px ${position.y}px, black 100%, transparent 100%)`,
+              WebkitMaskImage: `radial-gradient(circle ${lensSize / 2}px at ${position.x
+                }px ${position.y}px, black 100%, transparent 100%)`,
               transformOrigin: `${position.x}px ${position.y}px`,
             }}
           >
@@ -103,14 +107,11 @@ export const Lens: React.FC<LensProps> = ({
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="absolute inset-0 overflow-hidden"
                 style={{
-                  maskImage: `radial-gradient(circle ${lensSize / 2}px at ${
-                    mousePosition.x
-                  }px ${mousePosition.y}px, black 100%, transparent 100%)`,
-                  WebkitMaskImage: `radial-gradient(circle ${
-                    lensSize / 2
-                  }px at ${mousePosition.x}px ${
-                    mousePosition.y
-                  }px, black 100%, transparent 100%)`,
+                  maskImage: `radial-gradient(circle ${lensSize / 2}px at ${mousePosition.x
+                    }px ${mousePosition.y}px, black 100%, transparent 100%)`,
+                  WebkitMaskImage: `radial-gradient(circle ${lensSize / 2
+                    }px at ${mousePosition.x}px ${mousePosition.y
+                    }px, black 100%, transparent 100%)`,
                   transformOrigin: `${mousePosition.x}px ${mousePosition.y}px`,
                   zIndex: 50,
                 }}

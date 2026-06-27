@@ -22,6 +22,9 @@ export default defineConfig({
     },
   },
   integrations: [icon(), react(), sitemap()],
+  build: {
+    inlineStylesheets: 'always'
+  },
   vite: {
     plugins: [tailwindcss()],
     build: {

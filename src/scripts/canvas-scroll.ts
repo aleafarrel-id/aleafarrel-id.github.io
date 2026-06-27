@@ -64,7 +64,7 @@ export class HeroCanvasSequence {
       this.drawFrame(this.frames[this.currentIndex]);
     }
 
-    await new Promise<void>(resolve => setTimeout(resolve, 100));
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     globalEvents.emit(EVENTS.PRELOADER_DONE);
 
     this.setupScrollTrigger();
@@ -83,9 +83,11 @@ export class HeroCanvasSequence {
     return `${this.FRAME_PATH}hero-${padded}.webp`;
   }
 
-  private loadImage(src: string): Promise<HTMLImageElement> {
+  private loadImage(src: string, isInitial: boolean = false): Promise<HTMLImageElement> {
     return new Promise((resolve) => {
       const img = new Image();
+      img.decoding = 'async';
+      img.setAttribute('fetchpriority', isInitial ? 'high' : 'low');
       img.onload = () => resolve(img);
       img.onerror = () => resolve(img);
       img.src = src;
@@ -222,68 +224,52 @@ export class HeroCanvasSequence {
   }
 
   private async loadFrames(initialIdx: number = 0): Promise<void> {
-    const PHASE1_STEP = this.isMobile ? 15 : 10;
-    let loadedCount = 0;
     const targetLoadCount = Math.ceil(this.FRAME_COUNT / this.step);
-    const phase1Batch: Promise<void>[] = [];
+    let loadedCount = 0;
 
-    for (let i = 0; i < this.FRAME_COUNT; i += PHASE1_STEP) {
-      const idx = i;
-      phase1Batch.push(
-        this.loadImage(this.frameUrl(i)).then(img => {
-          this.frames[idx] = img;
-          loadedCount++;
-          this.updateProgress(loadedCount, targetLoadCount);
-          if (idx === initialIdx) this.drawFrame(this.frames[idx]);
-        })
-      );
-    }
+    const initialImg = await this.loadImage(this.frameUrl(initialIdx), true);
+    this.frames[initialIdx] = initialImg;
+    loadedCount++;
+    this.updateProgress(loadedCount, targetLoadCount);
+    this.drawFrame(this.frames[initialIdx]);
 
-    if (initialIdx % PHASE1_STEP !== 0) {
-      phase1Batch.push(
-        this.loadImage(this.frameUrl(initialIdx)).then(img => {
-          this.frames[initialIdx] = img;
-          loadedCount++;
-          this.updateProgress(loadedCount, targetLoadCount);
-          this.drawFrame(this.frames[initialIdx]);
-        })
-      );
-    }
-
-    await Promise.all(phase1Batch);
     this.createUIPill();
-    this.backfillRemainingFrames(loadedCount, targetLoadCount);
+
+    setTimeout(() => {
+      this.deferBackgroundLoading(initialIdx, loadedCount, targetLoadCount);
+    }, 100);
   }
 
-  private backfillRemainingFrames(loadedCount: number, targetLoadCount: number): void {
+  private deferBackgroundLoading(initialIdx: number, loadedCount: number, targetLoadCount: number): void {
     const isCached = localStorage.getItem('hero_frames_cached') === 'true';
+    if (!isCached) this.showUIPill();
 
-    const doBackfill = async () => {
-      if (!isCached) this.showUIPill();
-
+    const doBackgroundLoad = async () => {
       const pendingIndices: number[] = [];
       for (let i = 0; i < this.FRAME_COUNT; i += this.step) {
-        if (!this.frames[i]) pendingIndices.push(i);
+        if (i !== initialIdx && !this.frames[i]) pendingIndices.push(i);
       }
-
-      const BATCH_SIZE = 5;
+      const BATCH_SIZE = this.isMobile ? 10 : 40;
       for (let i = 0; i < pendingIndices.length; i += BATCH_SIZE) {
         const batch: Promise<void>[] = [];
         for (let j = 0; j < BATCH_SIZE && (i + j) < pendingIndices.length; j++) {
           const idx = pendingIndices[i + j];
           batch.push(
-            this.loadImage(this.frameUrl(idx)).then(img => {
+            this.loadImage(this.frameUrl(idx), false).then(img => {
               this.frames[idx] = img;
               loadedCount++;
+
               if (!isCached) {
                 const totalPct = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
                 this.updateUIPill(totalPct);
+                this.updateProgress(loadedCount, targetLoadCount);
               }
             })
           );
         }
         await Promise.all(batch);
-        await new Promise(resolve => setTimeout(resolve, isCached ? 5 : 50));
+
+        await new Promise(resolve => setTimeout(resolve, isCached ? 0 : (this.isMobile ? 30 : 10)));
       }
 
       if (!isCached) {
@@ -293,9 +279,9 @@ export class HeroCanvasSequence {
     };
 
     if ('requestIdleCallback' in window) {
-      setTimeout(() => (window as any).requestIdleCallback(() => doBackfill()), isCached ? 500 : 2500);
+      (window as any).requestIdleCallback(() => doBackgroundLoad(), { timeout: 2000 });
     } else {
-      setTimeout(doBackfill, isCached ? 500 : 2500);
+      setTimeout(doBackgroundLoad, 500);
     }
   }
 
