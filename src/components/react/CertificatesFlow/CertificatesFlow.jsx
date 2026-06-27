@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Lens } from '../../ui/lens';
 import { Tooltip } from '../../ui/tooltip-card';
+import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
 import {
   ReactFlow,
   useNodesState,
@@ -45,7 +46,7 @@ const CertificateNode = ({ data }) => {
       style={{ cursor: 'pointer' }}
     >
       <div className="cert-tooltip-image-wrapper">
-        <img src={imagePath} alt={data.title} className="cert-tooltip-image" loading="lazy" decoding="async" width="800" height="600" />
+        <ImageWithSkeleton src={imagePath} alt={data.title} className="cert-tooltip-image" loading="lazy" decoding="async" width="800" height="600" />
         <div className="cert-tooltip-gradient-overlay">
           <p className="cert-tooltip-provider">{data.name}</p>
         </div>
@@ -354,7 +355,7 @@ export default function CertificatesFlow({ items, strings }) {
         onClick={(e) => e.stopPropagation()}
       >
         <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <img
+          <ImageWithSkeleton
             src={previewImage}
             alt="Certificate detailed preview"
             className="cert-modal-image"

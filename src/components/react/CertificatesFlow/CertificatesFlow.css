@@ -151,6 +151,7 @@
   background: linear-gradient(to top, color-mix(in srgb, var(--clr-bg-deep) 95%, transparent) 0%, transparent 100%);
   display: flex;
   align-items: flex-end;
+  z-index: 20;
 }
 
 .cert-tooltip-badge {
@@ -163,6 +164,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 6px 12px;
+  z-index: 20;
 }
 
 .cert-tooltip-badge-text {
@@ -170,6 +173,7 @@
   color: var(--clr-text-primary);
   font-weight: bold;
   letter-spacing: 0.05em;
+  line-height: 1;
 }
 
 .cert-tooltip-provider {
@@ -297,11 +301,15 @@
 }
 
 .cert-modal-image {
+  width: auto;
+  height: auto;
   max-width: 100%;
   max-height: 90svh;
-  object-fit: contain;
+  display: block;
   border-radius: 0;
-  box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 80%, transparent), 0 0 0 1px var(--shadow-light);
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 80%, transparent);
+  outline: none;
+  border: none;
   cursor: crosshair;
 }
 
