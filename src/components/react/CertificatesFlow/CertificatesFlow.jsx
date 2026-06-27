@@ -355,12 +355,10 @@ export default function CertificatesFlow({ items, strings }) {
         onClick={(e) => e.stopPropagation()}
       >
         <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <ImageWithSkeleton
+          <img
             src={previewImage}
             alt="Certificate detailed preview"
             className="cert-modal-image"
-            loading="lazy"
-            decoding="async"
             width="1200"
             height="900"
           />

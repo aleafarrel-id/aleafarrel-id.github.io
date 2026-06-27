@@ -1,5 +1,9 @@
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { Lens } from '../../ui/lens';
+import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
+import { globalEvents, EVENTS } from '../../../lib/events';
 
 import './CircularGallery.css';
 
@@ -298,6 +302,9 @@ class Media {
         uniform vec2 uPlaneSizes;
         uniform sampler2D tMap;
         uniform float uBorderRadius;
+        uniform float uLoaded;
+        uniform float uTime;
+        uniform float uActive;
         varying vec2 vUv;
         
         float roundedBoxSDF(vec2 p, vec2 b, float r) {
@@ -316,6 +323,11 @@ class Media {
           );
           vec4 color = texture2D(tMap, uv);
           
+          if (uLoaded < 0.5) {
+            float pulse = (sin(uTime * 5.0) + 1.0) * 0.5;
+            color = vec4(mix(vec3(0.12), vec3(0.18), pulse), 1.0);
+          }
+          
           /* Grayscale filter */
           float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
           
@@ -325,11 +337,19 @@ class Media {
           float edgeSmooth = 0.002;
           float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
           
-          gl_FragColor = vec4(vec3(gray), alpha);
+          /* Active item effect: Color transition + Inner Border */
+          vec3 finalColor = mix(vec3(gray), color.rgb, uActive);
+          
+          float innerBorder = smoothstep(-0.03, -0.01, d) - smoothstep(-0.01, 0.01, d);
+          finalColor += vec3(1.0) * innerBorder * uActive * 0.4;
+          
+          gl_FragColor = vec4(finalColor, alpha);
         }
       `,
       uniforms: {
         tMap: { value: textureInfo.texture },
+        uLoaded: { value: textureInfo.loaded ? 1.0 : 0.0 },
+        uActive: { value: 0.0 },
         uPlaneSizes: { value: [1, 1] },
         uImageSizes: { value: textureInfo.sizes },
         uSpeed: { value: 0 },
@@ -341,10 +361,12 @@ class Media {
 
     if (textureInfo.loaded) {
       this.program.uniforms.uImageSizes.value = textureInfo.sizes;
+      this.program.uniforms.uLoaded.value = 1.0;
     } else {
       textureInfo.callbacks.push(() => {
         if (this.program) {
           this.program.uniforms.uImageSizes.value = textureInfo.sizes;
+          this.program.uniforms.uLoaded.value = 1.0;
         }
       });
     }
@@ -400,6 +422,9 @@ class Media {
     this.speed = scroll.current - scroll.last;
     this.program.uniforms.uTime.value += 0.01;
     this.program.uniforms.uSpeed.value = this.speed;
+    
+    const activeFactor = Math.max(0, 1.0 - Math.abs(x) / (this.width * 0.8));
+    this.program.uniforms.uActive.value = activeFactor * activeFactor * (3.0 - 2.0 * activeFactor);
 
     const planeOffset = this.plane.scale.x / 2;
     const viewportOffset = this.viewport.width / 2;
@@ -454,11 +479,13 @@ class App {
       borderRadius = 0,
       font = 'bold 30px Figtree',
       scrollSpeed = 2,
-      scrollEase = 0.05
+      scrollEase = 0.05,
+      onClickItem
     } = {}
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
+    this.onClickItem = onClickItem;
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
     this.onCheckDebounce = debounce(this.onCheck, 200);
@@ -582,9 +609,46 @@ class App {
     const distance = (this.start - x) * (this.scrollSpeed * speedMultiplier);
     this.scroll.target = this.scroll.position + distance;
   }
-  onTouchUp() {
+  onTouchUp(e) {
     this.isDown = false;
     this.onCheck();
+    
+    if (this.start !== undefined && e && this.onClickItem) {
+      const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+      const y = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+      if (x !== undefined && y !== undefined) {
+        const dx = Math.abs(x - this.start);
+        const dy = Math.abs(y - this.startY);
+        if (dx < 5 && dy < 5) {
+          if (!this.medias || !this.medias[0]) return;
+          
+          const rect = this.container.getBoundingClientRect();
+          const clickX = x - rect.left;
+          const clickY = y - rect.top;
+          
+          const centerX = this.screen.width / 2;
+          const centerY = this.screen.height / 2;
+          
+          const scale = this.screen.height / 1500;
+          const sizeFactor = this.screen.width < 768 ? 1.15 : 1;
+          const itemWidth = 700 * scale * sizeFactor;
+          const itemHeight = 900 * scale * sizeFactor;
+          
+          const minX = centerX - itemWidth / 2;
+          const maxX = centerX + itemWidth / 2;
+          const minY = centerY - itemHeight / 2;
+          const maxY = centerY + itemHeight / 2;
+          
+          if (clickX >= minX && clickX <= maxX && clickY >= minY && clickY <= maxY) {
+            const width = this.medias[0].width;
+            const itemIndex = Math.round(Math.abs(this.scroll.target) / width);
+            const originalLength = this.mediasImages.length / 2;
+            const actualIndex = itemIndex % originalLength;
+            this.onClickItem(actualIndex);
+          }
+        }
+      }
+    }
   }
   onWheel(e) {
     if (!this.isVisible) return;
@@ -756,13 +820,66 @@ export default function CircularGallery({
   const [isInteractive, setIsInteractive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  const [previewImage, setPreviewImage] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const closeButtonRef = useRef(null);
+  const closeTimeoutRef = useRef(null);
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth < 768);
-      const handleResize = () => setIsMobile(window.innerWidth < 768);
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && previewImage) {
+        handleClose();
+      }
+    };
+    
+    let focusTimer;
+    if (previewImage) {
+      document.addEventListener('keydown', handleKeyDown);
+      focusTimer = setTimeout(() => {
+        closeButtonRef.current?.focus({ preventScroll: true });
+      }, 100);
     }
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (focusTimer) clearTimeout(focusTimer);
+    };
+  }, [previewImage]);
+
+  const openPreview = useCallback((index) => {
+    if (items && items[index]) {
+      setIsClosing(false);
+      setPreviewImage(items[index].image || items[index].src);
+      document.body.style.overflow = "hidden";
+      globalEvents.emit(EVENTS.LENIS_STOP);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      if (previewImage) {
+        document.body.style.overflow = "";
+        globalEvents.emit(EVENTS.LENIS_START);
+      }
+    };
+  }, [previewImage]);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    document.body.style.overflow = "";
+    globalEvents.emit(EVENTS.LENIS_START);
+    closeTimeoutRef.current = setTimeout(() => {
+      setPreviewImage(null);
+      setIsClosing(false);
+      setHovering(false);
+    }, 300);
   }, []);
 
   useEffect(() => {
@@ -779,7 +896,8 @@ export default function CircularGallery({
           borderRadius,
           font: resolvedFont,
           scrollSpeed,
-          scrollEase
+          scrollEase,
+          onClickItem: openPreview
         });
         if (!app.gl) {
           setWebGLFailed(true);
@@ -795,24 +913,67 @@ export default function CircularGallery({
     };
   }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase]);
 
+  const modalContent = previewImage && (
+    <div
+      className={`project-modal-overlay ${isClosing ? 'closing' : 'entering'}`}
+      onClick={handleClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Gallery image preview"
+      style={{ zIndex: 9999 }}
+    >
+      <button
+        ref={closeButtonRef}
+        className="project-modal-close-btn"
+        onClick={handleClose}
+        aria-label="Close gallery preview"
+      >
+        &times;
+      </button>
+      <div
+        className={`project-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
+          <img
+            src={previewImage}
+            alt="Gallery detailed preview"
+            className="project-modal-image"
+            width="1200"
+            height="900"
+          />
+        </Lens>
+      </div>
+    </div>
+  );
+
   if (webGLFailed) {
     return (
-      <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory px-4 md:px-12" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' }}>
-        {items.map((item, i) => (
-          <div key={i} className="flex-none w-[280px] h-[380px] md:w-[360px] md:h-[480px] snap-center rounded-2xl overflow-hidden relative" style={{ boxShadow: 'var(--neu-raised)', border: '1px solid var(--shadow-light)', background: 'var(--clr-bg-deep)' }}>
-            <img src={item.image || item.src} alt={item.text || item.title} className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" width="800" height="1000" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              <h3 className="text-white font-display font-bold text-2xl tracking-tight mb-2">{item.text || item.title}</h3>
+      <>
+        <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory px-4 md:px-12" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none' }}>
+          {items.map((item, i) => (
+            <div 
+              key={i} 
+              className="flex-none w-[280px] h-[380px] md:w-[360px] md:h-[480px] snap-center rounded-2xl overflow-hidden relative cursor-pointer" 
+              style={{ boxShadow: 'var(--neu-raised)', border: '1px solid var(--shadow-light)', background: 'var(--clr-bg-deep)' }}
+              onClick={() => openPreview(i)}
+            >
+              <ImageWithSkeleton src={item.image || item.src} alt={item.text || item.title} className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" width="800" height="1000" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 pointer-events-none">
+                <h3 className="text-white font-display font-bold text-2xl tracking-tight mb-2">{item.text || item.title}</h3>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+        {isClient && createPortal(modalContent, document.body)}
+      </>
     );
   }
 
   return (
-    <div className="relative w-full h-full">
+    <>
+      <div className="relative w-full h-full">
       {!isInteractive && isMobile && (
         <div 
           className="interaction-overlay"
@@ -849,5 +1010,7 @@ export default function CircularGallery({
         style={{ pointerEvents: (isMobile && !isInteractive) ? 'none' : 'auto' }}
       ></div>
     </div>
+    {isClient && createPortal(modalContent, document.body)}
+    </>
   );
 }

@@ -91,12 +91,10 @@ const ProjectsScrollStack = ({ items, view_project }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <ImageWithSkeleton
+          <img
             src={previewImage}
             alt="Project detailed preview"
             className="project-modal-image"
-            loading="lazy"
-            decoding="async"
             width="1200"
             height="900"
           />
