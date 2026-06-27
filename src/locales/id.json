@@ -293,6 +293,7 @@
   "interaction": {
     "tap_to_interact": "Ketuk untuk berinteraksi",
     "done": "Selesai",
-    "loading_flow": "Memuat"
+    "loading_flow": "Memuat",
+    "pinch_zoom": "Cubit untuk memperbesar"
   }
 }

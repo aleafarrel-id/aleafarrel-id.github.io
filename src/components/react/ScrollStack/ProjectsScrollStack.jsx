@@ -5,6 +5,7 @@ import { FaGooglePlay } from 'react-icons/fa';
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import { Lens } from '../../ui/lens';
 import { ImageWithSkeleton } from '../../ui/ImageWithSkeleton';
+import { PinchZoomImage } from '../../ui/PinchZoomImage';
 import { globalEvents, EVENTS } from '../../../lib/events';
 import './ProjectsScrollStack.css';
 
@@ -50,7 +51,7 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
     >
       <button
         ref={closeButtonRef}
-        className="project-modal-close-btn"
+        className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-6 focus-visible:right-6 focus-visible:w-14 focus-visible:h-14 focus-visible:bg-red-500 focus-visible:text-white focus-visible:rounded-full focus-visible:flex focus-visible:items-center focus-visible:justify-center focus-visible:z-50 focus-visible:text-2xl"
         onClick={handleClose}
         aria-label="Close project preview"
       >
@@ -60,17 +61,19 @@ const ProjectModal = memo(({ previewImage, isClosing, handleClose }) => {
         className={`project-modal-content-wrapper ${isClosing ? 'closing' : 'entering'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
-          <ImageWithSkeleton
-            src={previewImage}
-            alt="Project detailed preview"
-            className="project-modal-image"
-            width="1200"
-            height="900"
-            loading="lazy"
-            decoding="async"
-          />
-        </Lens>
+        <PinchZoomImage>
+          <Lens hovering={hovering} setHovering={setHovering} zoomFactor={1.8} lensSize={180}>
+            <ImageWithSkeleton
+              src={previewImage}
+              alt="Project detailed preview"
+              className="project-modal-image"
+              width="1200"
+              height="900"
+              loading="lazy"
+              decoding="async"
+            />
+          </Lens>
+        </PinchZoomImage>
       </div>
     </div>
   );

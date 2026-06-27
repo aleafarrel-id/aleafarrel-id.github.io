@@ -234,31 +234,7 @@
   animation: certFadeOut var(--duration-base) var(--ease-out-expo) forwards;
 }
 
-.cert-modal-close-btn {
-  position: absolute;
-  top: var(--space-8);
-  right: var(--space-8);
-  background: var(--clr-bg-raised);
-  border: 1px solid var(--shadow-light);
-  color: var(--clr-text-primary);
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-full);
-  font-size: var(--text-3xl);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--neu-raised);
-  z-index: calc(var(--z-modal) + 1);
-  transition: transform var(--duration-fast), background var(--duration-fast);
-}
 
-.cert-modal-close-btn:focus-visible {
-  transform: scale(1.1);
-  background: var(--clr-error);
-  outline: none;
-}
 
 .cert-modal-content-wrapper {
   max-width: 90%;
@@ -327,11 +303,7 @@
     border-color: var(--clr-accent-blue);
     outline: none;
   }
-  .cert-modal-close-btn:hover {
-    transform: scale(1.1);
-    background: var(--clr-error);
-    outline: none;
-  }
+
 }
 
 @media (max-width: 767px) {
@@ -368,13 +340,7 @@
   .cert-tooltip-provider {
     font-size: 10px;
   }
-  .cert-modal-close-btn {
-    width: 40px;
-    height: 40px;
-    font-size: var(--text-xl);
-    top: var(--space-4);
-    right: var(--space-4);
-  }
+
 }
 
 @media (min-width: 768px) {

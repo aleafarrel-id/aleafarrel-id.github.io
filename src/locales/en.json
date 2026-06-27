@@ -293,6 +293,7 @@
   "interaction": {
     "tap_to_interact": "Tap to interact",
     "done": "Done",
-    "loading_flow": "Loading"
+    "loading_flow": "Loading",
+    "pinch_zoom": "Pinch to zoom"
   }
 }

@@ -198,31 +198,7 @@
   animation: projectFadeOut var(--duration-base, 0.3s) var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
 }
 
-.project-modal-close-btn {
-  position: absolute;
-  top: var(--space-8, 2rem);
-  right: var(--space-8, 2rem);
-  background: var(--clr-bg-raised);
-  border: 1px solid var(--shadow-light);
-  color: var(--clr-text-primary);
-  width: 56px;
-  height: 56px;
-  border-radius: 9999px;
-  font-size: var(--text-3xl, 1.875rem);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 1px 0 var(--shadow-light), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  z-index: calc(var(--z-modal, 9999) + 1);
-  transition: transform var(--duration-fast, 0.15s), background var(--duration-fast, 0.15s);
-}
 
-.project-modal-close-btn:focus-visible {
-  transform: scale(1.1);
-  background: var(--clr-error, #ef4444);
-  outline: none;
-}
 
 .project-modal-content-wrapper {
   max-width: 90%;
@@ -299,21 +275,11 @@
     background: color-mix(in srgb, var(--clr-text-primary) 20%, transparent);
     transform: scale(0.98);
   }
-  .project-modal-close-btn:hover {
-    transform: scale(1.1);
-    background: var(--clr-error, #ef4444);
-    outline: none;
-  }
+
 }
 
 @media (max-width: 767px) {
-  .project-modal-close-btn {
-    width: 40px;
-    height: 40px;
-    font-size: var(--text-xl, 1.25rem);
-    top: var(--space-4, 1rem);
-    right: var(--space-4, 1rem);
-  }
+
 }
 
 @media (min-width: 768px) {
