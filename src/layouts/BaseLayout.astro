@@ -49,6 +49,7 @@ const emailDomain = emailParts[1] || "";
     <link rel="alternate" hreflang={locale} href={Astro.url.href} />
     <link rel="alternate" hreflang={altLang} href={new URL(altUrl, Astro.site || "https://aleafarrel-id.github.io").href} />
     <link rel="alternate" hreflang="x-default" href={new URL("/en/", Astro.site || "https://aleafarrel-id.github.io").href} />
+    <link rel="preload" href="/frame/hero-000.webp" as="image" type="image/webp" fetchpriority="high" />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="Alea Farrel - Portfolio" />
@@ -161,7 +162,7 @@ const emailDomain = emailParts[1] || "";
       </div>
     </header>
 
-    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <canvas id="hero-canvas" aria-hidden="true" data-enhance-text={data.hero.enhancing}></canvas>
 
     <main id="main-content">
       <slot />

@@ -8,7 +8,6 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 export class HeroCanvasSequence {
   private readonly FRAME_COUNT = 229;
   private readonly FRAME_PATH = '/frame/';
-  private readonly BATCH_SIZE = 20;
 
   private frames: (HTMLImageElement | null)[];
   private currentIndex: number = 0;
@@ -17,6 +16,7 @@ export class HeroCanvasSequence {
   private isMobile: boolean;
   private step: number;
   private phrases: string[] = [];
+  private uiPill: HTMLElement | null = null;
 
   constructor() {
     this.frames = new Array(this.FRAME_COUNT).fill(null);
@@ -33,18 +33,38 @@ export class HeroCanvasSequence {
       return;
     }
 
+    // Determine initial scroll frame to prevent jumping on refresh
+    const driver = document.getElementById('scroll-canvas-driver');
+    let initialFrameIdx = 0;
+    if (driver) {
+      const scrollY = window.scrollY;
+      const driverTop = driver.offsetTop;
+      const driverHeight = driver.offsetHeight;
+      const winHeight = window.innerHeight;
+
+      if (driverHeight > winHeight) {
+        const progress = Math.max(0, Math.min(1, (scrollY - driverTop) / (driverHeight - winHeight)));
+        initialFrameIdx = Math.round(progress * (this.FRAME_COUNT - 1));
+      }
+
+      if (this.isMobile) {
+        initialFrameIdx = Math.round(initialFrameIdx / this.step) * this.step;
+      }
+    }
+    this.currentIndex = initialFrameIdx;
+
     this.setupResizeObserver();
     this.resizeCanvas();
     this.parsePhrases();
 
-    await this.loadFrames();
+    await this.loadFrames(initialFrameIdx);
 
-    // Ensure the first frame is drawn
-    if (this.frames[0]) {
-      this.drawFrame(this.frames[0]);
+    // Ensure the initial frame is drawn
+    if (this.frames[this.currentIndex]) {
+      this.drawFrame(this.frames[this.currentIndex]);
     }
 
-    await new Promise<void>(resolve => setTimeout(resolve, 600));
+    await new Promise<void>(resolve => setTimeout(resolve, 100));
     globalEvents.emit(EVENTS.PRELOADER_DONE);
 
     this.setupScrollTrigger();
@@ -129,28 +149,153 @@ export class HeroCanvasSequence {
     globalEvents.emit(EVENTS.LOADER_PROGRESS, { pct, phrase: activePhrase });
   }
 
-  private async loadFrames(): Promise<void> {
+  private createUIPill() {
+    this.uiPill = document.createElement('div');
+    Object.assign(this.uiPill.style, {
+      position: 'fixed',
+      bottom: this.isMobile ? 'auto' : '24px',
+      top: this.isMobile ? '80px' : 'auto',
+      right: '24px',
+      padding: '8px 16px',
+      background: 'rgba(20, 20, 20, 0.65)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '24px',
+      color: '#fff',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      fontSize: '12px',
+      fontWeight: '500',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      opacity: '0',
+      transform: this.isMobile ? 'translateY(-10px)' : 'translateY(10px)',
+      transition: 'opacity 0.4s ease, transform 0.4s ease',
+      zIndex: '9999',
+      pointerEvents: 'none',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+    });
+
+    let enhancingText = "Enhancing...";
+    const canvas = document.getElementById('hero-canvas');
+    if (canvas) {
+      enhancingText = canvas.getAttribute('data-enhance-text') || enhancingText;
+    }
+
+    this.uiPill.innerHTML = `
+      <div style="width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: canvas-pill-spin 1s linear infinite;"></div>
+      <span id="canvas-ui-pill-text" data-base-text="${enhancingText}">${enhancingText}</span>
+    `;
+
+    if (!document.getElementById('canvas-pill-styles')) {
+      const style = document.createElement('style');
+      style.id = 'canvas-pill-styles';
+      style.innerHTML = `@keyframes canvas-pill-spin { 100% { transform: rotate(360deg); } }`;
+      document.head.appendChild(style);
+    }
+    document.body.appendChild(this.uiPill);
+  }
+
+  private updateUIPill(pct: number) {
+    if (!this.uiPill) return;
+    const textEl = this.uiPill.querySelector('#canvas-ui-pill-text');
+    if (textEl) {
+      const baseText = textEl.getAttribute('data-base-text') || "Enhancing...";
+      textEl.textContent = `${baseText} ${pct}%`;
+    }
+  }
+
+  private showUIPill() {
+    if (this.uiPill) {
+      this.uiPill.style.opacity = '1';
+      this.uiPill.style.transform = 'translateY(0)';
+    }
+  }
+
+  private hideUIPill() {
+    if (this.uiPill) {
+      this.uiPill.style.opacity = '0';
+      this.uiPill.style.transform = this.isMobile ? 'translateY(-10px)' : 'translateY(10px)';
+      setTimeout(() => this.uiPill?.remove(), 400);
+    }
+  }
+
+  private async loadFrames(initialIdx: number = 0): Promise<void> {
+    const PHASE1_STEP = this.isMobile ? 15 : 10;
     let loadedCount = 0;
     const targetLoadCount = Math.ceil(this.FRAME_COUNT / this.step);
+    const phase1Batch: Promise<void>[] = [];
 
-    for (let start = 0; start < this.FRAME_COUNT; start += this.BATCH_SIZE * this.step) {
-      const end = Math.min(start + this.BATCH_SIZE * this.step - 1, this.FRAME_COUNT - 1);
-      const batch: Promise<void>[] = [];
+    for (let i = 0; i < this.FRAME_COUNT; i += PHASE1_STEP) {
+      const idx = i;
+      phase1Batch.push(
+        this.loadImage(this.frameUrl(i)).then(img => {
+          this.frames[idx] = img;
+          loadedCount++;
+          this.updateProgress(loadedCount, targetLoadCount);
+          if (idx === initialIdx) this.drawFrame(this.frames[idx]);
+        })
+      );
+    }
 
-      for (let i = start; i <= end; i += this.step) {
-        const idx = i;
-        batch.push(
-          this.loadImage(this.frameUrl(i)).then(img => {
-            this.frames[idx] = img;
-            loadedCount++;
-            this.updateProgress(loadedCount, targetLoadCount);
+    if (initialIdx % PHASE1_STEP !== 0) {
+      phase1Batch.push(
+        this.loadImage(this.frameUrl(initialIdx)).then(img => {
+          this.frames[initialIdx] = img;
+          loadedCount++;
+          this.updateProgress(loadedCount, targetLoadCount);
+          this.drawFrame(this.frames[initialIdx]);
+        })
+      );
+    }
 
-            if (idx === 0) this.drawFrame(this.frames[0]);
-          })
-        );
+    await Promise.all(phase1Batch);
+    this.createUIPill();
+    this.backfillRemainingFrames(loadedCount, targetLoadCount);
+  }
+
+  private backfillRemainingFrames(loadedCount: number, targetLoadCount: number): void {
+    const isCached = localStorage.getItem('hero_frames_cached') === 'true';
+
+    const doBackfill = async () => {
+      if (!isCached) this.showUIPill();
+
+      const pendingIndices: number[] = [];
+      for (let i = 0; i < this.FRAME_COUNT; i += this.step) {
+        if (!this.frames[i]) pendingIndices.push(i);
       }
 
-      await Promise.all(batch);
+      const BATCH_SIZE = 5;
+      for (let i = 0; i < pendingIndices.length; i += BATCH_SIZE) {
+        const batch: Promise<void>[] = [];
+        for (let j = 0; j < BATCH_SIZE && (i + j) < pendingIndices.length; j++) {
+          const idx = pendingIndices[i + j];
+          batch.push(
+            this.loadImage(this.frameUrl(idx)).then(img => {
+              this.frames[idx] = img;
+              loadedCount++;
+              if (!isCached) {
+                const totalPct = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
+                this.updateUIPill(totalPct);
+              }
+            })
+          );
+        }
+        await Promise.all(batch);
+        await new Promise(resolve => setTimeout(resolve, isCached ? 5 : 50));
+      }
+
+      if (!isCached) {
+        this.hideUIPill();
+        localStorage.setItem('hero_frames_cached', 'true');
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      setTimeout(() => (window as any).requestIdleCallback(() => doBackfill()), isCached ? 500 : 2500);
+    } else {
+      setTimeout(doBackfill, isCached ? 500 : 2500);
     }
   }
 
@@ -166,15 +311,32 @@ export class HeroCanvasSequence {
       onUpdate: (self) => {
         const idx = Math.round(self.progress * (this.FRAME_COUNT - 1));
         let clamped = Math.max(0, Math.min(idx, this.FRAME_COUNT - 1));
-        
-        // Snap to the nearest loaded frame if skipping
+
         if (this.isMobile) {
           clamped = Math.round(clamped / this.step) * this.step;
         }
 
-        if (clamped !== this.currentIndex && this.frames[clamped]) {
-          this.currentIndex = clamped;
-          requestAnimationFrame(() => this.drawFrame(this.frames[this.currentIndex]));
+        if (clamped !== this.currentIndex) {
+          let renderIdx = clamped;
+          if (!this.frames[renderIdx]) {
+            let offset = 1;
+            while (renderIdx - offset >= 0 || renderIdx + offset < this.FRAME_COUNT) {
+              if (renderIdx - offset >= 0 && this.frames[renderIdx - offset]) {
+                renderIdx = renderIdx - offset;
+                break;
+              }
+              if (renderIdx + offset < this.FRAME_COUNT && this.frames[renderIdx + offset]) {
+                renderIdx = renderIdx + offset;
+                break;
+              }
+              offset++;
+            }
+          }
+
+          if (renderIdx !== this.currentIndex && this.frames[renderIdx]) {
+            this.currentIndex = renderIdx;
+            requestAnimationFrame(() => this.drawFrame(this.frames[this.currentIndex]));
+          }
         }
       },
     });
