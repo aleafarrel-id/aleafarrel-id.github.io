@@ -30,4 +30,5 @@ export const EVENTS = {
   VH_UPDATED: "vh-updated",
   LENIS_STOP: "lenis-stop",
   LENIS_START: "lenis-start",
+  CANVAS_ENHANCED: "canvas-enhanced",
 } as const;

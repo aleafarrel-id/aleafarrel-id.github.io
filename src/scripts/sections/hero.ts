@@ -54,3 +54,63 @@ function initHeroScrollFade() {
 }
 
 initHeroScrollFade();
+
+(function initCtaEnhancement() {
+  const btn = document.getElementById("hero-cta-primary") as HTMLAnchorElement | null;
+  if (!btn) return;
+
+  function easeInOutCubic(t: number): number {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function smoothScrollTo(targetY: number, duration: number): void {
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const startTime = performance.now();
+
+    function step(now: number): void {
+      const progress = Math.min((now - startTime) / duration, 1);
+      window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  btn.addEventListener(
+    "click",
+    (e: Event) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      const href = btn.getAttribute("href") ?? "";
+      const hash = href.includes("#") ? "#" + href.split("#")[1] : "";
+      if (!hash) return;
+
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return;
+
+      const targetY = target.getBoundingClientRect().top + window.scrollY - 80;
+      smoothScrollTo(targetY, 4000);
+    },
+    { capture: true }
+  );
+
+  if (window.matchMedia("(pointer: coarse)").matches) {
+    let pulsed = false;
+
+    function pulseCtaBtn() {
+      if (pulsed) return;
+      pulsed = true;
+
+      setTimeout(() => {
+        btn!.classList.add("cta-touch-ready");
+      }, 1800);
+    }
+
+    window.addEventListener("canvas-enhanced", pulseCtaBtn, { once: true });
+
+    const failsafeId = setTimeout(pulseCtaBtn, 10000);
+    window.addEventListener("canvas-enhanced", () => clearTimeout(failsafeId), { once: true });
+  }
+})();

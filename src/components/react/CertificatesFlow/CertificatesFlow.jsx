@@ -22,13 +22,8 @@ const CertModal = memo(({ previewImage, isClosing, handleClose }) => {
     };
     
     document.addEventListener('keydown', handleKeyDown);
-    const focusTimer = setTimeout(() => {
-      closeButtonRef.current?.focus({ preventScroll: true });
-    }, 100);
-    
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      clearTimeout(focusTimer);
     };
   }, [handleClose]);
 

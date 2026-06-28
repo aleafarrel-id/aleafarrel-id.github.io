@@ -219,7 +219,12 @@ export class HeroCanvasSequence {
     if (this.uiPill) {
       this.uiPill.style.opacity = '0';
       this.uiPill.style.transform = this.isMobile ? 'translateY(-10px)' : 'translateY(10px)';
-      setTimeout(() => this.uiPill?.remove(), 400);
+      setTimeout(() => {
+        this.uiPill?.remove();
+        globalEvents.emit(EVENTS.CANVAS_ENHANCED);
+      }, 400);
+    } else {
+      globalEvents.emit(EVENTS.CANVAS_ENHANCED);
     }
   }
 
@@ -243,6 +248,7 @@ export class HeroCanvasSequence {
   private deferBackgroundLoading(initialIdx: number, loadedCount: number, targetLoadCount: number): void {
     const isCached = localStorage.getItem('hero_frames_cached') === 'true';
     if (!isCached) this.showUIPill();
+    else globalEvents.emit(EVENTS.CANVAS_ENHANCED);
 
     const doBackgroundLoad = async () => {
       const pendingIndices: number[] = [];
