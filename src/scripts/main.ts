@@ -182,3 +182,12 @@ const revealObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
 
 document.querySelectorAll(".reveal").forEach((el) => revealObs.observe(el));
+
+// --- Service Worker Registration ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((error) => {
+      console.error('Service Worker registration failed:', error);
+    });
+  });
+}
