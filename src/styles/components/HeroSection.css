@@ -175,8 +175,6 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-6);
-  opacity: 0;
-  animation: scrollHintFade 2s var(--ease-out-expo) 2s forwards;
   pointer-events: auto;
 }
 

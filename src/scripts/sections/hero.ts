@@ -6,7 +6,8 @@ function animateHeroIn() {
     .to("#hero-name", { opacity: 1, y: 0, duration: 0.8 }, "-=0.4")
     .to("#hero-title", { opacity: 1, y: 0, duration: 0.6 }, "-=0.5")
     .to("#hero-subtitle", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
-    .to("#hero-ctas", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
+    .to("#hero-ctas", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
+    .fromTo("#hero-scroll-hint", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, "-=0.2");
 }
 
 window.addEventListener("preloader-done", animateHeroIn, { once: true });
