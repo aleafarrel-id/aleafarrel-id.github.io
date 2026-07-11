@@ -10,7 +10,8 @@ import {
   Handle,
   Position,
   useReactFlow,
-  ReactFlowProvider
+  ReactFlowProvider,
+  useStore
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -24,6 +25,10 @@ const CenterNode = memo(({ data }) => (
 CenterNode.displayName = 'CenterNode';
 
 const CertificateNode = memo(({ data }) => {
+  const isDragging = useStore((s) => {
+    return s.paneDragging || (s.nodeLookup ? Array.from(s.nodeLookup.values()).some(n => n.dragging) : false);
+  });
+
   const imagePath = data.image.startsWith('/') ? data.image : `/certificate/${data.image.split('/').pop()}`;
 
   const tooltipContent = (
@@ -60,7 +65,7 @@ const CertificateNode = memo(({ data }) => {
   );
 
   return (
-    <Tooltip content={tooltipContent}>
+    <Tooltip content={tooltipContent} disabled={isDragging}>
       <div
         className="cert-node-container"
         role="button"

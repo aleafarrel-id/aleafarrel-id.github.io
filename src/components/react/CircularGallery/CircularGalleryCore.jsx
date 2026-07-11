@@ -123,7 +123,14 @@ function getFontSize(font) {
   return match ? parseInt(match[1], 10) : 30;
 }
 
+const textTextureCache = new Map();
+
 function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'black') {
+  const key = `${text}|${font}|${color}`;
+  if (textTextureCache.has(key)) {
+    return textTextureCache.get(key);
+  }
+
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
 
@@ -153,7 +160,9 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
   });
   texture.image = canvas;
 
-  return { texture, width: canvas.width, height: canvas.height };
+  const result = { texture, width: canvas.width, height: canvas.height };
+  textTextureCache.set(key, result);
+  return result;
 }
 
 const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => {
@@ -234,7 +243,7 @@ const CircularGalleryModal = memo(({ previewImage, isClosing, handleClose }) => 
 CircularGalleryModal.displayName = 'CircularGalleryModal';
 
 class Title {
-  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }) {
+  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif', sharedTitleProgram }) {
     autoBind(this);
     this.gl = gl;
     this.plane = plane;
@@ -242,37 +251,19 @@ class Title {
     this.text = text;
     this.textColor = textColor;
     this.font = font;
+    this.program = sharedTitleProgram;
     this.createMesh();
   }
   createMesh() {
     const { texture, width, height } = createTextTexture(this.gl, this.text, this.font, this.textColor);
     const geometry = new Plane(this.gl);
-    const program = new Program(this.gl, {
-      vertex: `
-        attribute vec3 position;
-        attribute vec2 uv;
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragment: `
-        precision highp float;
-        uniform sampler2D tMap;
-        varying vec2 vUv;
-        void main() {
-          vec4 color = texture2D(tMap, vUv);
-          if (color.a < 0.1) discard;
-          gl_FragColor = color;
-        }
-      `,
-      uniforms: { tMap: { value: texture } },
-      transparent: true
-    });
-    this.mesh = new Mesh(this.gl, { geometry, program });
+    this.mesh = new Mesh(this.gl, { geometry, program: this.program });
+    
+    const ogDraw = this.mesh.draw;
+    this.mesh.draw = (opts) => {
+      this.program.uniforms.tMap.value = texture;
+      ogDraw.call(this.mesh, opts);
+    };
     this.aspect = width / height;
     const textHeight = this.plane.scale.y * 0.15;
     const textWidth = textHeight * this.aspect;
@@ -304,7 +295,9 @@ class Media {
     textColor,
     borderRadius = 0,
     font,
-    textureCache = null
+    textureCache = null,
+    sharedProgram,
+    sharedTitleProgram
   }) {
     this.extra = 0;
     this.geometry = geometry;
@@ -322,6 +315,13 @@ class Media {
     this.borderRadius = borderRadius;
     this.font = font;
     this.textureCache = textureCache;
+    this.sharedProgram = sharedProgram;
+    this.sharedTitleProgram = sharedTitleProgram;
+    
+    this.time = 100 * Math.random();
+    this.speed = 0;
+    this.activeFactor = 0;
+
     this.createShader();
     this.createMesh();
     this.createTitle();
@@ -350,106 +350,29 @@ class Media {
         textureInfo.callbacks = [];
       };
     }
-
-    this.program = new Program(this.gl, {
-      depthTest: false,
-      depthWrite: false,
-      vertex: `
-        precision highp float;
-        attribute vec3 position;
-        attribute vec2 uv;
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        uniform float uTime;
-        uniform float uSpeed;
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          vec3 p = position;
-          p.z = (sin(p.x * 4.0 + uTime) * 0.2 + cos(p.y * 2.0 + uTime) * 0.2) * (0.02 + uSpeed * 0.1);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-        }
-      `,
-      fragment: `
-        precision highp float;
-        uniform vec2 uImageSizes;
-        uniform vec2 uPlaneSizes;
-        uniform sampler2D tMap;
-        uniform float uBorderRadius;
-        uniform float uLoaded;
-        uniform float uTime;
-        uniform float uActive;
-        varying vec2 vUv;
-        
-        float roundedBoxSDF(vec2 p, vec2 b, float r) {
-          vec2 d = abs(p) - b;
-          return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - r;
-        }
-        
-        void main() {
-          vec2 ratio = vec2(
-            min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
-            min((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
-          );
-          vec2 uv = vec2(
-            vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
-            vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
-          );
-          vec4 color = texture2D(tMap, uv);
-          
-          if (uLoaded < 0.5) {
-            float pulse = (sin(uTime * 5.0) + 1.0) * 0.5;
-            color = vec4(mix(vec3(0.12), vec3(0.18), pulse), 1.0);
-          }
-          
-          /* Grayscale filter */
-          float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-          
-          float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
-          
-          /* Antialiasing */
-          float edgeSmooth = 0.002;
-          float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
-          
-          /* Active item effect: Color transition + Inner Border */
-          vec3 finalColor = mix(vec3(gray), color.rgb, uActive);
-          
-          float innerBorder = smoothstep(-0.03, -0.01, d) - smoothstep(-0.01, 0.01, d);
-          finalColor += vec3(1.0) * innerBorder * uActive * 0.4;
-          
-          gl_FragColor = vec4(finalColor, alpha);
-        }
-      `,
-      uniforms: {
-        tMap: { value: textureInfo.texture },
-        uLoaded: { value: textureInfo.loaded ? 1.0 : 0.0 },
-        uActive: { value: 0.0 },
-        uPlaneSizes: { value: [1, 1] },
-        uImageSizes: { value: textureInfo.sizes },
-        uSpeed: { value: 0 },
-        uTime: { value: 100 * Math.random() },
-        uBorderRadius: { value: this.borderRadius }
-      },
-      transparent: true
-    });
-
-    if (textureInfo.loaded) {
-      this.program.uniforms.uImageSizes.value = textureInfo.sizes;
-      this.program.uniforms.uLoaded.value = 1.0;
-    } else {
-      textureInfo.callbacks.push(() => {
-        if (this.program) {
-          this.program.uniforms.uImageSizes.value = textureInfo.sizes;
-          this.program.uniforms.uLoaded.value = 1.0;
-        }
-      });
-    }
+    
+    this.textureInfo = textureInfo;
+    this.program = this.sharedProgram;
   }
   createMesh() {
+
     this.plane = new Mesh(this.gl, {
       geometry: this.geometry,
       program: this.program
     });
+    
+    const ogDraw = this.plane.draw;
+    this.plane.draw = (opts) => {
+      this.program.uniforms.tMap.value = this.textureInfo.texture;
+      this.program.uniforms.uLoaded.value = this.textureInfo.loaded ? 1.0 : 0.0;
+      this.program.uniforms.uActive.value = this.activeFactor || 0.0;
+      this.program.uniforms.uImageSizes.value = this.textureInfo.sizes;
+      this.program.uniforms.uSpeed.value = this.speed || 0;
+      this.program.uniforms.uTime.value = this.time || 0;
+      this.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
+      this.program.uniforms.uBorderRadius.value = this.borderRadius;
+      ogDraw.call(this.plane, opts);
+    };
     this.plane.setParent(this.scene);
   }
   createTitle() {
@@ -461,7 +384,8 @@ class Media {
         renderer: this.renderer,
         text: this.text,
         textColor: this.textColor,
-        font: this.font
+        font: this.font,
+        sharedTitleProgram: this.sharedTitleProgram
       });
       if (this.plane.scale && this.plane.scale.x > 0) {
         this.title.resize(this.plane.scale.x, this.plane.scale.y);
@@ -494,11 +418,10 @@ class Media {
     }
 
     this.speed = scroll.current - scroll.last;
-    this.program.uniforms.uTime.value += 0.01;
-    this.program.uniforms.uSpeed.value = this.speed;
+    this.time += 0.01;
     
     const activeFactor = Math.max(0, 1.0 - Math.abs(x) / (this.width * 0.8));
-    this.program.uniforms.uActive.value = activeFactor * activeFactor * (3.0 - 2.0 * activeFactor);
+    this.activeFactor = activeFactor * activeFactor * (3.0 - 2.0 * activeFactor);
 
     const planeOffset = this.plane.scale.x / 2;
     const viewportOffset = this.viewport.width / 2;
@@ -612,6 +535,106 @@ class App {
       heightSegments: 50,
       widthSegments: 100
     });
+    
+    this.sharedMediaProgram = new Program(this.gl, {
+      depthTest: false,
+      depthWrite: false,
+      vertex: `
+        precision highp float;
+        attribute vec3 position;
+        attribute vec2 uv;
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        uniform float uTime;
+        uniform float uSpeed;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          vec3 p = position;
+          p.z = (sin(p.x * 4.0 + uTime) * 0.2 + cos(p.y * 2.0 + uTime) * 0.2) * (0.02 + uSpeed * 0.1);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+        }
+      `,
+      fragment: `
+        precision highp float;
+        uniform vec2 uImageSizes;
+        uniform vec2 uPlaneSizes;
+        uniform sampler2D tMap;
+        uniform float uBorderRadius;
+        uniform float uLoaded;
+        uniform float uTime;
+        uniform float uActive;
+        varying vec2 vUv;
+        
+        float roundedBoxSDF(vec2 p, vec2 b, float r) {
+          vec2 d = abs(p) - b;
+          return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - r;
+        }
+        
+        void main() {
+          vec2 ratio = vec2(
+            min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
+            min((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
+          );
+          vec2 uv = vec2(
+            vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+            vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
+          );
+          vec4 color = texture2D(tMap, uv);
+          
+          if (uLoaded < 0.5) {
+            float pulse = (sin(uTime * 5.0) + 1.0) * 0.5;
+            color = vec4(mix(vec3(0.12), vec3(0.18), pulse), 1.0);
+          }
+          
+          float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
+          float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
+          float edgeSmooth = 0.002;
+          float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
+          vec3 finalColor = mix(vec3(gray), color.rgb, uActive);
+          float innerBorder = smoothstep(-0.03, -0.01, d) - smoothstep(-0.01, 0.01, d);
+          finalColor += vec3(1.0) * innerBorder * uActive * 0.4;
+          gl_FragColor = vec4(finalColor, alpha);
+        }
+      `,
+      uniforms: {
+        tMap: { value: null },
+        uLoaded: { value: 0.0 },
+        uActive: { value: 0.0 },
+        uPlaneSizes: { value: [1, 1] },
+        uImageSizes: { value: [1, 1] },
+        uSpeed: { value: 0 },
+        uTime: { value: 0 },
+        uBorderRadius: { value: 0 }
+      },
+      transparent: true
+    });
+    
+    this.sharedTitleProgram = new Program(this.gl, {
+      vertex: `
+        attribute vec3 position;
+        attribute vec2 uv;
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragment: `
+        precision highp float;
+        uniform sampler2D tMap;
+        varying vec2 vUv;
+        void main() {
+          vec4 color = texture2D(tMap, vUv);
+          if (color.a < 0.1) discard;
+          gl_FragColor = color;
+        }
+      `,
+      uniforms: { tMap: { value: null } },
+      transparent: true
+    });
   }
   createMedias(items, bend = 1, textColor, borderRadius, font) {
     const galleryItems = items && items.length ? items : [];
@@ -641,7 +664,9 @@ class App {
         textColor,
         borderRadius,
         font,
-        textureCache: this.textureCache
+        textureCache: this.textureCache,
+        sharedProgram: this.sharedMediaProgram,
+        sharedTitleProgram: this.sharedTitleProgram
       }));
       index++;
 
@@ -850,16 +875,29 @@ class App {
     if (this.planeGeometry) this.planeGeometry.remove();
     if (this.medias) {
       this.medias.forEach(media => {
-        if (media.plane) media.plane.remove();
-        if (media.program) media.program.remove();
-        if (media.title && media.title.mesh) media.title.mesh.remove();
+        if (media.plane) media.plane.setParent(null);
+        if (media.title && media.title.mesh) media.title.mesh.setParent(null);
       });
     }
+    
+    if (this.sharedMediaProgram) this.sharedMediaProgram.remove();
+    if (this.sharedTitleProgram) this.sharedTitleProgram.remove();
+
     if (this.textureCache) {
       Object.values(this.textureCache).forEach(info => {
-        if (info.texture) info.texture.remove();
+        if (info.texture && info.texture.texture) {
+          this.gl.deleteTexture(info.texture.texture);
+        }
       });
     }
+    
+    // Clear global text texture cache to prevent WebGL context leaks on unmount
+    textTextureCache.forEach((info) => {
+      if (info.texture && info.texture.texture) {
+        this.gl.deleteTexture(info.texture.texture);
+      }
+    });
+    textTextureCache.clear();
 
     if (this.renderer?.gl?.canvas?.parentNode) {
       this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas);

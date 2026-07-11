@@ -29,10 +29,12 @@ export const Tooltip = ({
   content,
   children,
   containerClassName,
+  disabled = false,
 }: {
   content: string | React.ReactNode;
   children: React.ReactNode;
   containerClassName?: string;
+  disabled?: boolean;
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -102,6 +104,7 @@ export const Tooltip = ({
 
   const showTooltip = useCallback(
     (x: number, y: number) => {
+      if (disabled) return;
       if (exitTimerRef.current) {
         clearTimeout(exitTimerRef.current);
         exitTimerRef.current = null;
@@ -111,7 +114,7 @@ export const Tooltip = ({
       setIsExiting(false);
       setIsVisible(true);
     },
-    [calculatePosition]
+    [calculatePosition, disabled]
   );
 
   const hideTooltip = useCallback(() => {
@@ -124,10 +127,10 @@ export const Tooltip = ({
 
   const handleMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (isTouchDevice) return;
+      if (isTouchDevice || disabled) return;
       showTooltip(e.clientX, e.clientY);
     },
-    [isTouchDevice, showTooltip]
+    [isTouchDevice, showTooltip, disabled]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -137,15 +140,15 @@ export const Tooltip = ({
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (isTouchDevice || !isVisible || isExiting) return;
+      if (isTouchDevice || !isVisible || isExiting || disabled) return;
       setPosition(calculatePosition(e.clientX, e.clientY));
     },
-    [isTouchDevice, isVisible, isExiting, calculatePosition]
+    [isTouchDevice, isVisible, isExiting, calculatePosition, disabled]
   );
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!isTouchDevice) return;
+      if (!isTouchDevice || disabled) return;
       e.stopPropagation();
 
       if (autoCloseTimerRef.current) {
@@ -160,7 +163,7 @@ export const Tooltip = ({
         autoCloseTimerRef.current = setTimeout(hideTooltip, 5000);
       }
     },
-    [isTouchDevice, isVisible, isExiting, showTooltip, hideTooltip]
+    [isTouchDevice, isVisible, isExiting, showTooltip, hideTooltip, disabled]
   );
 
   useEffect(() => {
@@ -178,6 +181,11 @@ export const Tooltip = ({
     return () => document.removeEventListener("pointerdown", onPointerDown, { capture: true });
   }, [isVisible, isTouchDevice, hideTooltip]);
 
+  useEffect(() => {
+    if (disabled && isVisible && !isExiting) {
+      hideTooltip();
+    }
+  }, [disabled, isVisible, isExiting, hideTooltip]);
 
 
   const tooltipPortal =
