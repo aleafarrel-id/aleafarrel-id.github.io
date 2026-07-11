@@ -8,8 +8,8 @@
 
 .project-scroll-card {
   width: 100%;
-  height: 70dvh;
-  height: calc(var(--vh, 1dvh) * 70);
+  height: 70vh;
+  height: 70svh;
   min-height: 480px;
   margin: 0;
   box-sizing: border-box;
@@ -292,8 +292,8 @@
 
 @media (min-width: 768px) {
   .project-scroll-card {
-    height: 55dvh;
-    height: calc(var(--vh, 1vh) * 55);
+    height: 55vh;
+    height: 55svh;
     min-height: 500px;
   }
 
@@ -358,8 +358,7 @@
 
 @media (min-width: 1024px) {
   .project-scroll-card {
-    height: 80dvh;
-    height: calc(var(--vh, 1vh) * 80);
+    height: 80svh;
     min-height: 600px;
   }
 

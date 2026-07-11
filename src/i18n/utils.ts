@@ -12,30 +12,7 @@ export type Locale = 'en' | 'id';
 
 const locales = { en, id } as const;
 
-/** Dot-notation key accessor with EN fallback */
-export function useTranslations(locale: Locale = 'en') {
-  const dict = locales[locale] as Record<string, unknown>;
 
-  return function t(key: string): string {
-    const parts = key.split('.');
-    let value: unknown = dict;
-    for (const part of parts) {
-      if (typeof value === 'object' && value !== null && part in value) {
-        value = (value as Record<string, unknown>)[part];
-      } else {
-        // Fallback to English
-        let fb: unknown = locales.en as Record<string, unknown>;
-        for (const p of parts) {
-          if (typeof fb === 'object' && fb !== null && p in fb) {
-            fb = (fb as Record<string, unknown>)[p];
-          } else return key;
-        }
-        return typeof fb === 'string' ? fb : key;
-      }
-    }
-    return typeof value === 'string' ? value : key;
-  };
-}
 
 /** Narrow an arbitrary string to Locale (defaults to 'en') */
 export function getLocale(raw: string | undefined): Locale {

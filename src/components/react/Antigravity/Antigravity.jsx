@@ -25,8 +25,7 @@ const AntigravityInner = ({
   const { viewport } = useThree();
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  const lastMousePos = useRef({ x: 0, y: 0 });
-  const lastMouseMoveTime = useRef(0);
+  const lastRealMoveTime = useRef(0);
   const virtualMouse = useRef({ x: 0, y: 0 });
   const totalTimeRef = useRef(0);
 
@@ -37,11 +36,7 @@ const AntigravityInner = ({
 
     for (let i = 0; i < count; i++) {
       const t = Math.random() * 100;
-      const factor = 20 + Math.random() * 100;
       const speed = 0.01 + Math.random() / 200;
-      const xFactor = -50 + Math.random() * 100;
-      const yFactor = -50 + Math.random() * 100;
-      const zFactor = -50 + Math.random() * 100;
 
       const x = (Math.random() - 0.5) * width;
       const y = (Math.random() - 0.5) * height;
@@ -51,31 +46,34 @@ const AntigravityInner = ({
 
       temp.push({
         t,
-        factor,
         speed,
-        xFactor,
-        yFactor,
-        zFactor,
         mx: x,
         my: y,
         mz: z,
         cx: x,
         cy: y,
         cz: z,
-        vx: 0,
-        vy: 0,
-        vz: 0,
         randomRadiusOffset
       });
     }
     return temp;
   }, [count, viewport.width, viewport.height]);
 
-  const globalPointer = useRef({ x: 0, y: 0 });
+  const globalPointer = useRef({ x: 0, y: 0, moved: false });
 
   useEffect(() => {
     let sectionCache = null;
+    let lastClientX = -1;
+    let lastClientY = -1;
+
     const handlePointerMove = (e) => {
+      let actuallyMoved = false;
+      if (lastClientX !== e.clientX || lastClientY !== e.clientY) {
+        actuallyMoved = true;
+        lastClientX = e.clientX;
+        lastClientY = e.clientY;
+      }
+
       if (!sectionCache) {
         sectionCache = document.getElementById('contact');
       }
@@ -85,7 +83,7 @@ const AntigravityInner = ({
       if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
         const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-        globalPointer.current = { x, y };
+        globalPointer.current = { x, y, moved: actuallyMoved };
       }
     };
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
@@ -103,17 +101,15 @@ const AntigravityInner = ({
     const { viewport: v } = state;
     const m = globalPointer.current;
 
-    const mouseDist = Math.sqrt(Math.pow(m.x - lastMousePos.current.x, 2) + Math.pow(m.y - lastMousePos.current.y, 2));
-
-    if (mouseDist > 0.001) {
-      lastMouseMoveTime.current = Date.now();
-      lastMousePos.current = { x: m.x, y: m.y };
+    if (m.moved) {
+      lastRealMoveTime.current = Date.now();
+      m.moved = false;
     }
 
     let destX = (m.x * v.width) / 2;
     let destY = (m.y * v.height) / 2;
 
-    if (autoAnimate && Date.now() - lastMouseMoveTime.current > 2000) {
+    if (autoAnimate && Date.now() - lastRealMoveTime.current > 2000) {
       const time = totalTimeRef.current;
       destX = Math.sin(time * 0.5) * (v.width / 4);
       destY = Math.cos(time * 0.5 * 2) * (v.height / 4);

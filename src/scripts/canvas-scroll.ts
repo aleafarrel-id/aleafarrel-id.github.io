@@ -5,7 +5,7 @@ import { globalEvents, EVENTS } from '../lib/events';
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
-export class HeroCanvasSequence {
+class HeroCanvasSequence {
   private readonly FRAME_COUNT = 229;
   private readonly FRAME_PATH = '/frame/';
 

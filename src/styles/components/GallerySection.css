@@ -18,11 +18,9 @@
   left: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(
-    circle,
-    var(--clr-accent-purple, #8b5cf6) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      var(--clr-accent-purple, #8b5cf6) 0%,
+      transparent 70%);
 }
 
 .gallery-glow-2 {
@@ -30,17 +28,16 @@
   right: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(
-    circle,
-    var(--clr-accent-blue, #3b82f6) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      var(--clr-accent-blue, #3b82f6) 0%,
+      transparent 70%);
 }
 
 @keyframes gallery-float {
   0% {
     transform: translateY(0) scale(1);
   }
+
   100% {
     transform: translateY(-40px) scale(1.05);
   }
@@ -50,6 +47,7 @@
   .gallery-glow-1 {
     animation: gallery-float 10s ease-in-out infinite alternate;
   }
+
   .gallery-glow-2 {
     animation: gallery-float 12s ease-in-out infinite alternate-reverse;
   }
@@ -62,8 +60,7 @@
   letter-spacing: -0.03em;
   color: var(--clr-text-primary);
   margin-bottom: var(--space-4);
-  text-shadow: 0 4px 24px
-    color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+  text-shadow: 0 4px 24px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
 }
 
 .gallery-subheading {
@@ -77,23 +74,19 @@
 
 .gallery-flow-wrapper {
   background-color: var(--clr-bg-deep);
-  background-image: radial-gradient(
-    color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1.5px,
-    transparent 1.5px
-  );
+  background-image: radial-gradient(color-mix(in srgb, var(--clr-text-primary) 10%, transparent) 1.5px,
+      transparent 1.5px);
   background-size: 24px 24px;
   background-position: 0 0;
-  border: 1px solid
-    color-mix(in srgb, var(--clr-text-primary) 5%, transparent);
-  box-shadow: 0 24px 64px
-    color-mix(in srgb, var(--shadow-dark) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--clr-text-primary) 5%, transparent);
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--shadow-dark) 40%, transparent);
   transition: background-position 0.5s ease-out;
 
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
+  height: 60vh;
   height: 60svh;
-  height: calc(var(--vh, 1svh) * 60);
   margin-left: calc(-1 * var(--space-4));
   width: calc(100% + var(--space-8));
   touch-action: pan-y;
@@ -141,14 +134,16 @@
   .gallery-flow-wrapper {
     margin-left: 0;
     width: 100%;
+    height: 70vh;
     height: 70svh;
-    height: calc(var(--vh, 1svh) * 70);
     max-height: 700px;
   }
+
   .gallery-interaction-hint {
     flex-direction: row;
     font-size: var(--text-sm);
   }
+
   .gallery-interaction-hint svg {
     width: 16px;
     height: 16px;
@@ -160,6 +155,7 @@
     align-items: flex-start;
     text-align: left;
   }
+
   .gallery-subheading {
     text-align: left;
   }

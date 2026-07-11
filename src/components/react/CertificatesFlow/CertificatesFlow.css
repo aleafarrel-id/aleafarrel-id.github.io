@@ -201,8 +201,8 @@
 /* React Flow Container */
 .cert-flow-wrapper {
   width: 100%;
+  height: 55vh;
   height: 55svh;
-  height: calc(var(--vh, 1svh) * 55);
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--shadow-light);

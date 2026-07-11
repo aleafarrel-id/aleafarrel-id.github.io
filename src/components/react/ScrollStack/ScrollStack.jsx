@@ -13,10 +13,10 @@ const ScrollStack = ({
   useWindowScroll = false,
   onStackComplete
 }) => {
-  const scrollerRef     = useRef(null);
+  const scrollerRef = useRef(null);
   const stackCompletedRef = useRef(false);
   const animationFrameRef = useRef(null);
-  const cardsRef        = useRef([]);
+  const cardsRef = useRef([]);
   const lastTransformsRef = useRef(new Map());
 
   const cachedOffsetsRef = useRef({
@@ -38,7 +38,7 @@ const ScrollStack = ({
 
     if (useWindowScroll) {
       containerH = window.innerHeight;
-      stackPx    = parsePercentage(stackPosition, containerH);
+      stackPx = parsePercentage(stackPosition, containerH);
       const scrollY = window.scrollY;
 
       cardTops = cards.map((c, i) => {
@@ -54,7 +54,7 @@ const ScrollStack = ({
       const scroller = scrollerRef.current;
       if (!scroller) return;
       containerH = scroller.clientHeight;
-      stackPx    = parsePercentage(stackPosition, containerH);
+      stackPx = parsePercentage(stackPosition, containerH);
       cardTops = cards.map(c => c.offsetTop);
       const endEl = scroller.querySelector('.scroll-stack-end');
       endTop = endEl ? endEl.offsetTop : 0;
@@ -82,9 +82,9 @@ const ScrollStack = ({
     cards.forEach((card, i) => {
       if (!card) return;
 
-      const cardTop      = cardTops[i] ?? 0;
-      const pinStart     = cardTop - stackPx;
-      const nextCardTop  = i < cards.length - 1 ? (cardTops[i + 1] ?? endTop) : endTop;
+      const cardTop = cardTops[i] ?? 0;
+      const pinStart = cardTop - stackPx;
+      const nextCardTop = i < cards.length - 1 ? (cardTops[i + 1] ?? endTop) : endTop;
       const nextPinStart = nextCardTop - stackPx;
       const effectivePinEnd = Math.max(pinEnd, nextPinStart);
 
@@ -92,7 +92,7 @@ const ScrollStack = ({
 
       if (scrollTop >= pinStart && scrollTop <= effectivePinEnd) {
         const span = Math.max(1, nextPinStart - pinStart);
-        const t    = Math.min(1, (scrollTop - pinStart) / span);
+        const t = Math.min(1, (scrollTop - pinStart) / span);
         sc = 1 - t * 0.035;
       } else if (scrollTop > effectivePinEnd) {
         sc = 0.965;
@@ -134,9 +134,9 @@ const ScrollStack = ({
 
     cards.forEach((card, i) => {
       if (i < cards.length - 1) card.style.marginBottom = `${itemDistance}px`;
-      card.style.willChange    = 'transform';
+      card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
-      card.style.transform     = 'scale(1)';
+      card.style.transform = 'scale(1)';
     });
 
     if (useWindowScroll) {
@@ -150,21 +150,22 @@ const ScrollStack = ({
 
       let resizeTimer;
       let lastWidth = window.innerWidth;
-      
+
       const handleResize = () => {
         const currentWidth = window.innerWidth;
         if (currentWidth === lastWidth && 'ontouchstart' in window) {
+          scheduleRecalc();
           return;
         }
         lastWidth = currentWidth;
-        
+
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
           scheduleRecalc();
           onScroll();
         }, 150);
       };
-      
+
       window.addEventListener('resize', handleResize, { passive: true });
       window.visualViewport?.addEventListener('resize', handleResize, { passive: true });
 
