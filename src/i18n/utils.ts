@@ -1,7 +1,7 @@
 /**
  * i18n utility — loads locale JSON and provides type-safe access.
  *
- * Routes: /en/  (English) | /id/  (Indonesian)
+ * Routes: /  (English, default) | /id/  (Indonesian)
  * Single source of truth: src/locales/{en,id}.json
  */
 
@@ -26,11 +26,29 @@ export function getLocaleData(locale: Locale) {
 
 /**
  * Given current locale, return the URL for the alternate locale.
- * Pattern: /en/... ↔ /id/...
+ * English lives at root (/), Indonesian at /id/...
+ * Pattern: / ↔ /id/
  */
 export function getAlternateUrl(currentPath: string, currentLocale: Locale): string {
   const alt = currentLocale === 'en' ? 'id' : 'en';
-  // Replace leading /en or /id prefix
-  const stripped = currentPath.replace(/^\/(en|id)/, '');
-  return `/${alt}${stripped || '/'}`;
+
+  if (alt === 'id') {
+    // Going to Indonesian: strip leading / content, prefix with /id
+    // e.g. /about → /id/about, / → /id/
+    const stripped = currentPath.replace(/^\/id/, '') || '/';
+    return `/id${stripped === '/' ? '/' : stripped}`;
+  } else {
+    // Going to English (root): strip /id prefix
+    // e.g. /id/about → /about, /id/ → /
+    const stripped = currentPath.replace(/^\/id/, '') || '/';
+    return stripped;
+  }
+}
+
+/**
+ * Return the base path for nav links based on locale.
+ * English → '' (root), Indonesian → '/id'
+ */
+export function getBasePath(locale: Locale): string {
+  return locale === 'id' ? '/id' : '';
 }

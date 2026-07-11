@@ -1,9 +1,91 @@
 ---
-/**
- * src/pages/index.astro
- * Root redirect — sends visitors to /en/ (default locale).
- * With prefixDefaultLocale: true, all content lives under /[lang]/.
- */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroSection from "../components/HeroSection.astro";
+import AboutSection from "../components/AboutSection.astro";
+import ProjectsSection from "../components/ProjectsSection.astro";
+import ExperienceSection from "../components/ExperienceSection.astro";
+import GallerySection from "../components/GallerySection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { getLocaleData } from "../i18n/utils";
+
+const locale = "en";
+const data = getLocaleData(locale);
+
+const projectsAnchor = `/#about`;
+const contactAnchor = `/#contact`;
 ---
-<meta http-equiv="refresh" content="0; url=/en/" />
-<script>window.location.replace('/en/')</script>
+
+<BaseLayout locale={locale}>
+  <div
+    id="scroll-canvas-driver"
+    style="height: 600vh; position: relative;"
+  >
+    <div
+      style="position: sticky; top: 0; height: 100lvh; pointer-events: none; z-index: 10;"
+    >
+      <HeroSection
+        greeting={data.hero.greeting}
+        name={data.hero.name}
+        title={data.hero.title}
+        subtitle={data.hero.subtitle}
+        cta_primary={data.hero.cta_primary}
+        cta_secondary={data.hero.cta_secondary}
+        scroll_hint={data.hero.scroll_hint}
+        projects_anchor={projectsAnchor}
+        contact_anchor={contactAnchor}
+      />
+    </div>
+  </div>
+
+  <div style="background: var(--clr-bg); position: relative; z-index: 10;">
+    <AboutSection
+      section_label={data.about.section_label}
+      heading={data.about.heading}
+      bio_1={data.about.bio_1}
+      bio_2={data.about.bio_2}
+      skills_label={data.about.skills_label}
+    />
+
+    <ProjectsSection
+      section_label={data.projects.section_label}
+      heading={data.projects.heading}
+      subheading={data.projects.subheading}
+      view_project={data.projects.view_project}
+      items={data.projects.items}
+      github_cta={data.projects.github_cta}
+      github_button={data.projects.github_button}
+    />
+
+    <ExperienceSection
+      section_label={data.experience.section_label}
+      heading={data.experience.heading}
+      subheading={data.experience.subheading}
+      interaction_hint={data.experience.interaction_hint}
+      center_label={data.experience.center_label}
+      center_subtitle={data.experience.center_subtitle}
+      preview_label={data.experience.preview_label}
+      items={data.experience.items}
+      interactionStrings={data.interaction}
+    />
+
+    <GallerySection
+      section_label={data.gallery.section_label}
+      heading={data.gallery.heading}
+      subheading={data.gallery.subheading}
+      interaction_hint={data.gallery.interaction_hint}
+      items={data.gallery.images}
+      interactionStrings={data.interaction}
+    />
+
+    <ContactSection
+      section_label={data.contact.section_label}
+      heading={data.contact.heading}
+      subheading={data.contact.subheading}
+      email_label={data.contact.email_label}
+    />
+  </div>
+</BaseLayout>
+
+<script>
+  import "../scripts/canvas-scroll";
+</script>

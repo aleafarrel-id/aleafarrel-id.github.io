@@ -16,12 +16,24 @@ export default defineConfig({
     locales: ['en', 'id'],
     defaultLocale: 'en',
     routing: {
-      // EN → /en/, ID → /id/
-      // One single [lang]/index.astro template serves both.
-      prefixDefaultLocale: true,
+      // EN → /, ID → /id/
+      // English serves at root, no redirect needed. Clean for GitHub Pages + SEO.
+      prefixDefaultLocale: false,
     },
   },
-  integrations: [icon(), react(), sitemap()],
+  integrations: [
+    icon(),
+    react(),
+    sitemap({
+      i18n: {
+        defaultLocale: 'en',
+        locales: {
+          en: 'en',
+          id: 'id',
+        },
+      },
+    }),
+  ],
   build: {
     inlineStylesheets: 'always'
   },
