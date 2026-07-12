@@ -95,9 +95,6 @@ globalEvents.on(EVENTS.LENIS_START, () => lenis?.start());
 
 // --- Navigation & Menu Setup ---
 const nav = document.getElementById("main-nav");
-window.addEventListener("scroll", () => {
-  nav?.classList.toggle("scrolled", window.scrollY > 60);
-}, { passive: true });
 
 const hamburger = document.getElementById("hamburger-btn");
 const mobileMenu = document.getElementById("mobile-menu");
@@ -128,6 +125,27 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeMenu();
 });
 
+// --- Navigation Jump State Management ---
+let navJumpTimeout: ReturnType<typeof setTimeout> | null = null;
+
+function startNavJump(durationMs: number, targetY?: number) {
+  if (navJumpTimeout) clearTimeout(navJumpTimeout);
+  globalEvents.emit(EVENTS.NAV_JUMP_START, { targetY });
+
+  navJumpTimeout = setTimeout(() => {
+    globalEvents.emit(EVENTS.NAV_JUMP_END);
+    navJumpTimeout = null;
+  }, durationMs);
+}
+
+function endNavJump() {
+  if (navJumpTimeout) {
+    clearTimeout(navJumpTimeout);
+    navJumpTimeout = null;
+  }
+  globalEvents.emit(EVENTS.NAV_JUMP_END);
+}
+
 // --- Smooth Scroll for Anchor Links ---
 document.querySelectorAll('a[href*="#"]').forEach((anchor) => {
   anchor.addEventListener('click', (e) => {
@@ -141,11 +159,23 @@ document.querySelectorAll('a[href*="#"]').forEach((anchor) => {
         const targetEl = document.querySelector(targetId);
         if (targetEl) {
           e.preventDefault();
+          const targetY = targetEl.getBoundingClientRect().top + window.scrollY - 80;
+          const distance = Math.abs(targetEl.getBoundingClientRect().top);
+
           if (lenis) {
-            lenis.scrollTo(targetEl as HTMLElement, { offset: -80, duration: 1.2 });
+            const dynamicDuration = Math.min(1.2, Math.max(0.5, distance / 2000));
+            startNavJump(dynamicDuration * 1000 + 100, targetY); // Add 100ms safety buffer
+
+            lenis.scrollTo(targetEl as HTMLElement, {
+              offset: -80,
+              duration: dynamicDuration,
+              onComplete: endNavJump
+            });
           } else {
-            const top = targetEl.getBoundingClientRect().top + window.scrollY - 80;
-            window.scrollTo({ top, behavior: 'smooth' });
+            // Mobile (Lenis destroyed) uses native smooth scroll
+            startNavJump(1000, targetY); // Native smooth scroll is usually ~500-800ms
+
+            window.scrollTo({ top: targetY, behavior: 'smooth' });
           }
         }
       }
@@ -157,19 +187,30 @@ document.querySelectorAll('a[href*="#"]').forEach((anchor) => {
 const backToTopBtn = document.getElementById("back-to-top");
 backToTopBtn?.addEventListener("click", () => {
   if (lenis) {
-    lenis.scrollTo(0, { duration: 1.2 });
+    const distance = window.scrollY;
+    const dynamicDuration = Math.min(1.2, Math.max(0.5, distance / 2000));
+
+    startNavJump(dynamicDuration * 1000 + 100, 0);
+
+    lenis.scrollTo(0, {
+      duration: dynamicDuration,
+      onComplete: endNavJump
+    });
   } else {
+    startNavJump(1000, 0);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 });
 
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) {
-    backToTopBtn?.classList.add("visible");
-  } else {
-    backToTopBtn?.classList.remove("visible");
+ScrollTrigger.create({
+  start: 0,
+  end: "max",
+  onUpdate: (self) => {
+    const scrollPos = self.scroll();
+    nav?.classList.toggle("scrolled", scrollPos > 60);
+    backToTopBtn?.classList.toggle("visible", scrollPos > 300);
   }
-}, { passive: true });
+});
 
 // --- Reveal Observer ---
 const revealObs = new IntersectionObserver((entries) => {

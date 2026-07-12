@@ -4,7 +4,12 @@ import "@fontsource-variable/space-grotesk";
 import "@fontsource-variable/syne";
 import "@fontsource-variable/inter";
 import { Icon } from "astro-icon/components";
-import { getLocale, getLocaleData, getAlternateUrl, getBasePath } from "../i18n/utils";
+import {
+  getLocale,
+  getLocaleData,
+  getAlternateUrl,
+  getBasePath,
+} from "../i18n/utils";
 import Loader from "../components/ui/Loader.astro";
 import siteConfig from "../siteConfig.json";
 
@@ -44,13 +49,31 @@ const emailDomain = emailParts[1] || "";
     <meta name="description" content={data.meta.description} />
     <meta name="author" content="Alea Farrel" />
     <meta name="robots" content="index, follow" />
-    <meta name="google-site-verification" content="_mfdiAU-T99xLdt4qCCcJZQ9pUwmvSkEsoEQYnRBw2k" />
+    <meta
+      name="google-site-verification"
+      content="_mfdiAU-T99xLdt4qCCcJZQ9pUwmvSkEsoEQYnRBw2k"
+    />
 
     <link rel="canonical" href={Astro.url.href} />
     <link rel="alternate" hreflang={locale} href={Astro.url.href} />
-    <link rel="alternate" hreflang={altLang} href={new URL(altUrl, Astro.site || "https://aleafarrel-id.github.io").href} />
-    <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site || "https://aleafarrel-id.github.io").href} />
-    <link rel="preload" href="/frame/hero-000.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link
+      rel="alternate"
+      hreflang={altLang}
+      href={new URL(altUrl, Astro.site || "https://aleafarrel-id.github.io")
+        .href}
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL("/", Astro.site || "https://aleafarrel-id.github.io").href}
+    />
+    <link
+      rel="preload"
+      href="/frame/hero-000.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="Alea Farrel - Portfolio" />
@@ -58,7 +81,13 @@ const emailDomain = emailParts[1] || "";
     <meta property="og:description" content={data.meta.description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
-    <meta property="og:image" content={new URL("/og-image.webp", Astro.site || "https://aleafarrel-id.github.io").href} />
+    <meta
+      property="og:image"
+      content={new URL(
+        "/og-image.webp",
+        Astro.site || "https://aleafarrel-id.github.io",
+      ).href}
+    />
     <meta property="og:image:alt" content="Alea Farrel Portfolio Preview" />
     <meta property="og:locale" content={locale === "id" ? "id_ID" : "en_US"} />
 
@@ -68,7 +97,13 @@ const emailDomain = emailParts[1] || "";
     <meta name="twitter:creator" content="@alea_farrel" />
     <meta name="twitter:title" content={data.meta.title} />
     <meta name="twitter:description" content={data.meta.description} />
-    <meta name="twitter:image" content={new URL("/og-image.webp", Astro.site || "https://aleafarrel-id.github.io").href} />
+    <meta
+      name="twitter:image"
+      content={new URL(
+        "/og-image.webp",
+        Astro.site || "https://aleafarrel-id.github.io",
+      ).href}
+    />
 
     <meta name="theme-color" content="#1A1A1A" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
@@ -76,7 +111,6 @@ const emailDomain = emailParts[1] || "";
   </head>
 
   <body>
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <Loader phrases={data.loading.phrases} />
 
     <div
@@ -98,28 +132,38 @@ const emailDomain = emailParts[1] || "";
           style="list-style:none;display:flex;flex-direction:column;align-items:center;gap:2.5rem;padding:0;"
         >
           <li>
-            <a href={`${base}/#about`} class="mobile-nav-link" aria-label={data.nav.about}
-              >{data.nav.about}</a
+            <a
+              href={`${base}/#about`}
+              class="mobile-nav-link"
+              aria-label={data.nav.about}>{data.nav.about}</a
             >
           </li>
           <li>
-            <a href={`${base}/#projects`} class="mobile-nav-link" aria-label={data.nav.projects}
-              >{data.nav.projects}</a
+            <a
+              href={`${base}/#projects`}
+              class="mobile-nav-link"
+              aria-label={data.nav.projects}>{data.nav.projects}</a
             >
           </li>
           <li>
-            <a href={`${base}/#experience`} class="mobile-nav-link" aria-label={data.nav.experience}
-              >{data.nav.experience}</a
+            <a
+              href={`${base}/#experience`}
+              class="mobile-nav-link"
+              aria-label={data.nav.experience}>{data.nav.experience}</a
             >
           </li>
           <li>
-            <a href={`${base}/#gallery`} class="mobile-nav-link" aria-label={data.nav.gallery}
-              >{data.nav.gallery}</a
+            <a
+              href={`${base}/#gallery`}
+              class="mobile-nav-link"
+              aria-label={data.nav.gallery}>{data.nav.gallery}</a
             >
           </li>
           <li>
-            <a href={`${base}/#contact`} class="mobile-nav-link" aria-label={data.nav.contact}
-              >{data.nav.contact}</a
+            <a
+              href={`${base}/#contact`}
+              class="mobile-nav-link"
+              aria-label={data.nav.contact}>{data.nav.contact}</a
             >
           </li>
         </ul>
@@ -133,11 +177,26 @@ const emailDomain = emailParts[1] || "";
 
       <nav aria-label="Main navigation">
         <ul class="nav-links">
-          <li><a href={`${base}/#about`} aria-label={data.nav.about}> {data.nav.about}</a></li>
-          <li><a href={`${base}/#projects`} aria-label={data.nav.projects}> {data.nav.projects}</a></li>
-          <li><a href={`${base}/#experience`} aria-label={data.nav.experience}> {data.nav.experience}</a></li>
-          <li><a href={`${base}/#gallery`} aria-label={data.nav.gallery}> {data.nav.gallery}</a></li>
-          <li><a href={`${base}/#contact`} aria-label={data.nav.contact}> {data.nav.contact}</a></li>
+          <li>
+            <a href={`${base}/#about`} aria-label={data.nav.about}>
+              {data.nav.about}</a>
+          </li>
+          <li>
+            <a href={`${base}/#projects`} aria-label={data.nav.projects}>
+              {data.nav.projects}</a>
+          </li>
+          <li>
+            <a href={`${base}/#experience`} aria-label={data.nav.experience}>
+              {data.nav.experience}</a>
+          </li>
+          <li>
+            <a href={`${base}/#gallery`} aria-label={data.nav.gallery}>
+              {data.nav.gallery}</a>
+          </li>
+          <li>
+            <a href={`${base}/#contact`} aria-label={data.nav.contact}>
+              {data.nav.contact}</a>
+          </li>
         </ul>
       </nav>
 
@@ -164,7 +223,10 @@ const emailDomain = emailParts[1] || "";
       </div>
     </header>
 
-    <canvas id="hero-canvas" aria-hidden="true" data-enhance-text={data.hero.enhancing}></canvas>
+    <canvas
+      id="hero-canvas"
+      aria-hidden="true"
+      data-enhance-text={data.hero.enhancing}></canvas>
 
     <main id="main-content">
       <slot />
@@ -177,8 +239,8 @@ const emailDomain = emailParts[1] || "";
             <a
               href={`${base}/`}
               class="footer-logo"
-              aria-label="AF. - Alea Farrel Home"
-            >AF<span>.</span></a>
+              aria-label="AF. - Alea Farrel Home">AF<span>.</span></a
+            >
             <p class="footer-description">
               {data.footer.description}
             </p>
@@ -203,12 +265,18 @@ const emailDomain = emailParts[1] || "";
                   <a
                     href={instagramUrl}
                     target="_blank"
-                    rel="noopener noreferrer">Instagram</a>
+                    rel="noopener noreferrer">Instagram</a
+                  >
                 </li>
-                <li><button onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}>Email</button></li>
+                <li>
+                  <button
+                    onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}
+                    >Email</button>
+                </li>
                 <li>
                   <a href={githubUrl} target="_blank" rel="noopener noreferrer"
-                    >GitHub</a>
+                    >GitHub</a
+                  >
                 </li>
               </ul>
             </div>

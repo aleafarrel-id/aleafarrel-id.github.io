@@ -709,10 +709,11 @@ class App {
     this.scroll.target = this.scroll.position + distance;
   }
   onTouchUp(e) {
+    const wasDown = this.isDown;
     this.isDown = false;
     this.onCheck();
     
-    if (this.start !== undefined && e && this.onClickItem) {
+    if (wasDown && this.start !== undefined && e && this.onClickItem) {
       const x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
       const y = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
       if (x !== undefined && y !== undefined) {
@@ -838,7 +839,9 @@ class App {
     }
 
 
-    window.addEventListener('mousedown', this.boundOnTouchDown);
+    if (this.container) {
+      this.container.addEventListener('mousedown', this.boundOnTouchDown);
+    }
     window.addEventListener('mousemove', this.boundOnTouchMove);
     window.addEventListener('mouseup', this.boundOnTouchUp);
 
@@ -861,7 +864,9 @@ class App {
     }
     window.removeEventListener('mousewheel', this.boundOnWheel);
     window.removeEventListener('wheel', this.boundOnWheel);
-    window.removeEventListener('mousedown', this.boundOnTouchDown);
+    if (this.container) {
+      this.container.removeEventListener('mousedown', this.boundOnTouchDown);
+    }
     window.removeEventListener('mousemove', this.boundOnTouchMove);
     window.removeEventListener('mouseup', this.boundOnTouchUp);
 

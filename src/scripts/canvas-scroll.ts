@@ -11,12 +11,15 @@ class HeroCanvasSequence {
 
   private frames: (HTMLImageElement | null)[];
   private currentIndex: number = 0;
+  private targetIndex: number = 0;
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
   private isMobile: boolean;
   private step: number;
   private phrases: string[] = [];
   private uiPill: HTMLElement | null = null;
+  private renderPending: boolean = false;
+  private isJumping: boolean = false;
 
   constructor() {
     this.frames = new Array(this.FRAME_COUNT).fill(null);
@@ -52,6 +55,7 @@ class HeroCanvasSequence {
       }
     }
     this.currentIndex = initialFrameIdx;
+    this.targetIndex = initialFrameIdx;
 
     this.setupResizeObserver();
     this.resizeCanvas();
@@ -66,6 +70,54 @@ class HeroCanvasSequence {
 
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
     globalEvents.emit(EVENTS.PRELOADER_DONE);
+
+    globalEvents.on(EVENTS.NAV_JUMP_START, (detail?: any) => {
+      this.isJumping = true;
+      if (detail && typeof detail.targetY === 'number') {
+        const driver = document.getElementById('scroll-canvas-driver');
+        if (driver) {
+          const currentY = window.scrollY;
+          const isJumpingDown = detail.targetY > currentY;
+
+          const driverTop = driver.offsetTop;
+          const driverHeight = driver.offsetHeight;
+          const winHeight = window.innerHeight;
+          let progress = (detail.targetY - driverTop) / (driverHeight - winHeight);
+          progress = Math.max(0, Math.min(1, progress));
+
+          let targetIdx = Math.round(progress * (this.FRAME_COUNT - 1));
+          if (this.isMobile) {
+            targetIdx = Math.round(targetIdx / this.step) * this.step;
+          }
+
+          this.targetIndex = targetIdx;
+
+          if (!isJumpingDown) {
+            this.currentIndex = targetIdx;
+
+            if (this.frames[this.currentIndex] && !this.renderPending) {
+              this.renderPending = true;
+              requestAnimationFrame(() => {
+                this.drawFrame(this.frames[this.currentIndex]);
+                this.renderPending = false;
+              });
+            }
+          }
+        }
+      }
+    });
+
+    globalEvents.on(EVENTS.NAV_JUMP_END, () => {
+      this.isJumping = false;
+      this.currentIndex = this.targetIndex;
+      if (this.frames[this.currentIndex] && !this.renderPending) {
+        this.renderPending = true;
+        requestAnimationFrame(() => {
+          this.drawFrame(this.frames[this.currentIndex]);
+          this.renderPending = false;
+        });
+      }
+    });
 
     this.setupScrollTrigger();
   }
@@ -265,6 +317,17 @@ class HeroCanvasSequence {
               this.frames[idx] = img;
               loadedCount++;
 
+              if (idx === this.targetIndex && this.currentIndex !== this.targetIndex) {
+                this.currentIndex = this.targetIndex;
+                if (!this.renderPending) {
+                  this.renderPending = true;
+                  requestAnimationFrame(() => {
+                    this.drawFrame(this.frames[this.currentIndex]);
+                    this.renderPending = false;
+                  });
+                }
+              }
+
               if (!isCached) {
                 const totalPct = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
                 this.updateUIPill(totalPct);
@@ -299,14 +362,18 @@ class HeroCanvasSequence {
       trigger: driver,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: this.isMobile ? 1 : 0.4,
+      scrub: true,
       onUpdate: (self) => {
+        if (this.isJumping) return;
+
         const idx = Math.round(self.progress * (this.FRAME_COUNT - 1));
         let clamped = Math.max(0, Math.min(idx, this.FRAME_COUNT - 1));
 
         if (this.isMobile) {
           clamped = Math.round(clamped / this.step) * this.step;
         }
+
+        this.targetIndex = clamped;
 
         if (clamped !== this.currentIndex) {
           let renderIdx = clamped;
@@ -327,7 +394,14 @@ class HeroCanvasSequence {
 
           if (renderIdx !== this.currentIndex && this.frames[renderIdx]) {
             this.currentIndex = renderIdx;
-            requestAnimationFrame(() => this.drawFrame(this.frames[this.currentIndex]));
+
+            if (!this.renderPending) {
+              this.renderPending = true;
+              requestAnimationFrame(() => {
+                this.drawFrame(this.frames[this.currentIndex]);
+                this.renderPending = false;
+              });
+            }
           }
         }
       },

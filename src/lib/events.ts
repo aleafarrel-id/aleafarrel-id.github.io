@@ -9,8 +9,8 @@ class EventBus {
   }
 
   on(eventName: string, callback: EventCallback): Unsubscribe {
-    if (typeof window === 'undefined') return () => {};
-    
+    if (typeof window === 'undefined') return () => { };
+
     const handler = (e: Event) => {
       const customEvent = e as CustomEvent;
       callback(customEvent.detail);
@@ -31,4 +31,6 @@ export const EVENTS = {
   LENIS_STOP: "lenis-stop",
   LENIS_START: "lenis-start",
   CANVAS_ENHANCED: "canvas-enhanced",
+  NAV_JUMP_START: "nav-jump-start",
+  NAV_JUMP_END: "nav-jump-end",
 } as const;
