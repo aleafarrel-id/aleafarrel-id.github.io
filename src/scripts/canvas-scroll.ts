@@ -307,7 +307,7 @@ class HeroCanvasSequence {
       for (let i = 0; i < this.FRAME_COUNT; i += this.step) {
         if (i !== initialIdx && !this.frames[i]) pendingIndices.push(i);
       }
-      const BATCH_SIZE = this.isMobile ? 10 : 40;
+      const BATCH_SIZE = this.isMobile ? 4 : 8;
       for (let i = 0; i < pendingIndices.length; i += BATCH_SIZE) {
         const batch: Promise<void>[] = [];
         for (let j = 0; j < BATCH_SIZE && (i + j) < pendingIndices.length; j++) {
@@ -338,7 +338,7 @@ class HeroCanvasSequence {
         }
         await Promise.all(batch);
 
-        await new Promise(resolve => setTimeout(resolve, isCached ? 0 : (this.isMobile ? 30 : 10)));
+        await new Promise(resolve => setTimeout(resolve, isCached ? 2 : (this.isMobile ? 50 : 25)));
       }
 
       if (!isCached) {
