@@ -269,9 +269,7 @@ const emailDomain = emailParts[1] || "";
                   >
                 </li>
                 <li>
-                  <button
-                    onclick={`window.location.href='mailto:${emailUser}' + '@' + '${emailDomain}'`}
-                    >Email</button>
+                  <a href={`mailto:${emailUser}@${emailDomain}`}>Email</a>
                 </li>
                 <li>
                   <a href={githubUrl} target="_blank" rel="noopener noreferrer"

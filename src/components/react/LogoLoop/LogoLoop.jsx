@@ -245,7 +245,7 @@ const LogoLoop = memo(
         }
         const isNodeItem = 'node' in item;
         const content = isNodeItem ? (
-          <span className="logoloop__node" aria-hidden={!!item.href && !item.ariaLabel}>
+          <span className="logoloop__node" aria-hidden={!!item.href && !item.ariaLabel} title={!item.href ? item.title : undefined}>
             {item.node}
           </span>
         ) : (
@@ -268,6 +268,7 @@ const LogoLoop = memo(
             className="logoloop__link"
             href={item.href}
             aria-label={itemAriaLabel || 'logo link'}
+            title={item.title}
             target="_blank"
             rel="noreferrer noopener"
             tabIndex={-1}
