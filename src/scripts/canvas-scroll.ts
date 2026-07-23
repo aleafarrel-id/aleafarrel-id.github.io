@@ -9,7 +9,7 @@ class HeroCanvasSequence {
   private readonly FRAME_COUNT = 229;
   private readonly FRAME_PATH = '/frame/';
 
-  private frames: (HTMLImageElement | null)[];
+  private frames: (ImageBitmap | null)[];
   private currentIndex: number = 0;
   private targetIndex: number = 0;
   private canvas: HTMLCanvasElement | null = null;
@@ -135,7 +135,7 @@ class HeroCanvasSequence {
     return `${this.FRAME_PATH}hero-${padded}.webp`;
   }
 
-  private async loadImage(src: string, isInitial: boolean = false): Promise<HTMLImageElement> {
+  private async loadImage(src: string, isInitial: boolean = false): Promise<ImageBitmap | null> {
     const MAX_RETRIES = 3;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
@@ -149,25 +149,12 @@ class HeroCanvasSequence {
             await new Promise<void>(r => setTimeout(r, 800 * (attempt + 1)));
             continue;
           }
-          return new Image();
+          return null;
         }
 
+        // createImageBitmap decodes off the main thread — no TBT impact
         const blob = await response.blob();
-        const objectUrl = URL.createObjectURL(blob);
-
-        return new Promise<HTMLImageElement>((resolve) => {
-          const img = new Image();
-          img.decoding = 'async';
-          img.onload = () => {
-            URL.revokeObjectURL(objectUrl);
-            resolve(img);
-          };
-          img.onerror = () => {
-            URL.revokeObjectURL(objectUrl);
-            resolve(new Image());
-          };
-          img.src = objectUrl;
-        });
+        return await createImageBitmap(blob);
       } catch {
         if (attempt < MAX_RETRIES - 1) {
           await new Promise<void>(r => setTimeout(r, 800 * (attempt + 1)));
@@ -175,16 +162,16 @@ class HeroCanvasSequence {
       }
     }
 
-    return new Image();
+    return null;
   }
 
-  private drawFrame(img: HTMLImageElement | null): void {
-    if (!img || !img.naturalWidth || !this.canvas || !this.ctx) return;
+  private drawFrame(img: ImageBitmap | null): void {
+    if (!img || !img.width || !this.canvas || !this.ctx) return;
 
     const cw = this.canvas.width;
     const ch = this.canvas.height;
-    const iw = img.naturalWidth;
-    const ih = img.naturalHeight;
+    const iw = img.width;
+    const ih = img.height;
 
     const scale = Math.max(cw / iw, ch / ih);
     const sx = (cw - iw * scale) / 2;
