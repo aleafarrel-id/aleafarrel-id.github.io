@@ -135,15 +135,47 @@ class HeroCanvasSequence {
     return `${this.FRAME_PATH}hero-${padded}.webp`;
   }
 
-  private loadImage(src: string, isInitial: boolean = false): Promise<HTMLImageElement> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.decoding = 'async';
-      img.setAttribute('fetchpriority', isInitial ? 'high' : 'low');
-      img.onload = () => resolve(img);
-      img.onerror = () => resolve(img);
-      img.src = src;
-    });
+  private async loadImage(src: string, isInitial: boolean = false): Promise<HTMLImageElement> {
+    const MAX_RETRIES = 3;
+
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        const response = await fetch(src, {
+          priority: isInitial ? 'high' : 'low',
+        } as RequestInit);
+
+        if (!response.ok) {
+          if (attempt < MAX_RETRIES - 1) {
+            await new Promise<void>(r => setTimeout(r, 800 * (attempt + 1)));
+            continue;
+          }
+          return new Image();
+        }
+
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        return new Promise<HTMLImageElement>((resolve) => {
+          const img = new Image();
+          img.decoding = 'async';
+          img.onload = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(img);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(new Image());
+          };
+          img.src = objectUrl;
+        });
+      } catch {
+        if (attempt < MAX_RETRIES - 1) {
+          await new Promise<void>(r => setTimeout(r, 800 * (attempt + 1)));
+        }
+      }
+    }
+
+    return new Image();
   }
 
   private drawFrame(img: HTMLImageElement | null): void {

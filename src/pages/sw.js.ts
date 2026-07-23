@@ -35,7 +35,7 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           return cachedResponse;
         }
-        return fetch(event.request).then((response) => {
+        return fetchWithRetry(event.request, 3).then((response) => {
           // Check if we received a valid response
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
@@ -50,6 +50,30 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
+function fetchWithRetry(request, maxRetries) {
+  return new Promise(function(resolve, reject) {
+    var attempt = 0;
+    function tryFetch() {
+      fetch(request).then(function(response) {
+        if (response.ok || attempt >= maxRetries - 1) {
+          resolve(response);
+        } else {
+          attempt++;
+          setTimeout(tryFetch, 600 * attempt);
+        }
+      }).catch(function(err) {
+        if (attempt >= maxRetries - 1) {
+          reject(err);
+        } else {
+          attempt++;
+          setTimeout(tryFetch, 600 * attempt);
+        }
+      });
+    }
+    tryFetch();
+  });
+}
 `;
 
   return new Response(script, {
