@@ -1,23 +1,52 @@
 import LogoLoop from './LogoLoop';
 import { FaHtml5, FaCss3Alt } from 'react-icons/fa6';
-import { SiJavascript, SiTailwindcss, SiPhp, SiGit, SiMysql, SiCplusplus, SiReact, SiPython, SiNodedotjs, SiAstro, SiGnubash, SiCapacitor } from 'react-icons/si';
+import {
+  SiJavascript,
+  SiTailwindcss,
+  SiPhp,
+  SiGit,
+  SiMysql,
+  SiCplusplus,
+  SiReact,
+  SiPython,
+  SiNodedotjs,
+  SiAstro,
+  SiGnubash,
+  SiCapacitor,
+} from 'react-icons/si';
+import siteConfig from '../../../siteConfig.json';
 
-const techLogos = [
-  { node: <FaHtml5 />, title: "HTML5", href: "https://developer.mozilla.org/en-US/docs/Glossary/HTML5" },
-  { node: <FaCss3Alt />, title: "CSS3", href: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
-  { node: <SiJavascript />, title: "JavaScript", href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-  { node: <SiReact />, title: "React", href: "https://react.dev" },
-  { node: <SiAstro />, title: "Astro", href: "https://astro.build" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
-  { node: <SiNodedotjs />, title: "Node.js", href: "https://nodejs.org" },
-  { node: <SiPython />, title: "Python", href: "https://www.python.org" },
-  { node: <SiCplusplus />, title: "C++", href: "https://isocpp.org" },
-  { node: <SiPhp />, title: "PHP", href: "https://www.php.net" },
-  { node: <SiMysql />, title: "MySQL", href: "https://www.mysql.com" },
-  { node: <SiGnubash />, title: "Bash", href: "https://www.gnu.org/software/bash/" },
-  { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
-  { node: <SiCapacitor />, title: "Capacitor", href: "https://capacitorjs.com" },
-];
+/**
+ * Map of icon key strings (from siteConfig.json) to React icon elements.
+ * To add a new icon: install it from react-icons, import it above,
+ * and add an entry here matching the "icon" key in siteConfig.json.
+ */
+const ICON_MAP = {
+  FaHtml5:      <FaHtml5 />,
+  FaCss3Alt:    <FaCss3Alt />,
+  SiJavascript: <SiJavascript />,
+  SiReact:      <SiReact />,
+  SiAstro:      <SiAstro />,
+  SiTailwindcss:<SiTailwindcss />,
+  SiNodedotjs:  <SiNodedotjs />,
+  SiPython:     <SiPython />,
+  SiCplusplus:  <SiCplusplus />,
+  SiPhp:        <SiPhp />,
+  SiMysql:      <SiMysql />,
+  SiGnubash:    <SiGnubash />,
+  SiGit:        <SiGit />,
+  SiCapacitor:  <SiCapacitor />,
+};
+
+/**
+ * Derived from siteConfig.json → skills[].
+ * To add/remove a skill, edit src/siteConfig.json — no JSX changes needed.
+ */
+const techLogos = siteConfig.skills.map((skill) => ({
+  node: ICON_MAP[skill.icon] ?? null,
+  title: skill.name,
+  href: skill.href,
+}));
 
 export default function SkillsLogoLoop() {
   return (

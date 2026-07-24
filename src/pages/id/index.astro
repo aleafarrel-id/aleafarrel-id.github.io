@@ -7,12 +7,16 @@ import ExperienceSection from "../../components/ExperienceSection.astro";
 import GallerySection from "../../components/GallerySection.astro";
 import ContactSection from "../../components/ContactSection.astro";
 import { getLocaleData } from "../../i18n/utils";
+import siteConfig from "../../siteConfig.json";
 
 const locale = "id";
 const data = getLocaleData(locale);
 
 const projectsAnchor = `/id/#about`;
 const contactAnchor = `/id/#contact`;
+
+const githubUrl =
+  siteConfig.socials.find((s) => s.icon === "github")?.url || "#";
 ---
 
 <BaseLayout locale={locale}>
@@ -54,6 +58,7 @@ const contactAnchor = `/id/#contact`;
       items={data.projects.items}
       github_cta={data.projects.github_cta}
       github_button={data.projects.github_button}
+      github_url={githubUrl}
     />
 
     <ExperienceSection

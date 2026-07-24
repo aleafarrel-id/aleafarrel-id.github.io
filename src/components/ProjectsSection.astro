@@ -17,6 +17,7 @@ interface Props {
   view_project: string;
   github_cta?: string;
   github_button?: string;
+  github_url: string;
   items: ProjectItem[];
 }
 
@@ -27,6 +28,7 @@ const {
   view_project,
   github_cta,
   github_button,
+  github_url,
   items,
 } = Astro.props;
 
@@ -81,7 +83,7 @@ import ProjectsScrollStack from "./react/ScrollStack/ProjectsScrollStack.jsx";
               <h3 class="github-cta-text font-display">{github_cta}</h3>
 
               <a
-                href="https://github.com/aleafarrel-id"
+                href={github_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="github-cta-btn"

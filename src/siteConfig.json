@@ -11,5 +11,21 @@
       "url": "https://instagram.com/alea_farrel",
       "icon": "instagram"
     }
+  ],
+  "skills": [
+    { "name": "HTML5",       "icon": "FaHtml5",      "href": "https://developer.mozilla.org/en-US/docs/Glossary/HTML5" },
+    { "name": "CSS3",        "icon": "FaCss3Alt",    "href": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    { "name": "JavaScript",  "icon": "SiJavascript", "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { "name": "React",       "icon": "SiReact",      "href": "https://react.dev" },
+    { "name": "Astro",       "icon": "SiAstro",      "href": "https://astro.build" },
+    { "name": "Tailwind CSS","icon": "SiTailwindcss","href": "https://tailwindcss.com" },
+    { "name": "Node.js",     "icon": "SiNodedotjs",  "href": "https://nodejs.org" },
+    { "name": "Python",      "icon": "SiPython",     "href": "https://www.python.org" },
+    { "name": "C++",         "icon": "SiCplusplus",  "href": "https://isocpp.org" },
+    { "name": "PHP",         "icon": "SiPhp",        "href": "https://www.php.net" },
+    { "name": "MySQL",       "icon": "SiMysql",      "href": "https://www.mysql.com" },
+    { "name": "Bash",        "icon": "SiGnubash",    "href": "https://www.gnu.org/software/bash/" },
+    { "name": "Git",         "icon": "SiGit",        "href": "https://git-scm.com" },
+    { "name": "Capacitor",   "icon": "SiCapacitor",  "href": "https://capacitorjs.com" }
   ]
 }
