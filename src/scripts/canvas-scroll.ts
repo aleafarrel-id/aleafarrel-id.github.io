@@ -321,53 +321,72 @@ class HeroCanvasSequence {
     if (!isCached) this.showUIPill();
     else globalEvents.emit(EVENTS.CANVAS_ENHANCED);
 
-    const doBackgroundLoad = async () => {
+    const doBackgroundLoad = () => {
       const pendingIndices: number[] = [];
       for (let i = 0; i < this.FRAME_COUNT; i += this.step) {
         if (i !== initialIdx && !this.frames[i]) pendingIndices.push(i);
       }
-      const BATCH_SIZE = this.isMobile ? 4 : 8;
-      for (let i = 0; i < pendingIndices.length; i += BATCH_SIZE) {
-        const batch: Promise<void>[] = [];
-        for (let j = 0; j < BATCH_SIZE && (i + j) < pendingIndices.length; j++) {
-          const idx = pendingIndices[i + j];
-          batch.push(
-            this.loadImage(this.frameUrl(idx), false).then(img => {
-              this.frames[idx] = img;
-              loadedCount++;
 
-              if (idx === this.targetIndex && this.currentIndex !== this.targetIndex) {
-                this.currentIndex = this.targetIndex;
-                if (!this.renderPending) {
-                  this.renderPending = true;
-                  requestAnimationFrame(() => {
-                    this.drawFrame(this.frames[this.currentIndex]);
-                    this.renderPending = false;
-                  });
-                }
-              }
-
-              if (!isCached) {
-                const totalPct = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
-                this.updateUIPill(totalPct);
-                this.updateProgress(loadedCount, targetLoadCount);
-              }
-            })
-          );
+      if (pendingIndices.length === 0) {
+        if (!isCached) {
+          this.hideUIPill();
+          localStorage.setItem('hero_frames_cached', 'true');
         }
-        await Promise.all(batch);
-
-        await new Promise(resolve => setTimeout(resolve, isCached ? 2 : (this.isMobile ? 50 : 25)));
+        return;
       }
 
-      if (!isCached) {
-        this.hideUIPill();
-        localStorage.setItem('hero_frames_cached', 'true');
-      }
+      // Run all fetching + decoding entirely off the main thread via Web Worker
+      const worker = new Worker(
+        new URL('../workers/frame-loader.worker.ts', import.meta.url),
+        { type: 'module' }
+      );
+
+      worker.onmessage = (e: MessageEvent<{ index: number; bitmap: ImageBitmap | null }>) => {
+        const { index, bitmap } = e.data;
+
+        if (index === -1) {
+          // Completion signal
+          worker.terminate();
+          if (!isCached) {
+            this.hideUIPill();
+            localStorage.setItem('hero_frames_cached', 'true');
+          }
+          return;
+        }
+
+        if (bitmap) this.frames[index] = bitmap;
+        loadedCount++;
+
+        if (index === this.targetIndex && this.currentIndex !== this.targetIndex) {
+          this.currentIndex = this.targetIndex;
+          if (!this.renderPending) {
+            this.renderPending = true;
+            requestAnimationFrame(() => {
+              this.drawFrame(this.frames[this.currentIndex]);
+              this.renderPending = false;
+            });
+          }
+        }
+
+        if (!isCached) {
+          const totalPct = Math.min(100, Math.round((loadedCount / targetLoadCount) * 100));
+          this.updateUIPill(totalPct);
+          this.updateProgress(loadedCount, targetLoadCount);
+        }
+      };
+
+      worker.onerror = () => worker.terminate();
+
+      worker.postMessage({
+        indices: pendingIndices,
+        framePath: this.FRAME_PATH,
+        batchSize: this.isMobile ? 4 : 8,
+        batchDelay: isCached ? 2 : (this.isMobile ? 50 : 25),
+      });
     };
 
     if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(() => doBackgroundLoad(), { timeout: 2000 });
+      (window as any).requestIdleCallback(doBackgroundLoad, { timeout: 2000 });
     } else {
       setTimeout(doBackgroundLoad, 500);
     }
