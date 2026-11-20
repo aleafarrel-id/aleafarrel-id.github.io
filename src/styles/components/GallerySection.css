@@ -85,8 +85,9 @@
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  height: 60vh;
-  height: 60svh;
+  height: 72vh;
+  height: 72svh;
+  min-height: 520px;
   margin-left: calc(-1 * var(--space-4));
   width: calc(100% + var(--space-8));
   touch-action: pan-y;

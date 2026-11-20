@@ -1,5 +1,5 @@
 ---
-import CircularGallery from "./react/CircularGallery/CircularGallery.jsx";
+import FlexCarousel from "./react/FlexCarousel/FlexCarousel.jsx";
 
 interface GalleryImage {
   src: string;
@@ -13,18 +13,19 @@ interface Props {
   subheading: string;
   interaction_hint?: string;
   items: GalleryImage[];
-  interactionStrings?: {
-    tap_to_interact: string;
-    done: string;
-  };
 }
 
-const { section_label, heading, subheading, interaction_hint, items, interactionStrings } =
+const { section_label, heading, subheading, interaction_hint, items } =
   Astro.props;
 
 const galleryItems = items.map((item) => ({
-  image: item.src,
-  text: item.title,
+  src: item.src,
+  alt: item.description || item.title,
+  title: item.title,
+  subtitle:
+    item.description && item.description !== item.title
+      ? item.description
+      : undefined,
 }));
 ---
 
@@ -48,15 +49,17 @@ const galleryItems = items.map((item) => ({
 
     <div class="reveal reveal-delay-3 mt-12">
       <div class="gallery-flow-wrapper">
-        <CircularGallery
-          client:visible
+        <FlexCarousel
+          client:visible={{ rootMargin: "400px" }}
           items={galleryItems}
-          bend={1.5}
-          textColor="#ffffff"
-          borderRadius={0.05}
-          scrollEase={0.05}
-          font="bold 14px 'Space Grotesk', sans-serif"
-          strings={interactionStrings}
+          preset="liquid"
+          intro="rise"
+          cardHeight={0.5}
+          gap={12}
+          squeeze={0.2}
+          focusOnClick
+          captions
+          captureWheel={false}
         />
       </div>
       {
