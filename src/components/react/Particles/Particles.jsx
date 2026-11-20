@@ -128,7 +128,11 @@ const Particles = ({
     window.addEventListener('resize', resize, false);
     resize();
 
+    let isVisible = true;
+    let animationFrameId = 0;
+
     const handleMouseMove = e => {
+      if (!isVisible) return;
       const rect = container.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
@@ -136,7 +140,6 @@ const Particles = ({
     };
 
     if (moveParticlesOnHover) {
-
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
     }
 
@@ -183,22 +186,15 @@ const Particles = ({
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
-    let isVisible = true;
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
-    });
-    observer.observe(container);
-
-    let animationFrameId;
     let lastTime = performance.now();
     let elapsed = 0;
 
     const update = t => {
-      animationFrameId = requestAnimationFrame(update);
       if (!isVisible) {
-        lastTime = t;
+        animationFrameId = 0;
         return;
       }
+      animationFrameId = requestAnimationFrame(update);
       const delta = t - lastTime;
       lastTime = t;
       elapsed += delta * speed;
@@ -221,6 +217,15 @@ const Particles = ({
 
       renderer.render({ scene: particles, camera });
     };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible && !animationFrameId) {
+        lastTime = performance.now();
+        animationFrameId = requestAnimationFrame(update);
+      }
+    });
+    observer.observe(container);
 
     animationFrameId = requestAnimationFrame(update);
 

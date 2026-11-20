@@ -211,6 +211,10 @@
   background-size: 64px 64px;
 }
 
+.cert-flow-paused .react-flow__edge.animated path {
+  animation-play-state: paused !important;
+}
+
 /* Modal Overlay */
 .cert-modal-overlay {
   position: fixed;

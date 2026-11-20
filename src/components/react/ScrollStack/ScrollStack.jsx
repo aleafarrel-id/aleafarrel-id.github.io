@@ -15,7 +15,7 @@ const ScrollStack = ({
 }) => {
   const scrollerRef = useRef(null);
   const stackCompletedRef = useRef(false);
-  const animationFrameRef = useRef(null);
+  const outOfBoundsRef = useRef(null);
   const cardsRef = useRef([]);
   const lastTransformsRef = useRef(new Map());
 
@@ -61,6 +61,7 @@ const ScrollStack = ({
     }
 
     cachedOffsetsRef.current = { cardTops, endTop, containerH, stackPx, valid: true };
+    outOfBoundsRef.current = null;
     if (scrollerRef.current) {
       scrollerRef.current.style.setProperty('--stack-pos', `${stackPx}px`);
     }
@@ -76,6 +77,17 @@ const ScrollStack = ({
     const scrollTop = useWindowScroll
       ? window.scrollY
       : (scrollerRef.current?.scrollTop ?? 0);
+
+    const firstPinStart = (cardTops[0] ?? 0) - stackPx;
+    if (scrollTop < firstPinStart) {
+      if (outOfBoundsRef.current === 'above') return;
+      outOfBoundsRef.current = 'above';
+    } else if (scrollTop > endTop + containerH) {
+      if (outOfBoundsRef.current === 'below') return;
+      outOfBoundsRef.current = 'below';
+    } else {
+      outOfBoundsRef.current = null;
+    }
 
     const pinEnd = endTop - containerH * 0.5;
 
@@ -178,44 +190,7 @@ const ScrollStack = ({
         cardsRef.current = [];
         lastTransformsRef.current.clear();
         cachedOffsetsRef.current = { cardTops: [], endTop: 0, containerH: 0, stackPx: 0, valid: false };
-        stackCompletedRef.current = false;
-      };
-
-    } else {
-      requestAnimationFrame(() => recalcOffsets());
-
-      import('lenis').then(({ default: Lenis }) => {
-        const lenis = new Lenis({
-          wrapper: scroller,
-          content: scroller.querySelector('.scroll-stack-inner'),
-          duration: 1.2,
-          easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          smoothWheel: true,
-          touchMultiplier: 2,
-          lerp: 0.1,
-          syncTouch: true,
-          syncTouchLerp: 0.075,
-        });
-
-        lenis.on('scroll', applyTransforms);
-
-        const raf = time => {
-          lenis.raf(time);
-          animationFrameRef.current = requestAnimationFrame(raf);
-        };
-        animationFrameRef.current = requestAnimationFrame(raf);
-        scroller._lenisInstance = lenis;
-      });
-
-      return () => {
-        cancelAnimationFrame(animationFrameRef.current);
-        if (scroller._lenisInstance) {
-          scroller._lenisInstance.destroy();
-          scroller._lenisInstance = null;
-        }
-        cardsRef.current = [];
-        lastTransformsRef.current.clear();
-        cachedOffsetsRef.current = { cardTops: [], endTop: 0, containerH: 0, stackPx: 0, valid: false };
+        outOfBoundsRef.current = null;
         stackCompletedRef.current = false;
       };
     }

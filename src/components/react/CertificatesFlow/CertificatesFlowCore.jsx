@@ -108,6 +108,8 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
   const [isInteractive, setIsInteractive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isFlowReady, setIsFlowReady] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const wrapperRef = useRef(null);
   const touchStartY = useRef(0);
 
   useEffect(() => {
@@ -115,7 +117,14 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
       setIsMobile(window.innerWidth < 768);
       const handleResize = () => setIsMobile(window.innerWidth < 768);
       window.addEventListener('resize', handleResize, { passive: true });
-      return () => window.removeEventListener('resize', handleResize);
+      const observer = new IntersectionObserver(([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      });
+      if (wrapperRef.current) observer.observe(wrapperRef.current);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        observer.disconnect();
+      };
     }
   }, []);
 
@@ -198,14 +207,14 @@ function FlowContent({ items, strings, onNodeClick, openPreview }) {
         const subset = nodes.slice(0, 3).map(n => ({ id: n.id }));
         fitView({ nodes: subset, padding: 0.1, duration: 0, maxZoom: 0.8 });
       } else {
-        fitView({ padding: 0.15, duration: 1000 });
+        fitView({ padding: 0.15, duration: 0 });
       }
     }, 150);
     return () => clearTimeout(timer);
   }, [fitView, nodes.length]);
 
   return (
-    <div className="relative w-full h-full">
+    <div ref={wrapperRef} className={`relative w-full h-full${!isVisible ? ' cert-flow-paused' : ''}`}>
       {!isFlowReady && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-[var(--clr-bg-deep)] rounded-xl">
           <svg className="animate-spin h-10 w-10 text-[var(--clr-accent-blue)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

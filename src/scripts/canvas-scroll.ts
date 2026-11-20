@@ -29,7 +29,7 @@ class HeroCanvasSequence {
 
   public async init(): Promise<void> {
     this.canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
-    this.ctx = this.canvas?.getContext('2d') ?? null;
+    this.ctx = this.canvas?.getContext('2d', { alpha: false }) ?? null;
 
     if (!this.canvas || !this.ctx) {
       globalEvents.emit(EVENTS.PRELOADER_DONE);
@@ -177,19 +177,22 @@ class HeroCanvasSequence {
     const sx = (cw - iw * scale) / 2;
     const sy = (ch - ih * scale) * 0.15;
 
-    this.ctx.clearRect(0, 0, cw, ch);
     this.ctx.drawImage(img, sx, sy, iw * scale, ih * scale);
   }
 
   private resizeCanvas(): void {
     if (!this.canvas) return;
 
-    const maxDpr = this.isMobile ? 1.25 : 2;
-    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     const rect = this.canvas.getBoundingClientRect();
+    const maxDpr = this.isMobile ? 1.25 : 2;
+    const sourceCap = Math.min(
+      1920 / Math.max(rect.width, 1),
+      1080 / Math.max(rect.height, 1)
+    );
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr, Math.max(1, sourceCap));
 
-    this.canvas.width = rect.width * dpr;
-    this.canvas.height = rect.height * dpr;
+    this.canvas.width = Math.round(rect.width * dpr);
+    this.canvas.height = Math.round(rect.height * dpr);
 
     if (this.frames[this.currentIndex]) {
       this.drawFrame(this.frames[this.currentIndex]);
@@ -380,21 +383,33 @@ class HeroCanvasSequence {
       worker.postMessage({
         indices: pendingIndices,
         framePath: this.FRAME_PATH,
-        batchSize: this.isMobile ? 4 : 8,
-        batchDelay: isCached ? 2 : (this.isMobile ? 50 : 25),
+        batchSize: isCached ? (this.isMobile ? 8 : 16) : (this.isMobile ? 6 : 12),
+        batchDelay: isCached ? 0 : (this.isMobile ? 16 : 8),
       });
     };
 
     if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(doBackgroundLoad, { timeout: 2000 });
+      (window as any).requestIdleCallback(doBackgroundLoad, { timeout: 600 });
     } else {
-      setTimeout(doBackgroundLoad, 500);
+      setTimeout(doBackgroundLoad, 200);
     }
   }
 
   private setupScrollTrigger(): void {
     const driver = document.getElementById('scroll-canvas-driver');
     if (!driver) return;
+
+    ScrollTrigger.create({
+      trigger: driver,
+      start: 'top top',
+      end: 'bottom top',
+      onLeave: () => {
+        if (this.canvas) this.canvas.style.visibility = 'hidden';
+      },
+      onEnterBack: () => {
+        if (this.canvas) this.canvas.style.visibility = 'visible';
+      },
+    });
 
     ScrollTrigger.create({
       trigger: driver,

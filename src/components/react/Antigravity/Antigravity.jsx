@@ -60,6 +60,8 @@ const AntigravityInner = ({
   }, [count, viewport.width, viewport.height]);
 
   const globalPointer = useRef({ x: 0, y: 0, moved: false });
+  const isVisibleRef = useRef(isVisible);
+  isVisibleRef.current = isVisible;
 
   useEffect(() => {
     let sectionCache = null;
@@ -67,6 +69,7 @@ const AntigravityInner = ({
     let lastClientY = -1;
 
     const handlePointerMove = (e) => {
+      if (!isVisibleRef.current) return;
       let actuallyMoved = false;
       if (lastClientX !== e.clientX || lastClientY !== e.clientY) {
         actuallyMoved = true;
@@ -211,7 +214,7 @@ const Antigravity = props => {
 
   return (
     <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
-      <Canvas camera={{ position: [0, 0, 50], fov: 35 }}>
+      <Canvas camera={{ position: [0, 0, 50], fov: 35 }} dpr={[1, 1.5]} frameloop={isVisible ? 'always' : 'never'}>
         <AntigravityInner {...props} isVisible={isVisible} />
       </Canvas>
     </div>
